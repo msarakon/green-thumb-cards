@@ -4,9 +4,9 @@
   "description": "A JavaScript version of a 90s gardening card & Windows game by Playful Minds.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/msarakon/green-thumb-cards.git"
+    "url": "https://github.com/msarakon/green-thumb-cards.git"
   },
-  "author": "Minna Sarakontu",
+  "author": "Minna Sarakontu <minna.sarakontu@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --mode=development --open",
@@ -27,12 +27,14 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-react": "^7.13.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
     "react-testing-library": "^7.0.1",
+    "style-loader": "^0.23.1",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1"
@@ -51,5 +53,10 @@
       ],
       "@babel/preset-react"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css)$": "<rootDir>/style-mock.js"
+    }
   }
 }

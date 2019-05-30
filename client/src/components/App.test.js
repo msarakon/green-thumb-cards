@@ -11,7 +11,7 @@ describe('App', () => {
     it('should pass a placeholder test', () => {
         let content;
         act(() => { content = render(<Provider store={store}><App /></Provider>); });
-        expect(content.container.querySelectorAll('div').length).toBe(1);
+        expect(content.container.querySelectorAll('.app').length).toBe(1);
     });
 
 });

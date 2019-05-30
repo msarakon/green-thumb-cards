@@ -17,6 +17,10 @@ const config = {
             {
                 test: /\.js$/,
                 loader: ['babel-loader', 'eslint-loader']
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             }
         ]
     },
