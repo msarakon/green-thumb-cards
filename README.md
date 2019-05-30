@@ -5,7 +5,7 @@ A JavaScript version of a 90s gardening card &amp; Windows game by Playful Minds
 
 ### Background
 
-TODO
+I loved playing the PC version of GTC as a kid. In May 2019, I needed an idea for a React/Node.js project for a uni course, so I decided to try out the possibilities of doing some simple game development with modern JS tools.
 
 ### How to run
 
