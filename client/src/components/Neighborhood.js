@@ -10,12 +10,15 @@ const Neighborhood = (props) => {
             <div className="garden-container">
                 <Garden player={props.players.bunny1} />
             </div>
+            <div className="street vertical"></div>
             <div className="garden-container">
                 <Garden player={props.players.bunny2} />
             </div>
+            <div className="street horizontal"></div>
             <div className="garden-container">
                 <Garden player={props.players.bunny3} />
             </div>
+            <div className="street vertical"></div>
             <div className="garden-container">
                 <Garden player={props.players.bunny4} />
             </div>

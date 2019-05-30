@@ -1,15 +1,8 @@
-const GARDEN_TILE_COUNT = 72;
-
-const gardenTiles = [];
-for (let i = 1; i < GARDEN_TILE_COUNT; i++) {
-    gardenTiles.push({ id: i, content: null });
-}
-
 const newPlayer = (name) => {
     return {
         name,
         hand: [],
-        garden: [... gardenTiles],
+        garden: [],
         points: 0
     };
 };

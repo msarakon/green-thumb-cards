@@ -6,9 +6,13 @@ const Garden = ({ player }) => {
     return (
         <div className="garden">
             {
-                player.garden.map(tile =>
-                    <div key={tile.id} className="garden-tile" style={{ zIndex: tile.id }}>
-                        {tile.content}
+                player.garden.map(item =>
+                    <div key={item.id} className="garden-item" style={{
+                        zIndex: item.zIndex,
+                        top: item.y + 'px',
+                        left: item.x + 'px'
+                    }}>
+                        {item.id}
                     </div>
                 )
             }

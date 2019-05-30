@@ -10,7 +10,23 @@
 }
 
 .garden-container {
-    width: 50%;
-    height: 50%;
+    width: 45%;
+    height: 45%;
     float: left;
+}
+
+.street {
+    background-color: #CE525A;
+}
+
+.street.vertical {
+    width: 10%;
+    height: 45%;
+    float: left;
+}
+
+.street.horizontal {
+    height: 10%;
+    width: 100%;
+    clear: both;
 }
