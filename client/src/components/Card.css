@@ -3,12 +3,46 @@
     height: 10em;
     max-height: 100%;
     background-color: #fff;
+    padding: .3em;
     margin-right: 1em;
     border: 2px solid #000;
     border-radius: .3em;
     box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, .75);
 }
 
-.card:hover {
+.card.plant:hover,
+.card.attack:hover,
+.card.environment:hover,
+.card.special:hover {
     cursor: pointer;
+}
+
+.card-bg {
+    height: 100%;
+    width: 100%;
+    border-radius: .3em;
+}
+
+.plant .card-bg {
+    background-color: #FF7B52;
+}
+
+.attack .card-bg {
+    background-color: #FF1808;
+}
+
+.defense .card-bg {
+    background-color: #8C5ADE;
+}
+
+.disaster .card-bg {
+    background-color: #000;
+}
+
+.environment .card-bg {
+    background-color: #FFA352;
+}
+
+.special .card-bg {
+    background-color: #40AF2A;
 }
