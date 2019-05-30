@@ -1,8 +1,23 @@
 .app {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
+}
+
+.start-screen {
+    max-width: 90%;
+    background-color: #fff;
+    padding: 5em;
+    text-align: center;
+}
+
+.start-button {
+    margin-top: 1em;
+    padding: .5em 1em;
+    font-size: 1.5em;
 }
 
 .gameboard-container {
