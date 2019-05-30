@@ -1,0 +1,52 @@
+{
+  "name": "green-thumb-cards",
+  "version": "0.1.0",
+  "description": "A JavaScript version of a 90s gardening card & Windows game by Playful Minds.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msarakon/green-thumb-cards.git"
+  },
+  "author": "Minna Sarakontu",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development --open",
+    "build": "webpack --mode=production",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "eslint": "^5.16.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-react": "^7.13.0",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.8.0",
+    "react-testing-library": "^7.0.1",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "corejs": "2",
+          "useBuiltIns": "entry"
+        }
+      ],
+      "@babel/preset-react"
+    ]
+  }
+}

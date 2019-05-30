@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- stable
+cache:
+  directories:
+    - "client/node_modules"
+before_install:
+- cd client
+install:
+- npm install
+- npm install -g codecov
+before_script:
+- cd client
+script:
+- npm test -- --collect-coverage
+- codecov
+- npm run build
