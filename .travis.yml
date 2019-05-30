@@ -9,8 +9,6 @@ before_install:
 install:
 - npm install
 - npm install -g codecov
-before_script:
-- cd client
 script:
 - npm test -- --collect-coverage
 - codecov
