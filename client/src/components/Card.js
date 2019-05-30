@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Card.css';
 
 const Card = ({ card }) => {
     return (
-        <div>{ card.id }</div>
+        <div className="card">
+            { card.id }
+        </div>
     );
 };
 

@@ -1,0 +1,16 @@
+.neighborhood {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #9C9CA5;
+    border: 2px solid #000;
+    box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, .75);
+    padding: .5em;
+}
+
+.garden-container {
+    width: 50%;
+    height: 50%;
+    float: left;
+}

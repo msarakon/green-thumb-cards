@@ -1,0 +1,14 @@
+.card {
+    width: 7em;
+    height: 10em;
+    max-height: 100%;
+    background-color: #fff;
+    margin-right: 1em;
+    border: 2px solid #000;
+    border-radius: .3em;
+    box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, .75);
+}
+
+.card:hover {
+    cursor: pointer;
+}

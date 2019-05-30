@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Card from './Card';
+import './Hand.css';
 
 const Hand = (props) => {
     return (
-        <div>
+        <div className="hand">
             {
-                props.hand.map(card => <div key={card.id}>{card.id}</div>)
+                props.hand.map(card => <Card key={card.id} card={card} />)
             }
         </div>
     );

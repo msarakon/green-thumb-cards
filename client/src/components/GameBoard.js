@@ -2,12 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Hand from './Hand';
+import Neighborhood from './Neighborhood';
 import './GameBoard.css';
 
 const GameBoard = () => {
     return (
         <div className="gameboard">
-            <Hand />
+            <div className="hand-container">
+                <Hand />
+            </div>
+            <div className="neighborhood-container">
+                <Neighborhood />
+            </div>
         </div>
     );
 };
