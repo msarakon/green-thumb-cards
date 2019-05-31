@@ -22,6 +22,15 @@ const reducer = (state = initialState, action) => {
         newState[action.data.player].hand = newHand;
         return newState;
     }
+    case 'ADD_ITEM': {
+        const newState = { ...state };
+        const newHand = state[action.data.player].hand.filter(card =>
+            card.id !== action.data.card.id);
+        newState[action.data.player].hand = newHand;
+        const newGarden = state[action.data.player].garden.concat(action.data.card);
+        newState[action.data.player].garden = newGarden;
+        return newState;
+    }
     default: return state;
     }
 };
@@ -29,10 +38,14 @@ const reducer = (state = initialState, action) => {
 export const addCards = (playerId, cards) => {
     return {
         type: 'ADD_CARDS',
-        data: {
-            player: playerId,
-            cards: cards
-        }
+        data: { player: playerId, cards }
+    };
+};
+
+export const addItem = (playerId, card) => {
+    return {
+        type: 'ADD_ITEM',
+        data: { player: playerId, card }
     };
 };
 

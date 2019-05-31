@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { pickCards } from '../reducers/deckReducer';
 import { addCards } from '../reducers/playerReducer';
+import { startSelectCard } from '../reducers/turnReducer';
 import GameBoard from './GameBoard';
 import Footer from './Footer';
 import './App.css';
@@ -18,12 +19,20 @@ const App = (props) => {
         props.addCards(playerId, picked);
     };
 
+    const startTurn = (playerId) => {
+        const player = props.players[playerId];
+        console.log(`${player.name}'s turn starts!`);
+        // todo: handle disaster cards before anything else
+        props.startSelectCard();
+    };
+
     const start = () => {
         setGameOn(true);
         pickCards('bunny1', CARDS_AT_START);
         pickCards('bunny2', CARDS_AT_START);
         pickCards('bunny3', CARDS_AT_START);
         pickCards('bunny4', CARDS_AT_START);
+        startTurn('bunny1');
     };
 
     return (
@@ -53,18 +62,22 @@ App.propTypes = {
     players: PropTypes.object.isRequired,
     pickCards: PropTypes.func.isRequired,
     addCards: PropTypes.func.isRequired,
+    startSelectCard: PropTypes.func.isRequired,
+    turn: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
         deck: state.deck,
-        players: state.players
+        players: state.players,
+        turn: state.turn
     };
 };
   
 const mapDispatchToProps = {
     pickCards,
-    addCards
+    addCards,
+    startSelectCard
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

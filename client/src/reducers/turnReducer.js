@@ -1,22 +1,32 @@
-const initialState = { mode: null, data: null };
+const initialState = { mode: null, card: null };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+    case 'START_SELECT_CARD': {
+        return {
+            mode: 'select_card',
+            card: action.data
+        };
+    }
     case 'START_INSERT': {
         return {
             mode: 'insert',
-            data: action.data
+            card: action.data
         };
     }
     case 'START_ATTACK': {
         return {
             mode: 'attack',
-            data: action.data
+            card: action.data
         };
     }
-    default: {
-        return state;
-    }}
+    case 'END_TURN': return initialState;
+    default: return state;
+    }
+};
+
+export const startSelectCard = () => {
+    return { type: 'START_SELECT_CARD', data: null };
 };
 
 export const playCard = (card) => {
@@ -38,6 +48,13 @@ export const playCard = (card) => {
         };
     default: return { type: '', data: null };
     }
+};
+
+export const endTurn = () => {
+    return {
+        type: 'END_TURN',
+        data: null
+    };
 };
 
 export default reducer;

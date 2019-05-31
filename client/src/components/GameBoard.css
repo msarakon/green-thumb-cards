@@ -15,3 +15,15 @@
     height: 75%;
     width: 100%;
 }
+
+.item-placer {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.item-placer.insertable {
+    border: 2px solid lightgreen;
+}
