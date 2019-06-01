@@ -10,10 +10,10 @@
     box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, .75);
 }
 
-.active .card.plant:hover,
-.active .card.attack:hover,
-.active .card.environment:hover,
-.active .card.special:hover {
+.active.card.plant:hover,
+.active.card.attack:hover,
+.active.card.environment:hover,
+.active.card.special:hover {
     cursor: pointer;
 }
 

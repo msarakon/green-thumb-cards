@@ -24,7 +24,7 @@ const GameBoard = (props) => {
     return (
         <div className="gameboard"
             onMouseMove={mouseMoveHandler}
-            onMouseDown={props.pointer === 'insertable' ? placeItem : undefined}>
+            onMouseDown={props.turn.mode === 'insert' && props.pointer === 'insertable' ? placeItem : undefined}>
             <div className="hand-container">
                 <Hand />
             </div>
