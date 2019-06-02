@@ -34,7 +34,7 @@ describe('Garden', () => {
 
     it('should handle stealing of item', () => {
         const state = {
-            turn: { mode: 'attack', callback: () => {} },
+            turn: { mode: 'attack', card: { id: 666 }, callback: () => {} },
             pointer: 'attackable',
             deck: [],
             players: {
