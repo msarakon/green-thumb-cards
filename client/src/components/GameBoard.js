@@ -56,8 +56,15 @@ const GameBoard = (props) => {
         else runAI(playerId);
     };
 
-    const placeItem = () => {
-        props.addItem('bunny1', props.turn.card);
+    const placeItem = (evt) => {
+        const containerBounds = evt.target.getBoundingClientRect();
+        const x = evt.clientX - containerBounds.x - 20;
+        const y = evt.clientY - containerBounds.y - 20;
+        props.addItem('bunny1', {
+            ...props.turn.card,
+            top: Math.floor(y / containerBounds.height * 100),
+            left: Math.floor(x / containerBounds.width * 100)
+        });
         endTurn('bunny1');
     };
 
@@ -68,7 +75,11 @@ const GameBoard = (props) => {
         const card = playableCards[Math.floor(Math.random()*playableCards.length)];
         if (card) {
             console.log(`${playerName} plays a "${card.title}"`);
-            props.addItem(playerId, card);
+            props.addItem(playerId, {
+                ...card,
+                top: Math.floor(Math.random() * 100),
+                left: Math.floor(Math.random() * 100)
+            });
         } else {
             console.log(`${playerName} skips their turn`);
         }
@@ -93,7 +104,7 @@ const GameBoard = (props) => {
 
     return (
         <div className="gameboard"
-            onMouseMove={insertOn ? mouseMoveHandler : undefined}
+            onMouseMove={mouseMoveHandler}
             onMouseDown={canPlaceItem ? placeItem : undefined}>
             <div className="hand-container">
                 <Hand />

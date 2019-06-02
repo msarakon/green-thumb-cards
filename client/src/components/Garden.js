@@ -9,8 +9,8 @@ const Garden = ({ player }) => {
                 player.garden.map(item =>
                     <div key={item.id} className="garden-item" style={{
                         zIndex: item.zIndex,
-                        top: item.y + 'px',
-                        left: item.x + 'px'
+                        top: item.top + '%',
+                        left: item.left + '%'
                     }}>
                         {item.id}
                     </div>
