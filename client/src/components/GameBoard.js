@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { pickCards } from '../reducers/deckReducer';
-import { addCards, addItem, removeCard } from '../reducers/playerReducer';
+import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
 import { startTurn, startSelectCard } from '../reducers/turnReducer';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
@@ -51,9 +51,27 @@ const GameBoard = (props) => {
         props.startTurn(playerId);
         console.log(`${props.players[playerId].name}'s turn starts!`);
         pickCardsFor(playerId, 1);
-        // todo: handle disaster cards before anything else
+        doDisasters(playerId, props.players[playerId].hand);
         if (playerId === 'bunny1') props.startSelectCard();
         else runAI(playerId);
+    };
+
+    const doDisasters = (playerId, cards) => {
+        const disasterCards = cards.filter(card => card.category === 'disaster');
+        disasterCards.forEach(disaster => {
+            console.log(`*** Disaster event! ${disaster.title}`);
+            Object.entries(props.players).forEach(([id, player]) => {
+                const plants = player.garden.filter(card => card.category === 'plant');
+                const item = plants[Math.floor(Math.random()*plants.length)];
+                if (item) {
+                    props.removeItem(id, item.id);
+                    console.log(`${player.name} lost "${item.title}"`);
+                    // todo: add items to the street
+                }
+            });
+            props.removeCard(playerId, disaster.id);
+            pickCardsFor(playerId, 1);
+        });
     };
 
     const placeItem = (evt) => {
@@ -135,7 +153,8 @@ GameBoard.propTypes = {
     addCards: PropTypes.func.isRequired,
     startTurn: PropTypes.func.isRequired,
     startSelectCard: PropTypes.func.isRequired,
-    removeCard: PropTypes.func.isRequired
+    removeCard: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -153,7 +172,8 @@ const mapDispatchToProps = {
     addCards,
     startTurn,
     startSelectCard,
-    removeCard
+    removeCard,
+    removeItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);
