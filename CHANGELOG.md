@@ -4,7 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
-| 6/2    | 4    | Implemented positioning of a garden item, initial stealing and handling of disaster cards
+| 6/2    | 4    | Implemented positioning of a garden item, initial stealing and handling of disaster cards. AI players can now select and place random plants from their hand.
 | 6/1    | 1    | Fixed ending the turn after adding a garden item, added a few tests & redux-mock-store
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
