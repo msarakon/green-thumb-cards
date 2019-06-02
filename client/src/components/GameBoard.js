@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { pickCards } from '../reducers/deckReducer';
-import { addCards, addItem } from '../reducers/playerReducer';
+import { addCards, addItem, removeCard } from '../reducers/playerReducer';
 import { startTurn, startSelectCard } from '../reducers/turnReducer';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
@@ -65,6 +65,7 @@ const GameBoard = (props) => {
             top: Math.floor(y / containerBounds.height * 100),
             left: Math.floor(x / containerBounds.width * 100)
         });
+        props.turn.callback();
         endTurn('bunny1');
     };
 
@@ -77,9 +78,10 @@ const GameBoard = (props) => {
             console.log(`${playerName} plays a "${card.title}"`);
             props.addItem(playerId, {
                 ...card,
-                top: Math.floor(Math.random() * 100),
-                left: Math.floor(Math.random() * 100)
+                top: Math.floor(Math.random() * 90),
+                left: Math.floor(Math.random() * 90)
             });
+            props.removeCard(playerId, card.id);
         } else {
             console.log(`${playerName} skips their turn`);
         }
@@ -132,7 +134,8 @@ GameBoard.propTypes = {
     pickCards: PropTypes.func.isRequired,
     addCards: PropTypes.func.isRequired,
     startTurn: PropTypes.func.isRequired,
-    startSelectCard: PropTypes.func.isRequired
+    startSelectCard: PropTypes.func.isRequired,
+    removeCard: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -149,7 +152,8 @@ const mapDispatchToProps = {
     pickCards,
     addCards,
     startTurn,
-    startSelectCard
+    startSelectCard,
+    removeCard
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

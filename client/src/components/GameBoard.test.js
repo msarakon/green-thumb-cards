@@ -11,7 +11,7 @@ describe('GameBoard', () => {
 
     const mockStore = configureMockStore([thunk]);
     const state = {
-        turn: { mode: 'insert' },
+        turn: { mode: 'insert', callback: () => {} },
         pointer: 'insertable',
         deck: [],
         players: {

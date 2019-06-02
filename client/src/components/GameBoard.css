@@ -27,6 +27,6 @@
     border: 2px solid lightgreen;
 }
 
-.item-placer.attack {
+.item-placer.attackable {
     border: 2px solid red;
 }

@@ -13,18 +13,19 @@ const reducer = (state = initialState, action) => {
         };
     case 'START_SELECT_CARD':
         return {
-            mode: 'select_card',
-            card: action.data
+            mode: 'select_card'
         };
     case 'START_INSERT':
         return {
             mode: 'insert',
-            card: action.data
+            card: action.data.card,
+            callback: action.data.callback
         };
     case 'START_ATTACK':
         return {
             mode: 'attack',
-            card: action.data
+            card: action.data.card,
+            callback: action.data.callback
         };
     default: return state;
     }
@@ -35,29 +36,29 @@ export const startGame = () => {
 };
 
 export const startTurn = (playerId) => {
-    return { type: 'START_TURN', data: playerId };
+    return { type: 'START_TURN', playerId };
 };
 
 export const startSelectCard = () => {
     return { type: 'START_SELECT_CARD', data: null };
 };
 
-export const playCard = (card) => {
+export const playCard = (card, callback) => {
     switch (card.category) {
     case 'plant':
         return {
             type: 'START_INSERT',
-            data: card
+            data: { card, callback }
         };
     case 'attack':
         return {
             type: 'START_ATTACK',
-            data: card
+            data: { card, callback }
         };
     case 'environment':
         return {
             type: 'START_INSERT',
-            data: card
+            data: { card, callback }
         };
     default: return { type: '', data: null };
     }

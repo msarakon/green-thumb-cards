@@ -17,18 +17,31 @@ initialState.bunny4 = newPlayer('Bunny 4');
 const reducer = (state = initialState, action) => {
     switch (action.type) {
     case 'ADD_CARDS': {
-        state[action.data.player] = {
-            ...state[action.data.player],
-            hand: state[action.data.player].hand.concat(action.data.cards)
+        state[action.data.playerId] = {
+            ...state[action.data.playerId],
+            hand: state[action.data.playerId].hand.concat(action.data.cards)
+        };
+        return state;
+    }
+    case 'REMOVE_CARD': {
+        state[action.data.playerId] = {
+            ...state[action.data.playerId],
+            hand: state[action.data.playerId].hand.filter(card =>
+                card.id !== action.data.cardId)
         };
         return state;
     }
     case 'ADD_ITEM': {
-        state[action.data.player] = {
-            ...state[action.data.player],
-            hand: state[action.data.player].hand.filter(card =>
-                card.id !== action.data.card.id),
-            garden: state[action.data.player].garden.concat(action.data.card)
+        state[action.data.playerId] = {
+            ...state[action.data.playerId],
+            garden: state[action.data.playerId].garden.concat(action.data.card)
+        };
+        return state;
+    }
+    case 'REMOVE_ITEM': {
+        state[action.data.playerId] = {
+            ...state[action.data.playerId],
+            garden: state[action.data.playerId].garden.filter(item => item.id !== action.data.itemId)
         };
         return state;
     }
@@ -39,14 +52,28 @@ const reducer = (state = initialState, action) => {
 export const addCards = (playerId, cards) => {
     return {
         type: 'ADD_CARDS',
-        data: { player: playerId, cards }
+        data: { playerId, cards }
+    };
+};
+
+export const removeCard = (playerId, cardId) => {
+    return {
+        type: 'REMOVE_CARD',
+        data: { playerId, cardId }
     };
 };
 
 export const addItem = (playerId, card) => {
     return {
         type: 'ADD_ITEM',
-        data: { player: playerId, card }
+        data: { playerId, card }
+    };
+};
+
+export const removeItem = (playerId, itemId) => {
+    return {
+        type: 'REMOVE_ITEM',
+        data: { playerId, itemId }
     };
 };
 

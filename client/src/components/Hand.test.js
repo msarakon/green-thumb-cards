@@ -1,0 +1,33 @@
+import React from 'react';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { render, cleanup, fireEvent } from 'react-testing-library';
+import configureMockStore from 'redux-mock-store';
+import Hand from './Hand';
+
+afterEach(cleanup);
+
+describe('Hand', () => {
+
+    const mockStore = configureMockStore([thunk]);
+    const state = {
+        turn: { mode: 'select_card' },
+        deck: [],
+        players: {
+            bunny1: { name: 'Bunny 1', hand: [
+                { id: 1, name: 'foobar', title: 'Foobar', category: 'plant' }
+            ], garden: [] },
+            bunny2: { name: 'Bunny 2', hand: [], garden: [] },
+            bunny3: { name: 'Bunny 3', hand: [], garden: [] },
+            bunny4: { name: 'Bunny 4', hand: [], garden: [] }
+        }
+    };
+    const store = mockStore(() => state);
+
+    it('should handle playing a card', () => {
+        const component = render(<Provider store={store}><Hand /></Provider>);
+        const card = component.container.querySelector('.card');
+        fireEvent.click(card);
+    });
+
+});
