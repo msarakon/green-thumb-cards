@@ -17,19 +17,20 @@ initialState.bunny4 = newPlayer('Bunny 4');
 const reducer = (state = initialState, action) => {
     switch (action.type) {
     case 'ADD_CARDS': {
-        const newState = { ...state };
-        const newHand = state[action.data.player].hand.concat(action.data.cards);
-        newState[action.data.player].hand = newHand;
-        return newState;
+        state[action.data.player] = {
+            ...state[action.data.player],
+            hand: state[action.data.player].hand.concat(action.data.cards)
+        };
+        return state;
     }
     case 'ADD_ITEM': {
-        const newState = { ...state };
-        const newHand = state[action.data.player].hand.filter(card =>
-            card.id !== action.data.card.id);
-        newState[action.data.player].hand = newHand;
-        const newGarden = state[action.data.player].garden.concat(action.data.card);
-        newState[action.data.player].garden = newGarden;
-        return newState;
+        state[action.data.player] = {
+            ...state[action.data.player],
+            hand: state[action.data.player].hand.filter(card =>
+                card.id !== action.data.card.id),
+            garden: state[action.data.player].garden.concat(action.data.card)
+        };
+        return state;
     }
     default: return state;
     }

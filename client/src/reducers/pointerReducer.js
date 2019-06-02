@@ -5,10 +5,10 @@ const reducer = (state = null, action) => {
     }
 };
 
-export const setInsertable = (insertable) => {
+export const setPointer = (data) => {
     return {
         type: 'SET_POINTER',
-        data: insertable ? 'insertable' : null
+        data
     };
 };
 
