@@ -2,27 +2,40 @@ const initialState = { mode: null, card: null };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-    case 'START_SELECT_CARD': {
+    case 'START_GAME':
+        return {
+            mode: 'start_game'
+        };
+    case 'START_TURN':
+        return {
+            mode: 'start_turn',
+            player: action.data
+        };
+    case 'START_SELECT_CARD':
         return {
             mode: 'select_card',
             card: action.data
         };
-    }
-    case 'START_INSERT': {
+    case 'START_INSERT':
         return {
             mode: 'insert',
             card: action.data
         };
-    }
-    case 'START_ATTACK': {
+    case 'START_ATTACK':
         return {
             mode: 'attack',
             card: action.data
         };
-    }
-    case 'END_TURN': return initialState;
     default: return state;
     }
+};
+
+export const startGame = () => {
+    return { type: 'START_GAME', data: null };
+};
+
+export const startTurn = (playerId) => {
+    return { type: 'START_TURN', data: playerId };
 };
 
 export const startSelectCard = () => {
@@ -48,13 +61,6 @@ export const playCard = (card) => {
         };
     default: return { type: '', data: null };
     }
-};
-
-export const endTurn = () => {
-    return {
-        type: 'END_TURN',
-        data: null
-    };
 };
 
 export default reducer;

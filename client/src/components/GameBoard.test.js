@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from 'react-testing-library';
 import configureMockStore from 'redux-mock-store';
 import GameBoard from './GameBoard';
@@ -8,16 +9,16 @@ afterEach(cleanup);
 
 describe('GameBoard', () => {
 
-    const mockStore = configureMockStore([]);
+    const mockStore = configureMockStore([thunk]);
     const state = {
         turn: { mode: 'insert' },
         pointer: 'insertable',
         deck: [],
         players: {
-            bunny1: { hand: [], garden: [] },
-            bunny2: { hand: [], garden: [] },
-            bunny3: { hand: [], garden: [] },
-            bunny4: { hand: [], garden: [] }
+            bunny1: { name: 'Bunny 1', hand: [{ id: 1, category: 'plant' }], garden: [] },
+            bunny2: { name: 'Bunny 2', hand: [{ id: 2, category: 'plant' }], garden: [] },
+            bunny3: { name: 'Bunny 3', hand: [{ id: 3, category: 'attack' }], garden: [] },
+            bunny4: { name: 'Bunny 4', hand: [{ id: 4, category: 'foobar' }], garden: [] }
         }
     };
     const store = mockStore(() => state);

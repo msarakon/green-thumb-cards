@@ -1,8 +1,12 @@
-import reducer, { playCard, endTurn } from './turnReducer';
+import reducer, { startGame, playCard } from './turnReducer';
 
 describe('turnReducer', () => {
     it('should return the initial state', () => {
         expect(reducer(undefined, {})).toEqual({ mode: null, card: null });
+    });
+
+    it('should handle starting the game', () => {
+        expect(reducer(undefined, startGame())).toEqual({ mode: 'start_game' });
     });
 
     it('should handle playing a plant card', () => {
@@ -23,10 +27,6 @@ describe('turnReducer', () => {
     it('should handle playing a defense card', () => {
         const card = { id: 4, name: 'he_also_defend', title: 'He also defend', category: 'defense' };
         expect(reducer(undefined, playCard(card))).toEqual({ mode: null, card: null });
-    });
-
-    it('should handle ending the turn', () => {
-        expect(reducer(undefined, endTurn())).toEqual({ mode: null, card: null });
     });
 
 });

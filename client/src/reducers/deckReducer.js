@@ -25,10 +25,13 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export const pickCards = (count) => {
-    return {
-        type: 'PICK_CARDS',
-        data: { count }
+export const pickCards = (count, callback) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: 'PICK_CARDS',
+            data: { count }
+        });
+        callback(getState());
     };
 };
 
