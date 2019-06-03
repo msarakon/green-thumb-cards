@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { pickCards } from '../reducers/deckReducer';
 import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
 import { startTurn, startSelectCard } from '../reducers/turnReducer';
+import { throwToStreet } from '../reducers/streetReducer';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
 import './GameBoard.css';
@@ -50,7 +51,9 @@ const GameBoard = (props) => {
     const startTurn = (playerId) => {
         props.startTurn(playerId);
         console.log(`${props.players[playerId].name}'s turn starts!`);
-        pickCardsFor(playerId, 1);
+        if (props.players[playerId].hand.length < 6) {
+            pickCardsFor(playerId, 1);
+        }
         doDisasters(playerId, props.players[playerId].hand);
         if (playerId === 'bunny1') props.startSelectCard();
         else runAI(playerId);
@@ -66,7 +69,7 @@ const GameBoard = (props) => {
                 if (item) {
                     props.removeItem(id, item.id);
                     console.log(`${player.name} lost "${item.title}"`);
-                    // todo: add items to the street
+                    props.throwToStreet(item);
                 }
             });
             props.removeCard(playerId, disaster.id);
@@ -154,7 +157,8 @@ GameBoard.propTypes = {
     startTurn: PropTypes.func.isRequired,
     startSelectCard: PropTypes.func.isRequired,
     removeCard: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired
+    removeItem: PropTypes.func.isRequired,
+    throwToStreet: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -173,7 +177,8 @@ const mapDispatchToProps = {
     startTurn,
     startSelectCard,
     removeCard,
-    removeItem
+    removeItem,
+    throwToStreet
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

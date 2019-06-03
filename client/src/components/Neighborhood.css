@@ -18,6 +18,7 @@
 
 .street {
     background-color: #CE525A;
+    position: relative;
 }
 
 .street.vertical {

@@ -37,6 +37,10 @@ module.exports = {
           'error',
           'always'
       ],
+      'no-unused-vars': [
+        'error',
+        { 'args': 'after-used' }
+      ],
       'no-console': ['off']
   }
 }

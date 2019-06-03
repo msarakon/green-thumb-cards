@@ -21,7 +21,8 @@ describe('GameBoard', () => {
                 bunny2: { name: 'Bunny 2', hand: [{ id: 2, category: 'plant' }], garden: [] },
                 bunny3: { name: 'Bunny 3', hand: [{ id: 3, category: 'attack' }], garden: [] },
                 bunny4: { name: 'Bunny 4', hand: [{ id: 4, category: 'foobar' }], garden: [] }
-            }
+            },
+            street: { top: [], center: [], bottom: [] }
         };
         const store = mockStore(() => state);
 
@@ -38,7 +39,8 @@ describe('GameBoard', () => {
                 bunny2: { name: 'Bunny 2', hand: [], garden: [{ id: 2, category: 'plant' }] },
                 bunny3: { name: 'Bunny 3', hand: [{ id: 3, category: 'attack' }], garden: [] },
                 bunny4: { name: 'Bunny 4', hand: [{ id: 4, category: 'foobar' }], garden: [] }
-            }
+            },
+            street: { top: [], center: [], bottom: [] }
         };
         const store = mockStore(() => state);
 
