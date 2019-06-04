@@ -5,11 +5,9 @@ import { playCard } from '../reducers/turnReducer';
 import { pickFromStreet } from '../reducers/streetReducer';
 
 const Street = (props) => {
-    const selectOn = props.turn.mode === 'select_card';
+    const selectOn = props.turn.mode === 'select_action';
 
-    const pick = (item) => props.playCard(item, () => {
-        props.pickFromStreet(item.id);
-    });
+    const pick = (item) => props.playCard(item, () => props.pickFromStreet(item.id));
 
     return (
         <div>

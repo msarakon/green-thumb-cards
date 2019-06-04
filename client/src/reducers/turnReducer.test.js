@@ -1,4 +1,4 @@
-import reducer, { startGame, playCard } from './turnReducer';
+import reducer, { startGame, startSelectAction, playCard } from './turnReducer';
 
 describe('turnReducer', () => {
     it('should return the initial state', () => {
@@ -7,6 +7,10 @@ describe('turnReducer', () => {
 
     it('should handle starting the game', () => {
         expect(reducer(undefined, startGame())).toEqual({ mode: 'start_game' });
+    });
+
+    it('should handle the select action mode', () => {
+        expect(reducer(undefined, startSelectAction())).toEqual({ mode: 'select_action' });
     });
 
     it('should handle playing a plant card', () => {

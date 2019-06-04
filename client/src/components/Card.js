@@ -5,13 +5,19 @@ import './Card.css';
 
 const Card = (props) => {
     const selectableCategories = ['plant', 'environment', 'attack'];
-    const selectable = props.turn.mode === 'select_card' &&
+    const selectable = props.turn.mode === 'select_action' &&
         selectableCategories.includes(props.card.category);
+    const active = props.turn.card && props.turn.card.id === props.card.id;
 
     return (
-        <div className={'card ' + props.card.category + (selectable ? ' selectable' : '')}
-            onClick={props.turn.mode === 'select_card' ? props.play : undefined}
-            title={props.card.title}>
+        <div className={
+            'card ' +
+            props.card.category +
+            (selectable ? ' selectable' : '') +
+            (active ? ' active' : '')
+        }
+        onClick={props.turn.mode === 'select_action' ? props.play : undefined}
+        title={props.card.title}>
             <div className='card-bg'>
                 { props.card.title }
             </div>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { pickCards } from '../reducers/deckReducer';
 import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
-import { startTurn, startSelectCard } from '../reducers/turnReducer';
+import { startPickCard, startSelectAction } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
@@ -40,7 +40,9 @@ const GameBoard = (props) => {
         const count = proposedCount > props.deck.length ? props.deck.length : proposedCount;
         props.pickCards(count, (state) => {
             const picked = state.deck.slice(0, count);
-            props.addCards(playerId, picked);
+            props.addCards(playerId, picked, (state) => {
+                doDisasters(playerId, state.players[playerId].hand);
+            });
         });
     };
 
@@ -49,20 +51,15 @@ const GameBoard = (props) => {
      * @param {String} playerId 
      */
     const startTurn = (playerId) => {
-        props.startTurn(playerId);
         console.log(`${props.players[playerId].name}'s turn starts!`);
-        if (props.players[playerId].hand.length < 6) {
-            pickCardsFor(playerId, 1);
-        }
-        doDisasters(playerId, props.players[playerId].hand);
-        if (playerId === 'bunny1') props.startSelectCard();
+        if (playerId === 'bunny1') props.startPickCard();
         else runAI(playerId);
     };
 
     const doDisasters = (playerId, cards) => {
         const disasterCards = cards.filter(card => card.category === 'disaster');
         disasterCards.forEach(disaster => {
-            console.log(`*** Disaster event! ${disaster.title}`);
+            console.log(`*** Disaster event: "${disaster.title}"`);
             Object.entries(props.players).forEach(([id, player]) => {
                 const plants = player.garden.filter(card => card.category === 'plant');
                 const item = plants[Math.floor(Math.random()*plants.length)];
@@ -130,7 +127,7 @@ const GameBoard = (props) => {
             onMouseMove={mouseMoveHandler}
             onMouseDown={canPlaceItem ? placeItem : undefined}>
             <div className="hand-container">
-                <Hand />
+                <Hand pickCard={() => pickCardsFor('bunny1', 1)} />
             </div>
             <div className="neighborhood-container">
                 <Neighborhood />
@@ -154,8 +151,8 @@ GameBoard.propTypes = {
     addItem: PropTypes.func.isRequired,
     pickCards: PropTypes.func.isRequired,
     addCards: PropTypes.func.isRequired,
-    startTurn: PropTypes.func.isRequired,
-    startSelectCard: PropTypes.func.isRequired,
+    startPickCard: PropTypes.func.isRequired,
+    startSelectAction: PropTypes.func.isRequired,
     removeCard: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
     throwToStreet: PropTypes.func.isRequired
@@ -174,8 +171,8 @@ const mapDispatchToProps = {
     addItem,
     pickCards,
     addCards,
-    startTurn,
-    startSelectCard,
+    startPickCard,
+    startSelectAction,
     removeCard,
     removeItem,
     throwToStreet

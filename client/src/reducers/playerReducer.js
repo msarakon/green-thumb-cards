@@ -49,10 +49,13 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export const addCards = (playerId, cards) => {
-    return {
-        type: 'ADD_CARDS',
-        data: { playerId, cards }
+export const addCards = (playerId, cards, callback) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: 'ADD_CARDS',
+            data: { playerId, cards }
+        });
+        callback(getState());
     };
 };
 

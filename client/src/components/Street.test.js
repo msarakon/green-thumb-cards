@@ -11,9 +11,18 @@ describe('Street', () => {
 
     const mockStore = configureMockStore([thunk]);
 
+    it('should render the street', () => {
+        const state = {
+            turn: { mode: 'insert' },
+            street: { top: [{ id: 1 }, { id: 2 }], center: [{ id: 3 }], bottom: [] }
+        };
+        const store = mockStore(() => state);
+        render(<Provider store={store}><Street streetId={'center'} /></Provider>);
+    });
+
     it('should handle picking an item from street', () => {
         const state = {
-            turn: { mode: 'select_card' },
+            turn: { mode: 'select_action' },
             street: { top: [], center: [{ id: 1 }], bottom: [] }
         };
         const store = mockStore(() => state);

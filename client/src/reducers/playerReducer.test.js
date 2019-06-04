@@ -1,4 +1,4 @@
-import reducer, { addCards, removeCard, addItem, removeItem } from './playerReducer';
+import reducer, { addItem, removeItem } from './playerReducer';
 
 describe('playerReducer', () => {
 
@@ -9,23 +9,6 @@ describe('playerReducer', () => {
             garden: [],
             points: 0
         });
-    });
-
-    it('should handle adding cards', () => {
-        const cards = [
-            { id: 1, name: 'flower', title: 'Flower', category: 'plant' },
-            { id: 2, name: 'fizzbuzz', title: 'Fizzbuzz', category: 'plant' }
-        ];
-        expect(reducer(undefined, addCards('bunny1', cards)).bunny1).toEqual({
-            name: 'Bunny 1 (You)',
-            hand: cards,
-            garden: [],
-            points: 0
-        });
-    });
-
-    it('should handle removing a card', () => {
-        expect(reducer(undefined, removeCard('bunny1', 2)).bunny1.hand.length).toBe(1);
     });
 
     it('should handle adding an item', () => {

@@ -18,7 +18,7 @@ const Garden = (props) => {
     };
 
     return (
-        <div className="garden"
+        <div className='garden'
             onMouseEnter={myGarden ? () => props.setPointer('insertable') : undefined}
             onMouseLeave={() => props.setPointer(null) }>
             {
