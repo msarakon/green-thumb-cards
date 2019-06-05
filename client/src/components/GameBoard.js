@@ -178,4 +178,6 @@ const mapDispatchToProps = {
     throwToStreet
 };
 
+export { GameBoard };
+
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);
