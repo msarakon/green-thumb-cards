@@ -17,7 +17,7 @@ describe('GameBoard', () => {
             bunny4: { name: 'Bunny 4', hand: [], garden: [] }
         },
         addItem: () => {},
-        pickCards: (param, callback) => callback(props),
+        drawCards: (param, callback) => callback(props),
         addCards: (param1, param2, callback) => callback(props),
         startPickCard: () => {},
         startSelectAction: () => {},
@@ -26,14 +26,8 @@ describe('GameBoard', () => {
         throwToStreet: () => {}
     };
 
-    it('should handle starting the game', () => {
-        const privProps = {
-            ...props,
-            pickCards: jest.fn()
-        };
-        shallow(<GameBoard {...privProps} />);
-        const spy = jest.spyOn(privProps, 'pickCards');
-        expect(spy).toHaveBeenCalledTimes(4);
+    it('should handle the game preparation', () => {
+        shallow(<GameBoard {...props} />);
     });
 
     it('should handle starting the game with disasters', () => {
@@ -41,11 +35,17 @@ describe('GameBoard', () => {
             ...props,
             throwToStreet: jest.fn()
         };
-        privProps.players.bunny1.hand = [{ id: 1, title: 'Disaster', category: 'disaster' }];
-        privProps.players.bunny2.garden = [{ id: 2, title: 'Fizzbuzz', category: 'plant' }];
+        privProps.players.bunny1.hand = [
+            { id: 1, title: 'Disaster', category: 'disaster' },
+            { id: 2, title: 'Godzilla', category: 'disaster' }
+        ];
+        privProps.players.bunny2.garden = [
+            { id: 3, title: 'Fizzbuzz', category: 'plant' },
+            { id: 4, title: 'Foobar', category: 'plant' }
+        ];
         shallow(<GameBoard {...privProps} />);
         const spy = jest.spyOn(privProps, 'throwToStreet');
-        expect(spy).toHaveBeenCalledWith({ id: 2, title: 'Fizzbuzz', category: 'plant' });
+        expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('should handle placing an item', () => {

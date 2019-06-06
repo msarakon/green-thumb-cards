@@ -1,6 +1,6 @@
 import reducer, { throwToStreet, pickFromStreet } from './streetReducer';
 
-describe('turnReducer', () => {
+describe('streetReducer', () => {
     it('should return the initial state', () => {
         expect(reducer(undefined, {})).toEqual({ top: [], center: [], bottom: [] });
     });

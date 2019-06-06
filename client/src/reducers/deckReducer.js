@@ -16,20 +16,20 @@ const initialState = shuffled(cards);
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-    case 'PICK_CARDS': {
+    case 'DRAW_CARDS': {
         const newState = [ ...state ];
-        newState.splice(0, action.data.count);
+        newState.splice(0, action.data);
         return newState;
     }
     default: return state;
     }
 };
 
-export const pickCards = (count, callback) => {
+export const drawCards = (data, callback) => {
     return (dispatch, getState) => {
         dispatch({
-            type: 'PICK_CARDS',
-            data: { count }
+            type: 'DRAW_CARDS',
+            data
         });
         callback(getState());
     };
