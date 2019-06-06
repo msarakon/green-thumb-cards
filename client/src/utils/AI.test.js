@@ -21,7 +21,7 @@ describe('AI', () => {
     const removeItemSpy = jest.spyOn(props, 'removeItem');
     const endTurnSpy = jest.spyOn(props, 'endTurn');
 
-    afterEach(() => {
+    beforeEach(() => {
         jest.clearAllMocks();
     });
 
@@ -32,8 +32,16 @@ describe('AI', () => {
     });
 
     it('should place a plant to garden', () => {
-        const privProps = { ...props };
-        privProps.players.bunny1.hand.push({ id: 1, title: 'Foobar', category: 'plant' });
+        const privProps = {
+            ...props,
+            players: {
+                ...props.players,
+                bunny1: {
+                    ...props.players.bunny1,
+                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Plant', category: 'plant' })
+                }
+            }
+        };
         playTurn(privProps);
         expect(addItemSpy).toHaveBeenCalledTimes(1);
         expect(removeCardSpy).toHaveBeenCalledTimes(1);
@@ -41,8 +49,16 @@ describe('AI', () => {
     });
 
     it('should place an environment item to garden', () => {
-        const privProps = { ...props };
-        privProps.players.bunny1.hand.push({ id: 1, title: 'Fizzbuzz', category: 'environment' });
+        const privProps = {
+            ...props,
+            players: {
+                ...props.players,
+                bunny1: {
+                    ...props.players.bunny1,
+                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Env', category: 'environment' })
+                }
+            }
+        };
         playTurn(privProps);
         expect(addItemSpy).toHaveBeenCalledTimes(1);
         expect(removeCardSpy).toHaveBeenCalledTimes(1);
@@ -50,9 +66,20 @@ describe('AI', () => {
     });
 
     it('should steal something', () => {
-        const privProps = { ...props };
-        privProps.players.bunny1.hand.push({ id: 1, title: 'Attac', category: 'attack' });
-        privProps.players.bunny2.garden.push({ id: 2, title: 'Foobar', category: 'plant' });
+        const privProps = {
+            ...props,
+            players: {
+                ...props.players,
+                bunny1: {
+                    ...props.players.bunny1,
+                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Attac', category: 'attack' })
+                },
+                bunny2: {
+                    ...props.players.bunny2,
+                    garden: props.players.bunny2.garden.concat({ id: 2, title: 'Haul', category: 'plant' })
+                }
+            }
+        };
         playTurn(privProps);
         expect(addItemSpy).toHaveBeenCalledTimes(1);
         expect(removeCardSpy).toHaveBeenCalledTimes(1);
