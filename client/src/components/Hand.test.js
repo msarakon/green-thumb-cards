@@ -26,15 +26,15 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand pickCard={() => {}}/></Provider>);
+        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
 
         const card = component.container.querySelector('.card');
         fireEvent.click(card);
     });
 
-    it('should handle picking a card', () => {
+    it('should handle drawing a card', () => {
         const state = {
-            turn: { mode: 'pick_card' },
+            turn: { mode: '' },
             deck: [],
             players: {
                 bunny1: { name: 'Bunny 1', hand: [], garden: [] },
@@ -44,7 +44,7 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand pickCard={() => {}}/></Provider>);
+        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
 
         const deck = component.container.querySelector('.deck .card');
         fireEvent.click(deck);
@@ -62,7 +62,7 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand pickCard={() => {}}/></Provider>);
+        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
 
         expect(component.container.querySelector('.active')).toBeDefined();
     });

@@ -1,5 +1,4 @@
 const playTurn = (props) => {
-    console.log('********', props.playerId, 'starts turn');
     const playerName = props.players[props.playerId].name;
     const playableCats = ['plant', 'environment'];
     if (plantsInGarden(props.players)) playableCats.push('attack');

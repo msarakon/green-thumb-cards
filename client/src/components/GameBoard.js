@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { drawCards } from '../reducers/deckReducer';
 import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
-import { startPickCard, startSelectAction } from '../reducers/turnReducer';
+import { startDrawCard, startSelectAction } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
@@ -23,7 +23,7 @@ const GameBoard = (props) => {
     };
 
     /**
-     * The game begins. Pick the starting hand for each player.
+     * The game begins. Draw the starting hand for each player.
      * Start turn for player 1.
      */
     const startGame = () => {
@@ -40,7 +40,7 @@ const GameBoard = (props) => {
     };
 
     /**
-     * Pick n cards for the given player.
+     * Draw n cards for the given player.
      * @param {String} playerId 
      * @param {Number} proposedCount
      * @param {Array} deck
@@ -65,7 +65,7 @@ const GameBoard = (props) => {
      */
     const startTurn = (playerId) => {
         console.log(`${props.players[playerId].name}'s turn starts!`);
-        if (playerId === 'bunny1') props.startPickCard();
+        if (playerId === 'bunny1') props.startDrawCard();
         else playAITurn({ ...props, playerId, endTurn });
     };
 
@@ -122,7 +122,7 @@ const GameBoard = (props) => {
             onMouseMove={mouseMoveHandler}
             onMouseDown={canPlaceItem ? placeItem : undefined}>
             <div className="hand-container">
-                <Hand pickCard={() => drawCardsFor('bunny1', 1, props.deck, () => {})} />
+                <Hand drawCard={() => drawCardsFor('bunny1', 1, props.deck, () => {})} />
             </div>
             <div className="neighborhood-container">
                 <Neighborhood />
@@ -146,7 +146,7 @@ GameBoard.propTypes = {
     addItem: PropTypes.func.isRequired,
     drawCards: PropTypes.func.isRequired,
     addCards: PropTypes.func.isRequired,
-    startPickCard: PropTypes.func.isRequired,
+    startDrawCard: PropTypes.func.isRequired,
     startSelectAction: PropTypes.func.isRequired,
     removeCard: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
@@ -166,7 +166,7 @@ const mapDispatchToProps = {
     addItem,
     drawCards,
     addCards,
-    startPickCard,
+    startDrawCard,
     startSelectAction,
     removeCard,
     removeItem,

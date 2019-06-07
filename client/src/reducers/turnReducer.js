@@ -6,9 +6,9 @@ const reducer = (state = initialState, action) => {
         return {
             mode: 'start_game'
         };
-    case 'START_PICK_CARD':
+    case 'START_DRAW_CARD':
         return {
-            mode: 'pick_card',
+            mode: 'draw_card',
             player: action.data
         };
     case 'START_SELECT_ACTION':
@@ -35,8 +35,8 @@ export const startGame = () => {
     return { type: 'START_GAME', data: null };
 };
 
-export const startPickCard = () => {
-    return { type: 'START_PICK_CARD', data: null };
+export const startDrawCard = () => {
+    return { type: 'START_DRAW_CARD', data: null };
 };
 
 export const startSelectAction = () => {
@@ -60,6 +60,7 @@ export const playCard = (card, callback) => {
             type: 'START_INSERT',
             data: { card, callback }
         };
+    case 'special': return startSelectAction();
     default: return { type: '', data: null };
     }
 };

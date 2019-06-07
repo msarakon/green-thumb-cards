@@ -19,7 +19,7 @@ describe('GameBoard', () => {
         addItem: () => {},
         drawCards: (param, callback) => callback(props),
         addCards: (param1, param2, callback) => callback(props),
-        startPickCard: () => {},
+        startDrawCard: () => {},
         startSelectAction: () => {},
         removeCard: () => props.players.bunny1.hand = [],
         removeItem: () => {},
