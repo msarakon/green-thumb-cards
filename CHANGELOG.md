@@ -4,6 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 6/7    | 2    | Turns our disaster handling did not work properly, but now it might. Also minor improvements such as displaying an empty deck.
 | 6/6    | 2    | Fixed chaining Redux actions, disaster handling now works properly. AI can now use their turn to steal a plant. I have created a monster.
 | 6/5    | 2    | Refactored some tests using Enzyme, wondering why disaster handling fails randomly
 | 6/4    | 1.5  | Added styling and functionality for the deck - player now needs to manually pick a new card.
@@ -13,4 +14,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 19.5 | | 
+| total  | 21.5 | | 
