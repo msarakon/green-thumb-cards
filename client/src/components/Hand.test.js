@@ -35,7 +35,7 @@ describe('Hand', () => {
     it('should handle drawing a card', () => {
         const state = {
             turn: { mode: 'draw_card' },
-            deck: [],
+            deck: [{ id: 1 }],
             players: {
                 bunny1: { name: 'Bunny 1', hand: [], garden: [] },
                 bunny2: { name: 'Bunny 2', hand: [], garden: [] },

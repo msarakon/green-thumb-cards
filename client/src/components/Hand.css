@@ -11,6 +11,12 @@
     height: 9em;
 }
 
+.deck.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .deck .card {
     position: absolute;
     width: 6em;

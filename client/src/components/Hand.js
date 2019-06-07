@@ -20,9 +20,6 @@ const Hand = (props) => {
     return (
         <div className='hand'>
             {
-                props.turn.mode
-            }
-            {
                 props.hand.map(card =>
                     <Card key={card.id}
                         card={card}
@@ -33,19 +30,26 @@ const Hand = (props) => {
                 props.hand.length < 6 &&
                 <div className='card placeholder'>
                     {
-                        props.turn.mode === 'draw_card' &&
+                        props.turn.mode === 'draw_card' && props.deckSize > 0 &&
                         <div>Draw a card</div>
                     }
                 </div>
             }
-            <div
-                className='deck'
-                title={props.deckSize + ' cards remaining'}
-                onClick={props.turn.mode === 'draw_card' ? drawCard : undefined}>
-                <div className='card'><div className='card-bg'></div></div>
-                <div className='card'><div className='card-bg'></div></div>
-                <div className='card'><div className='card-bg'></div></div>
-            </div>
+            {
+                props.deckSize > 0 &&
+                <div
+                    className='deck'
+                    title={props.deckSize + ' cards remaining'}
+                    onClick={props.turn.mode === 'draw_card' ? drawCard : undefined}>
+                    <div className='card'><div className='card-bg'></div></div>
+                    <div className='card'><div className='card-bg'></div></div>
+                    <div className='card'><div className='card-bg'></div></div>
+                </div>
+            }
+            {
+                props.deckSize == 0 &&
+                <div className='deck empty'><div>No cards left!</div></div>
+            }
         </div>
     );
 };
