@@ -8,8 +8,7 @@ const reducer = (state = initialState, action) => {
         };
     case 'START_DRAW_CARD':
         return {
-            mode: 'draw_card',
-            player: action.data
+            mode: 'draw_card'
         };
     case 'START_SELECT_ACTION':
         return {
@@ -60,7 +59,17 @@ export const playCard = (card, callback) => {
             type: 'START_INSERT',
             data: { card, callback }
         };
-    case 'special': return startSelectAction();
+    /* case 'special':
+        return dispatch => {
+            callback(() => {
+                dispatch({
+                    type: 'START_DRAW_CARD',
+                    data: {
+                        callback: () => {}
+                    }
+                });
+            });
+        }; */
     default: return { type: '', data: null };
     }
 };

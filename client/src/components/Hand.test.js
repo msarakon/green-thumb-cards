@@ -34,7 +34,7 @@ describe('Hand', () => {
 
     it('should handle drawing a card', () => {
         const state = {
-            turn: { mode: '' },
+            turn: { mode: 'draw_card' },
             deck: [],
             players: {
                 bunny1: { name: 'Bunny 1', hand: [], garden: [] },
@@ -44,10 +44,14 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
+        const func = { drawCard: jest.fn() };
+        const spy = jest.spyOn(func, 'drawCard');
+        const component = render(<Provider store={store}><Hand drawCard={func.drawCard}/></Provider>);
 
         const deck = component.container.querySelector('.deck .card');
         fireEvent.click(deck);
+        expect(spy).toHaveBeenCalledTimes(1);
+
     });
 
     it('should emphasize the active card', () => {

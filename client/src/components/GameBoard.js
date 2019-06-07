@@ -69,9 +69,17 @@ const GameBoard = (props) => {
         else playAITurn({ ...props, playerId, endTurn });
     };
 
+    /**
+     * Handle disasters if present in a player's hand.
+     * @param {String} playerId
+     * @param {Array} cards
+     * @param {Array} deck
+     * @param {Function} next
+     */
     const doDisasters = (playerId, cards, deck, next) => {
         const disasters = cards.filter(card => card.category === 'disaster');
         if (disasters.length === 0) next(deck);
+        let newDeck = [ ...deck ];
         disasters.forEach(disaster => {
             console.log(`*** Disaster event: "${disaster.title}"`);
             Object.entries(props.players).forEach(([id, player]) => {
@@ -84,7 +92,10 @@ const GameBoard = (props) => {
                 }
             });
             props.removeCard(playerId, disaster.id);
-            drawCardsFor(playerId, 1, deck, (deck) => next(deck));
+            drawCardsFor(playerId, 1, newDeck, (deck) => {
+                newDeck = [ ...deck ];
+                next(newDeck);
+            });
         });
     };
 

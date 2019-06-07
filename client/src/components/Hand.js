@@ -8,6 +8,7 @@ import './Hand.css';
 
 const Hand = (props) => {
     const playCard = (card) => {
+        console.log(`You play "${card.title}"`);
         props.playCard(card, () => props.removeCard('bunny1', card.id));
     };
 
@@ -19,6 +20,9 @@ const Hand = (props) => {
     return (
         <div className='hand'>
             {
+                props.turn.mode
+            }
+            {
                 props.hand.map(card =>
                     <Card key={card.id}
                         card={card}
@@ -27,7 +31,12 @@ const Hand = (props) => {
             }
             {
                 props.hand.length < 6 &&
-                <div className='card placeholder'></div>
+                <div className='card placeholder'>
+                    {
+                        props.turn.mode === 'draw_card' &&
+                        <div>Draw a card</div>
+                    }
+                </div>
             }
             <div
                 className='deck'

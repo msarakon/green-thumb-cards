@@ -8,6 +8,7 @@
     border: 2px solid #000;
     border-radius: .3em;
     box-shadow: 5px 5px 5px -5px rgba(0, 0, 0, .75);
+    transition: transform .5s ease-in-out;
 }
 
 .card.active {
@@ -19,10 +20,17 @@
     background: none;
     border: none;
     box-shadow: none;
+    color: red;
+    font-size: 1.1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card.selectable:hover {
     cursor: pointer;
+    transform: rotate(5deg);
 }
 
 .card-bg {

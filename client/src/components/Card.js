@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Card.css';
 
 const Card = (props) => {
-    const selectableCategories = ['plant', 'environment', 'attack'];
+    const selectableCategories = ['plant', 'environment', 'attack', 'special'];
     const selectable = props.turn.mode === 'select_action' &&
         selectableCategories.includes(props.card.category);
     const active = props.turn.card && props.turn.card.id === props.card.id;
