@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { render, cleanup, fireEvent } from 'react-testing-library';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import Hand from './Hand';
 
