@@ -13,6 +13,7 @@ import './GameBoard.css';
 
 const GameBoard = (props) => {
     const CARDS_AT_START = 5;
+    const MAX_HAND_CARDS = 6;
     const [ pointerX, setPointerX ] = useState(null);
     const [ pointerY, setPointerY ] = useState(null);
     const [ gameStarted, setGameStarted ] = useState(false);
@@ -31,8 +32,8 @@ const GameBoard = (props) => {
         drawCardsFor('bunny1', CARDS_AT_START, props.deck, (deck) => {
             drawCardsFor('bunny2', CARDS_AT_START, deck, (deck) => {
                 drawCardsFor('bunny3', CARDS_AT_START, deck, (deck) => {
-                    drawCardsFor('bunny4', CARDS_AT_START, deck, () => {
-                        startTurn('bunny1');
+                    drawCardsFor('bunny4', CARDS_AT_START, deck, (deck) => {
+                        startTurn('bunny1', deck);
                     });
                 });
             });
@@ -61,12 +62,18 @@ const GameBoard = (props) => {
 
     /**
      * Start turn for the given player.
-     * @param {String} playerId 
+     * @param {String} playerId
+     * @param {Array} deck
      */
-    const startTurn = (playerId) => {
+    const startTurn = (playerId, deck) => {
         console.log(`${props.players[playerId].name}'s turn starts!`);
-        if (playerId === 'bunny1') props.startDrawCard();
-        else playAITurn({ ...props, playerId, endTurn });
+        if (playerId === 'bunny1') {
+            if (deck.length > 0 && props.players[playerId].hand.length < MAX_HAND_CARDS) {
+                props.startDrawCard();
+            }
+            else props.startSelectAction();
+        }
+        else playAITurn({ ...props, playerId, drawCardsFor, deck, endTurn });
     };
 
     /**
@@ -108,18 +115,19 @@ const GameBoard = (props) => {
             left: Math.floor(x / containerBounds.width * 100)
         });
         props.turn.callback();
-        endTurn('bunny1');
+        endTurn('bunny1', props.deck);
     };
 
     /**
      * Start turn for the next player.
-     * @param {String} playerId 
+     * @param {String} playerId
+     * @param {Array} deck
      */
-    const endTurn = (playerId) => {
+    const endTurn = (playerId, deck) => {
         const playerIds = Object.keys(props.players);
         const playerIdx = playerIds.indexOf(playerId);
         const nextPlayerIdx = playerIdx === playerIds.length - 1 ? 0 : playerIdx + 1;
-        startTurn(playerIds[nextPlayerIdx]);
+        startTurn(playerIds[nextPlayerIdx], deck);
     };
 
     if (props.turn.mode === 'start_game' && !gameStarted) startGame();

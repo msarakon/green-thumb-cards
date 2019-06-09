@@ -13,7 +13,8 @@ describe('AI', () => {
         addItem: jest.fn(),
         removeCard: jest.fn(),
         removeItem: jest.fn(),
-        endTurn: jest.fn()
+        endTurn: jest.fn(),
+        drawCardsFor: (param1, param2, param3, callback) => callback([]) 
     };
 
     const addItemSpy = jest.spyOn(props, 'addItem');
