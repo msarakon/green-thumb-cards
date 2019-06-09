@@ -81,6 +81,21 @@ describe('GameBoard', () => {
         });
     });
 
+    it('should skip drawing a card if deck is empty', () => {
+        const privProps = {
+            ...props,
+            drawCards: (param, callback) => callback({ ...props, deck: [] }),
+            startDrawCard: jest.fn(),
+            startSelectAction: jest.fn()
+        };
+        shallow(<GameBoard {...privProps} />);
+        const drawCardSpy = jest.spyOn(privProps, 'startDrawCard');
+        expect(drawCardSpy).not.toHaveBeenCalled();
+        const selectActionSpy = jest.spyOn(privProps, 'startSelectAction');
+        expect(selectActionSpy).toHaveBeenCalledTimes(1);
+    });
+
+
     it('should handle an AI turn', () => {
         const privProps = {
             ...props,
