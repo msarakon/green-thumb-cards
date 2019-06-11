@@ -1,16 +1,10 @@
 {
   "cards": [
     {  
-      "id":89,
-      "name":"bad_soil",
-      "title":"Bad Soil",
-      "category":"disaster"
-    },
-    {  
-      "id":90,
-      "name":"dog_buries_bone",
-      "title":"Dog buries bone",
-      "category":"disaster"
+      "id":108,
+      "name":"hire_a_gardener",
+      "title":"Hire a gardener",
+      "category":"special"
     },
     {  
       "id":1,
@@ -137,6 +131,18 @@
       "title":"Tulip",
       "category":"plant",
       "count":3
+    },
+    {  
+      "id":89,
+      "name":"bad_soil",
+      "title":"Bad Soil",
+      "category":"disaster"
+    },
+    {  
+      "id":90,
+      "name":"dog_buries_bone",
+      "title":"Dog buries bone",
+      "category":"disaster"
     }
   ]
 }

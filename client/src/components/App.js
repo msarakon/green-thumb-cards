@@ -5,6 +5,7 @@ import { startGame } from '../reducers/turnReducer';
 import GameBoard from './GameBoard';
 import Footer from './Footer';
 import './App.css';
+import GameMaster from '../logic/GameMaster';
 
 const App = (props) => {
     const [gameOn, setGameOn] = useState(false);
@@ -26,7 +27,7 @@ const App = (props) => {
             {
                 gameOn &&
                 <div className="gameboard-container">
-                    <GameBoard />
+                    <GameBoard gameMaster={new GameMaster()}/>
                 </div>
             }
             <div className="footer-container">

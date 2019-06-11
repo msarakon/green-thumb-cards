@@ -1,67 +1,47 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { GameBoard } from './GameBoard';
+import { render, cleanup, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
+import GameBoard from './GameBoard';
+import GameMaster from '../logic/GameMaster';
+
+afterEach(cleanup);
 
 describe('GameBoard', () => {
 
+    const mockStore = configureMockStore([thunk]);
+
     const props = {
-        turn: { mode: 'start_game', callback: () => {} },
-        deck: [
-            { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 },
-            { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }
-        ],
+        gameMaster: new GameMaster(),
+    };
+
+    const state = {
+        deck: [],
         players: {
-            bunny1: { name: 'Bunny 1', hand: [], garden: [] },
+            bunny1: { name: 'Bunny 1', hand: [{ id: 1, title: 'Foobar', category: 'plant' }], garden: [] },
             bunny2: { name: 'Bunny 2', hand: [], garden: [] },
             bunny3: { name: 'Bunny 3', hand: [], garden: [] },
             bunny4: { name: 'Bunny 4', hand: [], garden: [] }
         },
-        addItem: () => {},
-        drawCards: (param, callback) => callback(props),
-        addCards: (param1, param2, callback) => callback(props),
-        startDrawCard: () => {},
-        startSelectAction: () => {},
-        removeCard: () => props.players.bunny1.hand = [],
-        removeItem: () => {},
-        throwToStreet: () => {}
+        street: { top: [], center: [], bottom: [] },
+        turn: { mode: 'start_game', callback: () => {} }
     };
 
     it('should handle the game preparation', () => {
-        shallow(<GameBoard {...props} />);
+        const store = mockStore(() => state);
+        render(<Provider store={store} ><GameBoard {...props } /></Provider>);
     });
 
-    it('should handle starting the game with disasters', () => {
-        const privProps = {
-            ...props,
-            throwToStreet: jest.fn()
-        };
-        privProps.players.bunny1.hand = [
-            { id: 1, title: 'Disaster', category: 'disaster' },
-            { id: 2, title: 'Godzilla', category: 'disaster' }
-        ];
-        privProps.players.bunny2.garden = [
-            { id: 3, title: 'Fizzbuzz', category: 'plant' },
-            { id: 4, title: 'Foobar', category: 'plant' }
-        ];
-        shallow(<GameBoard {...privProps} />);
-        const spy = jest.spyOn(privProps, 'throwToStreet');
-        expect(spy).toHaveBeenCalledTimes(2);
-    });
+    it('should handle drawing a plant card and placing it', () => {
+        const store = mockStore(() => state);
+        const component = render(<Provider store={store} ><GameBoard {...props } /></Provider>);
 
-    it('should handle placing an item', () => {
-        const privProps = {
-            ...props,
-            turn: {
-                mode: 'insert',
-                card: { id: 1, category: 'plant', title: 'Foobar' },
-                callback: () => {}
-            },
-            pointer: 'insertable',
-            addItem: jest.fn()
-        };
+        fireEvent.click(component.container.querySelector('.card'));
 
-        const wrapper = shallow(<GameBoard {...privProps} />);
-        wrapper.find('.gameboard').simulate('mousedown', {
+        fireEvent.mouseMove(component.container.querySelector('.gameboard'));
+        
+        fireEvent.mouseDown(component.container.querySelector('.garden'), {
             target: {
                 getBoundingClientRect: () => {
                     return { x: 100, y: 300, height: 400, width: 400 };
@@ -70,53 +50,5 @@ describe('GameBoard', () => {
             clientX: 550,
             clientY: 500
         });
-
-        const spy = jest.spyOn(privProps, 'addItem');
-        expect(spy).toHaveBeenCalledWith('bunny1', {
-            id: 1,
-            category: 'plant',
-            title: 'Foobar',
-            left: 107,
-            top: 45
-        });
     });
-
-    it('should skip drawing a card if deck is empty', () => {
-        const privProps = {
-            ...props,
-            drawCards: (param, callback) => callback({ ...props, deck: [] }),
-            startDrawCard: jest.fn(),
-            startSelectAction: jest.fn()
-        };
-        shallow(<GameBoard {...privProps} />);
-        const drawCardSpy = jest.spyOn(privProps, 'startDrawCard');
-        expect(drawCardSpy).not.toHaveBeenCalled();
-        const selectActionSpy = jest.spyOn(privProps, 'startSelectAction');
-        expect(selectActionSpy).toHaveBeenCalledTimes(1);
-    });
-
-
-    it('should handle an AI turn', () => {
-        const privProps = {
-            ...props,
-            turn: {
-                mode: 'insert',
-                card: { id: 1, category: 'plant', title: 'Foobar' },
-                callback: () => {}
-            },
-            pointer: 'insertable'
-        };
-        privProps.players.bunny2.hand = [{ id: 2, category: 'plant', title: 'Fizzbuzz' }];
-
-        const wrapper = shallow(<GameBoard {...privProps} />);
-        wrapper.find('.gameboard').simulate('mousedown', {
-            target: {
-                getBoundingClientRect: () => {
-                    return { x: 100, y: 300, height: 400, width: 400 };
-                }
-            }
-        });
-
-    });
-
 });

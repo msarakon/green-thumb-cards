@@ -1,0 +1,134 @@
+import store from '../store.js';
+import { drawCards } from '../reducers/deckReducer';
+import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
+import { startDrawCard, startSelectAction } from '../reducers/turnReducer';
+import { throwToStreet } from '../reducers/streetReducer';
+import AI from './AI';
+
+class GameMaster {
+
+    constructor() {
+        this.CARDS_AT_START = 5;
+        this.MAX_HAND_CARDS = 6;
+        this.startGame = this.startGame.bind(this);
+        this.drawCardsFor = this.drawCardsFor.bind(this);
+        this.placeItem = this.placeItem.bind(this);
+        this.doDisasters = this.doDisasters.bind(this);
+        this.endTurn = this.endTurn.bind(this);
+        this.startTurn = this.startTurn.bind(this);
+        this.ai = new AI({
+            drawCardsFor: this.drawCardsFor,
+            endTurn: this.endTurn
+        });
+    }
+   
+    /**
+     * The game begins. Draw the starting hand for each player.
+     * Start turn for player 1.
+     */
+    startGame() {
+        this.drawCardsFor('bunny1', this.CARDS_AT_START, store.getState().deck, (deck) => {
+            this.drawCardsFor('bunny2', this.CARDS_AT_START, deck, (deck) => {
+                this.drawCardsFor('bunny3', this.CARDS_AT_START, deck, (deck) => {
+                    this.drawCardsFor('bunny4', this.CARDS_AT_START, deck, (deck) => {
+                        this.startTurn('bunny1', deck);
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Draw n cards for the given player.
+     * @param {String} playerId 
+     * @param {Number} proposedCount
+     * @param {Array} deck
+     * @param {Function} next
+     */
+    drawCardsFor(playerId, proposedCount, deck, next) {
+        const count = proposedCount > deck.length ? deck.length : proposedCount;
+        console.log(`${store.getState().players[playerId].name} draws ${count} card(s)`);
+        const drawn = deck.slice(0, count);
+        store.dispatch(drawCards(count, ({ deck }) => {
+            store.dispatch(addCards(playerId, drawn, ({ players }) => {
+                this.doDisasters(playerId, players[playerId].hand, deck, (deck) => {
+                    next(deck);
+                });
+            }));
+        }));
+    }
+
+    /**
+     * Handle disasters if present in a player's hand.
+     * @param {String} playerId
+     * @param {Array} cards
+     * @param {Array} deck
+     * @param {Function} next
+     */
+    doDisasters(playerId, cards, deck, next) {
+        const disasters = cards.filter(card => card.category === 'disaster');
+        disasters.forEach(disaster => {
+            console.log(`*** Disaster event: "${disaster.title}"`);
+            Object.entries(store.getState().players).forEach(([id, player]) => {
+                const plants = player.garden.filter(card => card.category === 'plant');
+                const item = plants[Math.floor(Math.random()*plants.length)];
+                if (item) {
+                    store.dispatch(removeItem(id, item.id));
+                    console.log(`${player.name} lost "${item.title}"`);
+                    store.dispatch(throwToStreet(item));
+                }
+            });
+            store.dispatch(removeCard(playerId, disaster.id));
+        });
+        if (disasters.length > 0) {
+            this.drawCardsFor(playerId, disasters.length, deck, (deck) => next(deck));
+        } else {
+            next(deck);
+        }
+    }
+
+    placeItem(evt) {
+        const containerBounds = evt.target.getBoundingClientRect();
+        const x = evt.clientX - containerBounds.x - 20;
+        const y = evt.clientY - containerBounds.y - 20;
+        store.dispatch(addItem('bunny1', {
+            ...store.getState().turn.card,
+            top: Math.floor(y / containerBounds.height * 100),
+            left: Math.floor(x / containerBounds.width * 100)
+        }));
+        store.getState().turn.callback();
+        this.endTurn('bunny1', store.getState().deck);
+    }
+
+    /**
+     * Start turn for the next player.
+     * @param {String} playerId
+     * @param {Array} deck
+     */
+    endTurn(playerId, deck) {
+        const playerIds = Object.keys(store.getState().players);
+        const playerIdx = playerIds.indexOf(playerId);
+        const nextPlayerIdx = playerIdx === playerIds.length - 1 ? 0 : playerIdx + 1;
+        this.startTurn(playerIds[nextPlayerIdx], deck);
+    }
+
+    /**
+     * Start turn for the given player.
+     * @param {String} playerId
+     * @param {Array} deck
+     */
+    startTurn(playerId, deck) {
+        console.log(`${store.getState().players[playerId].name}'s turn starts!`);
+        if (playerId === 'bunny1') {
+            if (deck.length > 0 && store.getState().players[playerId].hand.length < this.MAX_HAND_CARDS) {
+                store.dispatch(startDrawCard());
+            }
+            else store.dispatch(startSelectAction());
+        } else {
+            this.ai.playTurn({ playerId, deck });
+        }
+    }
+
+}
+
+export default GameMaster;
