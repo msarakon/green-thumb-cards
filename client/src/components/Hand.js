@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { playCard, startSelectAction } from '../reducers/turnReducer';
 import { removeCard } from '../reducers/playerReducer';
 import Card from './Card';
+import Deck from './Deck';
 import './Hand.css';
 
 const Hand = (props) => {
@@ -19,37 +20,15 @@ const Hand = (props) => {
 
     return (
         <div className='hand'>
-            {
-                props.hand.map(card =>
-                    <Card key={card.id}
-                        card={card}
-                        play={() => playCard(card)}/>
-                )
-            }
-            {
-                props.hand.length < 6 &&
+            {props.hand.map(card => <Card key={card.id} card={card} play={() => playCard(card)}/>)}
+            {props.hand.length < 6 &&
                 <div className='card placeholder'>
-                    {
-                        props.turn.mode === 'draw_card' && props.deckSize > 0 &&
+                    {props.turn.mode === 'draw_card' && props.deckSize > 0 &&
                         <div>Draw a card</div>
                     }
                 </div>
             }
-            {
-                props.deckSize > 0 &&
-                <div
-                    className='deck'
-                    title={props.deckSize + ' cards remaining'}
-                    onClick={props.turn.mode === 'draw_card' ? drawCard : undefined}>
-                    <div className='card'><div className='card-bg'></div></div>
-                    <div className='card'><div className='card-bg'></div></div>
-                    <div className='card'><div className='card-bg'></div></div>
-                </div>
-            }
-            {
-                props.deckSize == 0 &&
-                <div className='deck empty'><div>No cards left!</div></div>
-            }
+            <Deck size={props.deckSize} drawCard={drawCard} />
         </div>
     );
 };

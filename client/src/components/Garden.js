@@ -7,9 +7,6 @@ import { removeItem, addItem, removeCard } from '../reducers/playerReducer';
 import './Garden.css';
 
 const Garden = (props) => {
-    const myGarden = props.playerId === 'bunny1';
-    const attackOn = !myGarden && props.turn.mode === 'attack';
-
     const steal = (item) => {
         console.log(`You attempt to steal "${item.title}" from ${props.player.name}`);
         props.removeItem(props.playerId, item.id);
@@ -19,7 +16,7 @@ const Garden = (props) => {
 
     return (
         <div className='garden'
-            onMouseEnter={myGarden ? () => props.setPointer('insertable') : undefined}
+            onMouseEnter={props.myGarden ? () => props.setPointer('insertable') : undefined}
             onMouseLeave={() => props.setPointer(null) }>
             {
                 props.player.garden.map(item =>
@@ -28,7 +25,7 @@ const Garden = (props) => {
                         top: item.top + '%',
                         left: item.left + '%'
                     }}
-                    onClick={attackOn ? () => steal(item) : undefined}>
+                    onClick={props.attackOn ? () => steal(item) : undefined}>
                         {item.id}
                     </div>
                 )
@@ -40,6 +37,8 @@ const Garden = (props) => {
 Garden.propTypes = {
     playerId: PropTypes.string.isRequired,
     player: PropTypes.object.isRequired,
+    myGarden: PropTypes.bool.isRequired,
+    attackOn: PropTypes.bool.isRequired,
     turn: PropTypes.object.isRequired,
     setPointer: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
@@ -51,6 +50,8 @@ Garden.propTypes = {
 const mapStateToProps = (state, { playerId }) => {
     return {
         player: state.players[playerId],
+        myGarden: playerId === 'bunny1',
+        attackOn: playerId !== 'bunny1' && state.turn.mode === 'attack',
         turn: state.turn
     };
 };

@@ -3,17 +3,11 @@ const initialState = { mode: null, card: null };
 const reducer = (state = initialState, action) => {
     switch (action.type) {
     case 'START_GAME':
-        return {
-            mode: 'start_game'
-        };
+        return { mode: 'start_game' };
     case 'START_DRAW_CARD':
-        return {
-            mode: 'draw_card'
-        };
+        return { mode: 'draw_card' };
     case 'START_SELECT_ACTION':
-        return {
-            mode: 'select_action'
-        };
+        return { mode: 'select_action' };
     case 'START_INSERT':
         return {
             mode: 'insert',

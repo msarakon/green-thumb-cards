@@ -14,37 +14,48 @@ initialState.bunny2 = newPlayer('Bunny 2');
 initialState.bunny3 = newPlayer('Bunny 3');
 initialState.bunny4 = newPlayer('Bunny 4');
 
+const stateWithNewCards = (state, playerId, cards) => {
+    state[playerId] = {
+        ...state[playerId],
+        hand: state[playerId].hand.concat(cards)
+    };
+    return state;
+};
+
+const stateWithRemovedCard = (state, playerId, cardId) => {
+    state[playerId] = {
+        ...state[playerId],
+        hand: state[playerId].hand.filter(card => card.id !== cardId)
+    };
+    return state;
+};
+
+const stateWithNewItem = (state, playerId, item) => {
+    state[playerId] = {
+        ...state[playerId],
+        garden: state[playerId].garden.concat(item)
+    };
+    return state;
+};
+
+const stateWithRemovedItem = (state, playerId, itemId) => {
+    state[playerId] = {
+        ...state[playerId],
+        garden: state[playerId].garden.filter(item => item.id !== itemId)
+    };
+    return state;
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-    case 'ADD_CARDS': {
-        state[action.data.playerId] = {
-            ...state[action.data.playerId],
-            hand: state[action.data.playerId].hand.concat(action.data.cards)
-        };
-        return state;
-    }
-    case 'REMOVE_CARD': {
-        state[action.data.playerId] = {
-            ...state[action.data.playerId],
-            hand: state[action.data.playerId].hand.filter(card =>
-                card.id !== action.data.cardId)
-        };
-        return state;
-    }
-    case 'ADD_ITEM': {
-        state[action.data.playerId] = {
-            ...state[action.data.playerId],
-            garden: state[action.data.playerId].garden.concat(action.data.card)
-        };
-        return state;
-    }
-    case 'REMOVE_ITEM': {
-        state[action.data.playerId] = {
-            ...state[action.data.playerId],
-            garden: state[action.data.playerId].garden.filter(item => item.id !== action.data.itemId)
-        };
-        return state;
-    }
+    case 'ADD_CARDS':
+        return stateWithNewCards(state, action.data.playerId, action.data.cards);
+    case 'REMOVE_CARD':
+        return stateWithRemovedCard(state, action.data.playerId, action.data.cardId);
+    case 'ADD_ITEM':
+        return stateWithNewItem(state, action.data.playerId, action.data.card);
+    case 'REMOVE_ITEM':
+        return stateWithRemovedItem(state, action.data.playerId, action.data.itemId);
     default: return state;
     }
 };
