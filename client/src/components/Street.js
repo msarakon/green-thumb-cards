@@ -3,24 +3,19 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { playCard } from '../reducers/turnReducer';
 import { pickFromStreet } from '../reducers/streetReducer';
+import GardenItem from './GardenItem';
 
 const Street = (props) => {
-    const selectOn = props.turn.mode === 'select_action';
-
     const pick = (item) => props.playCard(item, () => props.pickFromStreet(item.id));
 
     return (
         <div>
             {
                 props.items.map(item =>
-                    <div key={item.id} className="garden-item" style={{
-                        zIndex: item.zIndex,
-                        top: item.top + '%',
-                        left: item.left + '%'
-                    }}
-                    onClick={selectOn ? () => pick(item) : undefined}>
-                        {item.id}
-                    </div>
+                    <GardenItem
+                        key={item.id}
+                        item={item}
+                        action={props.selectOn ? (item) => pick(item) : undefined} />
                 )
             }
         </div>
@@ -30,14 +25,14 @@ const Street = (props) => {
 Street.propTypes = {
     streetId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
-    turn: PropTypes.object.isRequired,
+    selectOn: PropTypes.bool.isRequired,
     playCard: PropTypes.func.isRequired,
     pickFromStreet: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { streetId }) => {
     return {
-        turn: state.turn,
+        selectOn: state.turn.mode === 'select_action',
         items: state.street[streetId]
     };
 };

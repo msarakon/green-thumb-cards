@@ -30,58 +30,28 @@ describe('AI', () => {
     });
 
     it('should place a plant to garden', () => {
-        const privProps = {
-            ...props,
-            players: {
-                ...props.players,
-                bunny1: {
-                    ...props.players.bunny1,
-                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Plant', category: 'plant' })
-                }
-            }
-        };
+        const privProps = { ...props };
+        privProps.players.bunny1.hand = props.players.bunny1.hand.concat(
+            { id: 1, title: 'Plant', category: 'plant' });
         ai.playTurn(privProps);
-        // expect(addItemSpy).toHaveBeenCalledTimes(1);
-        // expect(removeCardSpy).toHaveBeenCalledTimes(1);
         expect(endTurnSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should place an environment item to garden', () => {
-        const privProps = {
-            ...props,
-            players: {
-                ...props.players,
-                bunny1: {
-                    ...props.players.bunny1,
-                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Env', category: 'environment' })
-                }
-            }
-        };
+        const privProps = { ...props };
+        privProps.players.bunny1.hand = props.players.bunny1.hand.concat(
+            { id: 1, title: 'Env', category: 'environment' });
         ai.playTurn(privProps);
-        // expect(addItemSpy).toHaveBeenCalledTimes(1);
-        // expect(removeCardSpy).toHaveBeenCalledTimes(1);
         expect(endTurnSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should steal something', () => {
-        const privProps = {
-            ...props,
-            players: {
-                ...props.players,
-                bunny1: {
-                    ...props.players.bunny1,
-                    hand: props.players.bunny1.hand.concat({ id: 1, title: 'Attac', category: 'attack' })
-                },
-                bunny2: {
-                    ...props.players.bunny2,
-                    garden: props.players.bunny2.garden.concat({ id: 2, title: 'Haul', category: 'plant' })
-                }
-            }
-        };
+        const privProps = { ...props };
+        privProps.players.bunny1.hand = props.players.bunny1.hand.concat(
+            { id: 1, title: 'Attac', category: 'attack' });
+        privProps.players.bunny2.hand = props.players.bunny1.hand.concat(
+            { id: 2, title: 'Haul', category: 'plant' });
         ai.playTurn(privProps);
-        // expect(addItemSpy).toHaveBeenCalledTimes(1);
-        // expect(removeCardSpy).toHaveBeenCalledTimes(1);
-        // expect(removeItemSpy).toHaveBeenCalledTimes(1);
         expect(endTurnSpy).toHaveBeenCalledTimes(1);
     });
 

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { setPointer } from '../reducers/pointerReducer';
 import { playCard } from '../reducers/turnReducer';
 import { removeItem, addItem, removeCard } from '../reducers/playerReducer';
+import GardenItem from './GardenItem';
 import './Garden.css';
 
 const Garden = (props) => {
@@ -20,14 +21,10 @@ const Garden = (props) => {
             onMouseLeave={() => props.setPointer(null) }>
             {
                 props.player.garden.map(item =>
-                    <div key={item.id} className="garden-item" style={{
-                        zIndex: item.zIndex,
-                        top: item.top + '%',
-                        left: item.left + '%'
-                    }}
-                    onClick={props.attackOn ? () => steal(item) : undefined}>
-                        {item.id}
-                    </div>
+                    <GardenItem
+                        key={item.id}
+                        item={item}
+                        action={props.attackOn ? (item) => steal(item) : undefined} />
                 )
             }
         </div>
