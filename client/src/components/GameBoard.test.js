@@ -12,12 +12,11 @@ describe('GameBoard', () => {
 
     const mockStore = configureMockStore([thunk]);
 
-    const props = {
-        gameMaster: new GameMaster(),
-    };
+    const gameMaster = new GameMaster();
+    const props = { gameMaster };
 
     const state = {
-        deck: [],
+        deck: [{ id: 123, category: 'plant' }],
         players: {
             bunny1: { name: 'Bunny 1', hand: [{ id: 1, title: 'Foobar', category: 'plant' }], garden: [] },
             bunny2: { name: 'Bunny 2', hand: [], garden: [] },
@@ -50,5 +49,22 @@ describe('GameBoard', () => {
             clientX: 550,
             clientY: 500
         });
+    });
+
+    it('should handle stealing a plant', () => {
+        const stealState = {
+            ...state,
+            turn: { mode: 'attack', card: { id: 1 } }
+        };
+        stealState.players.bunny2.garden = stealState.players.bunny2.garden
+            .concat({ id: 2, category: 'plant', title: 'Foobar' });
+        const store = mockStore(() => stealState);
+        gameMaster.steal = jest.fn();
+        const stealSpy = jest.spyOn(gameMaster, 'steal');
+        const component = render(<Provider store={store} ><GameBoard {...props } /></Provider>);
+
+        fireEvent.click(component.container.querySelector('.garden-item'));
+
+        expect(stealSpy).toHaveBeenCalledTimes(1);
     });
 });

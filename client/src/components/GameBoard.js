@@ -8,7 +8,6 @@ import './GameBoard.css';
 
 const GameBoard = (props) => {
     const [ pointerCoords, setPointerCoords ] = useState([null, null]);
-
     const mouseMoveHandler = (evt) => setPointerCoords([evt.clientX - 20, evt.clientY - 20]);
 
     if (props.turn.mode === 'start_game') props.gameMaster.startGame();
@@ -21,7 +20,7 @@ const GameBoard = (props) => {
                 <Hand drawCard={() => props.gameMaster.drawCardsFor('bunny1', 1, props.deck, () => {})} />
             </div>
             <div className="neighborhood-container">
-                <Neighborhood />
+                <Neighborhood steal={(item, playerId) => props.gameMaster.steal(item, playerId)} />
             </div>
             {
                 props.insertOn &&

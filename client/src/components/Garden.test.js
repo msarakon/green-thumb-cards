@@ -44,9 +44,28 @@ describe('Garden', () => {
         };
         const store = mockStore(() => state);
 
-        const component = render(<Provider store={store}><Garden playerId={'bunny2'} /></Provider>);
+        const mockFuncs = { steal: jest.fn() };
+        const spy = jest.spyOn(mockFuncs, 'steal');
+
+        const component = render(<Provider store={store}>
+            <Garden playerId={'bunny2'} steal={mockFuncs.steal} />
+        </Provider>);
         const foobar = component.container.querySelector('.garden-item');
         fireEvent.click(foobar);
+
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle mouseenter and mouseleave', () => {
+        const state = {
+            ...baseState,
+            turn: { mode: 'foobar '}
+        };
+        const store = mockStore(() => state);
+        const component = render(<Provider store={store}><Garden playerId={'bunny1'} /></Provider>);
+
+        fireEvent.mouseEnter(component.container.querySelector('.garden'));
+        fireEvent.mouseLeave(component.container.querySelector('.garden'));
     });
 
 });

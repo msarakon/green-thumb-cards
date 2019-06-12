@@ -1,7 +1,7 @@
 import store from '../store.js';
 import { drawCards } from '../reducers/deckReducer';
 import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
-import { startDrawCard, startSelectAction } from '../reducers/turnReducer';
+import { startDrawCard, startSelectAction, playCard } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import AI from './AI';
 
@@ -14,11 +14,14 @@ class GameMaster {
         this.drawCardsFor = this.drawCardsFor.bind(this);
         this.placeItem = this.placeItem.bind(this);
         this.doDisasters = this.doDisasters.bind(this);
+        this.steal = this.steal.bind(this);
+        this.hasDefender = this.hasDefender.bind(this);
         this.endTurn = this.endTurn.bind(this);
         this.startTurn = this.startTurn.bind(this);
         this.ai = new AI({
             drawCardsFor: this.drawCardsFor,
-            endTurn: this.endTurn
+            endTurn: this.endTurn,
+            hasDefender: this.hasDefender
         });
     }
    
@@ -100,6 +103,24 @@ class GameMaster {
         this.endTurn('bunny1', store.getState().deck);
     }
 
+    steal(item, playerId) {
+        const attack = store.getState().turn.card;
+        const victimName = store.getState().players[playerId].name;
+        if (this.hasDefender(playerId, attack)) {
+            console.log(`You failed to steal "${item.title}" from ${victimName}`);
+        } else {
+            console.log(`You stole "${item.title}" from ${victimName}`);
+            store.dispatch(removeItem(playerId, item.id));
+            store.dispatch(playCard(item, () => store.dispatch(removeCard('bunny1', attack.id))));
+        }
+    }
+
+    hasDefender(playerId, attack) {
+        return store.getState().players[playerId].hand.filter(card =>
+            card.protectsFrom && card.protectsFrom.includes(attack.name))
+            .length > 0;
+    }
+
     /**
      * Start turn for the next player.
      * @param {String} playerId
@@ -125,7 +146,7 @@ class GameMaster {
             }
             else store.dispatch(startSelectAction());
         } else {
-            this.ai.playTurn({ playerId, deck });
+            this.ai.playTurn(playerId, deck);
         }
     }
 

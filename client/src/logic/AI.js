@@ -3,20 +3,21 @@ import { addItem, removeCard, removeItem } from '../reducers/playerReducer';
 
 class AI {
 
-    constructor({ drawCardsFor, endTurn }) {
+    constructor({ drawCardsFor, endTurn, hasDefender }) {
         this.drawCardsFor = drawCardsFor;
         this.endTurn = endTurn;
+        this.hasDefender = hasDefender;
         this.playTurn = this.playTurn.bind(this);
         this.placeItem = this.placeItem.bind(this);
         this.getSomethingToSteal = this.getSomethingToSteal.bind(this);
         this.plantsInGarden = this.plantsInGarden.bind(this);
     }
 
-    playTurn({ playerId, deck }) {
+    playTurn(playerId, deck) {
         this.drawCardsFor(playerId, 1, deck, (deck) => {
             const playerName = store.getState().players[playerId].name;
             const playableCats = ['plant', 'environment'];
-            if (this.plantsInGarden(store.getState().players)) playableCats.push('attack');
+            if (this.plantsInGarden()) playableCats.push('attack');
             const playableCards = store.getState().players[playerId].hand
                 .filter(card => playableCats.includes(card.category));
             const card = playableCards[Math.floor(Math.random() * playableCards.length)];
@@ -25,10 +26,12 @@ class AI {
                 if (card.category === 'plant' || card.category === 'environment') {
                     this.placeItem(playerId, card);
                 } else if (card.category === 'attack') {
-                    const haul = this.getSomethingToSteal(store.getState().players, playerId);
-                    console.log(`${playerName} steals "${haul.item.title}" from ${haul.victimName}`);
-                    store.dispatch(removeItem(haul.victimId, haul.item.id));
-                    this.placeItem(playerId, haul.item);
+                    const haul = this.getSomethingToSteal(playerId, card);
+                    if (haul) {
+                        console.log(`${playerName} steals "${haul.item.title}" from ${haul.victimName}`);
+                        store.dispatch(removeItem(haul.victimId, haul.item.id));
+                        this.placeItem(playerId, haul.item);
+                    }
                 }
                 store.dispatch(removeCard(playerId, card.id));
             } else {
@@ -46,21 +49,26 @@ class AI {
         }));
     }
     
-    getSomethingToSteal(players, playerId) {
-        const possibleVictims = Object.entries(players).filter(([id, player]) =>
+    getSomethingToSteal(playerId, attack) {
+        const possibleVictims = Object.entries(store.getState().players).filter(([id, player]) =>
             id !== playerId && player.garden.filter(item => item.category === 'plant').length > 0
         );
         const [ victimId, victim ] = possibleVictims[Math.floor(Math.random() * possibleVictims.length)];
         const possibleItems = victim.garden.filter(item => item.category === 'plant');
-        return {
-            victimId,
-            victimName: victim.name,
-            item: possibleItems[Math.floor(Math.random() * possibleItems.length)]
-        };
+        if (this.hasDefender(victimId, attack)) {
+            console.log(`${store.getState().players[playerId].name} tried to steal from "${victim.name}" but it failed!`);
+            return null;
+        } else {
+            return {
+                victimId,
+                victimName: victim.name,
+                item: possibleItems[Math.floor(Math.random() * possibleItems.length)]
+            };
+        }
     }
     
-    plantsInGarden(players) {
-        return Object.values(players).some(player =>
+    plantsInGarden() {
+        return Object.values(store.getState().players).some(player =>
             player.garden.some(item => item.category === 'plant'));
     }
 
