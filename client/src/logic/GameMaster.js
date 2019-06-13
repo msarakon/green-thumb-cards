@@ -15,13 +15,14 @@ class GameMaster {
         this.placeItem = this.placeItem.bind(this);
         this.doDisasters = this.doDisasters.bind(this);
         this.steal = this.steal.bind(this);
-        this.hasDefender = this.hasDefender.bind(this);
+        this.findDefender = this.findDefender.bind(this);
         this.endTurn = this.endTurn.bind(this);
         this.startTurn = this.startTurn.bind(this);
         this.ai = new AI({
+            MAX_HAND_CARDS: this.MAX_HAND_CARDS,
             drawCardsFor: this.drawCardsFor,
             endTurn: this.endTurn,
-            hasDefender: this.hasDefender
+            findDefender: this.findDefender
         });
     }
    
@@ -106,8 +107,10 @@ class GameMaster {
     steal(item, playerId) {
         const attack = store.getState().turn.card;
         const victimName = store.getState().players[playerId].name;
-        if (this.hasDefender(playerId, attack)) {
-            console.log(`You failed to steal "${item.title}" from ${victimName}`);
+        const defender = this.findDefender(playerId, attack);
+        if (defender) {
+            store.dispatch(removeCard(playerId, defender.id));
+            console.log(`You failed to steal "${item.title}" from ${victimName} because of "${defender.title}"`);
         } else {
             console.log(`You stole "${item.title}" from ${victimName}`);
             store.dispatch(removeItem(playerId, item.id));
@@ -115,10 +118,9 @@ class GameMaster {
         }
     }
 
-    hasDefender(playerId, attack) {
+    findDefender(playerId, attack) {
         return store.getState().players[playerId].hand.filter(card =>
-            card.protectsFrom && card.protectsFrom.includes(attack.name))
-            .length > 0;
+            card.protectsFrom && card.protectsFrom.includes(attack.name))[0];
     }
 
     /**

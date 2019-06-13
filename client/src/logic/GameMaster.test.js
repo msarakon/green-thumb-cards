@@ -66,16 +66,15 @@ describe('GameMaster', () => {
 
     it('should handle failed stealing', () => {
         const plant = { id: 124, title: 'Foobar', category: 'plant' };
+        const defender = { id: 125, title: 'Defend', category: 'defense', protectsFrom: ['attac'] };
         store.dispatch(addItem('bunny3', plant));
-        store.dispatch(addCards(
-            'bunny3',
-            [{ id: 125, title: 'Defend', category: 'defense', protectsFrom: ['attac'] }],
-            () => {}));
+        store.dispatch(addCards('bunny3', [defender], () => {}));
         store.dispatch(playCard({ id: 666, category: 'attack', name: 'attac' }));
 
         gm.steal({ id: 123, title: 'Foobar'}, 'bunny3');
 
         expect(store.getState().players.bunny3.garden).toContain(plant);
+        expect(store.getState().players.bunny2.hand).not.toContain(defender);
     });
 
     it('should start an AI turn', () => {

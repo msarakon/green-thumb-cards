@@ -3,10 +3,11 @@ import { addItem, removeCard, removeItem } from '../reducers/playerReducer';
 
 class AI {
 
-    constructor({ drawCardsFor, endTurn, hasDefender }) {
+    constructor({ MAX_HAND_CARDS, drawCardsFor, endTurn, findDefender }) {
+        this.MAX_HAND_CARDS = MAX_HAND_CARDS;
         this.drawCardsFor = drawCardsFor;
         this.endTurn = endTurn;
-        this.hasDefender = hasDefender;
+        this.findDefender = findDefender;
         this.playTurn = this.playTurn.bind(this);
         this.placeItem = this.placeItem.bind(this);
         this.getSomethingToSteal = this.getSomethingToSteal.bind(this);
@@ -14,7 +15,8 @@ class AI {
     }
 
     playTurn(playerId, deck) {
-        this.drawCardsFor(playerId, 1, deck, (deck) => {
+        const cardCount = this.MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
+        this.drawCardsFor(playerId, cardCount, deck, (deck) => {
             const playerName = store.getState().players[playerId].name;
             const playableCats = ['plant', 'environment'];
             if (this.plantsInGarden()) playableCats.push('attack');
@@ -55,8 +57,11 @@ class AI {
         );
         const [ victimId, victim ] = possibleVictims[Math.floor(Math.random() * possibleVictims.length)];
         const possibleItems = victim.garden.filter(item => item.category === 'plant');
-        if (this.hasDefender(victimId, attack)) {
-            console.log(`${store.getState().players[playerId].name} tried to steal from "${victim.name}" but it failed!`);
+        const defender = this.findDefender(victimId, attack);
+        if (defender) {
+            const playerName = store.getState().players[playerId].name;
+            console.log(`${playerName} tried to steal from ${victim.name} but it failed because of "${defender.title}"`);
+            store.dispatch(removeCard(playerId, defender.id));
             return null;
         } else {
             return {
