@@ -14,6 +14,7 @@ class GameMaster {
         this.drawCardsFor = this.drawCardsFor.bind(this);
         this.placeItem = this.placeItem.bind(this);
         this.doDisasters = this.doDisasters.bind(this);
+        this.throwPlantToStreet = this.throwPlantToStreet.bind(this);
         this.steal = this.steal.bind(this);
         this.findDefender = this.findDefender.bind(this);
         this.endTurn = this.endTurn.bind(this);
@@ -73,21 +74,29 @@ class GameMaster {
         const disasters = cards.filter(card => card.category === 'disaster');
         disasters.forEach(disaster => {
             console.log(`*** Disaster event: "${disaster.title}"`);
-            Object.entries(store.getState().players).forEach(([id, player]) => {
-                const plants = player.garden.filter(card => card.category === 'plant');
-                const item = plants[Math.floor(Math.random()*plants.length)];
-                if (item) {
-                    store.dispatch(removeItem(id, item.id));
-                    console.log(`${player.name} lost "${item.title}"`);
-                    store.dispatch(throwToStreet(item));
-                }
-            });
+            if (disaster.affectsAll) {
+                Object.keys(store.getState().players).forEach(playerId =>
+                    this.throwPlantToStreet(playerId));
+            } else {
+                this.throwPlantToStreet(playerId);
+            }
             store.dispatch(removeCard(playerId, disaster.id));
         });
         if (disasters.length > 0) {
             this.drawCardsFor(playerId, disasters.length, deck, (deck) => next(deck));
         } else {
             next(deck);
+        }
+    }
+
+    throwPlantToStreet(playerId) {
+        const player = store.getState().players[playerId];
+        const plants = player.garden.filter(card => card.category === 'plant');
+        const item = plants[Math.floor(Math.random()*plants.length)];
+        if (item) {
+            store.dispatch(removeItem(playerId, item.id));
+            console.log(`${player.name} lost "${item.title}"`);
+            store.dispatch(throwToStreet(item));
         }
     }
 

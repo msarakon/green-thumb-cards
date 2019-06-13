@@ -610,19 +610,22 @@
       "id":91,
       "name":"flood",
       "title":"Flood",
-      "category":"disaster"
+      "category":"disaster",
+      "affectsAll": true
     },
     {  
       "id":92,
       "name":"freeze",
       "title":"Freeze",
-      "category":"disaster"
+      "category":"disaster",
+      "affectsAll": true
     },
     {  
       "id":93,
       "name":"not_enough_water",
       "title":"Not enough water",
-      "category":"disaster"
+      "category":"disaster",
+      "affectsAll": true
     },
     {  
       "id":94,
@@ -634,7 +637,8 @@
       "id":95,
       "name":"too_much_sun",
       "title":"Too much sun",
-      "category":"disaster"
+      "category":"disaster",
+      "affectsAll": true
     },
     {  
       "id":96,
