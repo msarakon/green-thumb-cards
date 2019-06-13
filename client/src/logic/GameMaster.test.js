@@ -22,22 +22,24 @@ describe('GameMaster', () => {
 
     it('should handle zero disasters', () => {
         const cards = [
-            { id: 1, category: 'plant' },
-            { id: 2, category: 'plant' },
-            { id: 3, category: 'plant' }
+            { id: 10, category: 'plant' },
+            { id: 20, category: 'plant' },
+            { id: 30, category: 'plant' }
         ];
         gm.doDisasters('bunny1', cards, [], () => {});
     });
 
-    it('should handle some disasters', () => {
-        store.dispatch(addItem('bunny1', { id: 1, category: 'plant' }));
-        store.dispatch(addItem('bunny3', { id: 2, category: 'plant' }));
-        const cards = [
-            { id: 3, category: 'plant' },
-            { id: 4, category: 'plant' },
-            { id: 5, category: 'disaster' }
-        ];
+    it('should handle a disaster', () => {
+        store.dispatch(addItem('bunny1', { id: 100, category: 'plant' }));
+        store.dispatch(addItem('bunny2', { id: 200, category: 'plant' }));
+        store.dispatch(addItem('bunny3', { id: 300, category: 'plant' }));
+        store.dispatch(addItem('bunny2', { id: 400, category: 'environment', protectsFrom: 'disastah' }));
+        const cards = [{ id: 5, name: 'disastah', category: 'disaster', affectsAll: true }];
         gm.doDisasters('bunny1', cards, [], () => {});
+
+        expect(store.getState().players.bunny1.garden).not.toContainEqual({ id: 100, category: 'plant' });
+        expect(store.getState().players.bunny2.garden).toContainEqual({ id: 200, category: 'plant' });
+        expect(store.getState().players.bunny3.garden).not.toContainEqual({ id: 300, category: 'plant' });
     });
 
     it('should handle placing an item', () => {

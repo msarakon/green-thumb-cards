@@ -61,7 +61,6 @@ class AI {
         if (defender) {
             const playerName = store.getState().players[playerId].name;
             console.log(`${playerName} tried to steal from ${victim.name} but it failed because of "${defender.title}"`);
-            store.dispatch(removeCard(playerId, defender.id));
             return null;
         } else {
             return {

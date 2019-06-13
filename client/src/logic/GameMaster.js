@@ -76,9 +76,9 @@ class GameMaster {
             console.log(`*** Disaster event: "${disaster.title}"`);
             if (disaster.affectsAll) {
                 Object.keys(store.getState().players).forEach(playerId =>
-                    this.throwPlantToStreet(playerId));
+                    this.throwPlantToStreet(playerId, disaster));
             } else {
-                this.throwPlantToStreet(playerId);
+                this.throwPlantToStreet(playerId, disaster);
             }
             store.dispatch(removeCard(playerId, disaster.id));
         });
@@ -89,14 +89,19 @@ class GameMaster {
         }
     }
 
-    throwPlantToStreet(playerId) {
+    throwPlantToStreet(playerId, disaster) {
         const player = store.getState().players[playerId];
-        const plants = player.garden.filter(card => card.category === 'plant');
-        const item = plants[Math.floor(Math.random()*plants.length)];
-        if (item) {
-            store.dispatch(removeItem(playerId, item.id));
-            console.log(`${player.name} lost "${item.title}"`);
-            store.dispatch(throwToStreet(item));
+        const defender = this.findDefender(playerId, disaster);
+        if (defender) {
+            console.log(`${player.name} is not affected because of "${defender.title}"`);
+        } else {
+            const plants = player.garden.filter(card => card.category === 'plant');
+            const plant = plants[Math.floor(Math.random() * plants.length)];
+            if (plant) {
+                store.dispatch(removeItem(playerId, plant.id));
+                console.log(`${player.name} lost "${plant.title}"`);
+                store.dispatch(throwToStreet(plant));
+            }
         }
     }
 
@@ -118,7 +123,6 @@ class GameMaster {
         const victimName = store.getState().players[playerId].name;
         const defender = this.findDefender(playerId, attack);
         if (defender) {
-            store.dispatch(removeCard(playerId, defender.id));
             console.log(`You failed to steal "${item.title}" from ${victimName} because of "${defender.title}"`);
         } else {
             console.log(`You stole "${item.title}" from ${victimName}`);
@@ -127,9 +131,22 @@ class GameMaster {
         }
     }
 
+    /**
+     * Returns a suitable defending card/item in player's hand/garden if such exists.
+     * A hand card is removed after use.
+     * @param {String} playerId 
+     * @param {Object} attack 
+     */
     findDefender(playerId, attack) {
-        return store.getState().players[playerId].hand.filter(card =>
+        const defender = store.getState().players[playerId].hand.filter(card =>
             card.protectsFrom && card.protectsFrom.includes(attack.name))[0];
+        if (defender) {
+            store.dispatch(removeCard(playerId, defender.id));
+            return defender;
+        } else {
+            return store.getState().players[playerId].garden.filter(card =>
+                card.protectsFrom && card.protectsFrom.includes(attack.name))[0];
+        }
     }
 
     /**
