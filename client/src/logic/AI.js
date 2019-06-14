@@ -18,11 +18,7 @@ class AI {
         const cardCount = this.MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
         this.drawCardsFor(playerId, cardCount, deck, (deck) => {
             const playerName = store.getState().players[playerId].name;
-            const playableCats = ['plant', 'environment'];
-            if (this.plantsInGarden()) playableCats.push('attack');
-            const playableCards = store.getState().players[playerId].hand
-                .filter(card => playableCats.includes(card.category));
-            const card = playableCards[Math.floor(Math.random() * playableCards.length)];
+            const card = this.getPlayableCard(playerId);
             if (card) {
                 console.log(`${playerName} plays "${card.title}"`);
                 if (card.category === 'plant' || card.category === 'environment') {
@@ -41,6 +37,14 @@ class AI {
             }
             this.endTurn(playerId, deck);
         });
+    }
+
+    getPlayableCard(playerId) {
+        const playableCats = ['plant', 'environment'];
+        if (this.plantsInGarden()) playableCats.push('attack');
+        const playableCards = store.getState().players[playerId].hand
+            .filter(card => playableCats.includes(card.category));
+        return playableCards[Math.floor(Math.random() * playableCards.length)];
     }
     
     placeItem(playerId, item) {
