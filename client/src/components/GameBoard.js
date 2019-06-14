@@ -17,7 +17,7 @@ const GameBoard = (props) => {
             onMouseMove={mouseMoveHandler}
             onMouseDown={props.canPlaceItem ? (e) => props.gameMaster.placeItem(e) : undefined}>
             <div className="hand-container">
-                <Hand drawCard={() => props.gameMaster.drawCardsFor('bunny1', 1, props.deck, () => {})} />
+                <Hand gameMaster={props.gameMaster} />
             </div>
             <div className="neighborhood-container">
                 <Neighborhood steal={(item, playerId) => props.gameMaster.steal(item, playerId)} />

@@ -1,6 +1,6 @@
 import GameMaster from './GameMaster';
 import store from '../store';
-import { playCard } from '../reducers/turnReducer';
+import { playCard, finishAction } from '../reducers/turnReducer';
 import { addItem, addCards } from '../reducers/playerReducer';
 
 describe('GameMaster', () => {
@@ -42,6 +42,15 @@ describe('GameMaster', () => {
         expect(store.getState().players.bunny3.garden).not.toContainEqual({ id: 300, category: 'plant' });
     });
 
+    it('should handle playing a card', () => {
+        gm.playCard('bunny1', { id: 1000, category: 'plant', title: 'Foobar' });
+    });
+
+    it('should handle playing a special card', () => {
+        gm.playCard('bunny1', { id: 1001, category: 'special', title: 'Speshul' });
+        store.getState().turn.callback();
+    });
+
     it('should handle placing an item', () => {
         store.dispatch(playCard({ id: 1, category: 'plant' }, () => {}));
         gm.placeItem({
@@ -81,6 +90,11 @@ describe('GameMaster', () => {
 
     it('should start an AI turn', () => {
         gm.startTurn('bunny2', []);
+    });
+
+    it('should handle ending the turn', () => {
+        store.dispatch(finishAction());
+        gm.endTurn('bunny1', []);
     });
 
 });

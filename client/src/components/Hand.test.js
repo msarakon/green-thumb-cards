@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
+import GameMaster from '../logic/GameMaster';
 import Hand from './Hand';
 
 afterEach(cleanup);
@@ -26,7 +27,7 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
+        const component = render(<Provider store={store}><Hand gameMaster={new GameMaster()}/></Provider>);
 
         const card = component.container.querySelector('.card');
         fireEvent.click(card);
@@ -44,9 +45,9 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const func = { drawCard: jest.fn() };
-        const spy = jest.spyOn(func, 'drawCard');
-        const component = render(<Provider store={store}><Hand drawCard={func.drawCard}/></Provider>);
+        const gm = { drawCardsFor: jest.fn() };
+        const spy = jest.spyOn(gm, 'drawCardsFor');
+        const component = render(<Provider store={store}><Hand gameMaster={gm}/></Provider>);
 
         const deck = component.container.querySelector('.deck .card');
         fireEvent.click(deck);
@@ -66,7 +67,7 @@ describe('Hand', () => {
             }
         };
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand drawCard={() => {}}/></Provider>);
+        const component = render(<Provider store={store}><Hand gameMaster={new GameMaster()}/></Provider>);
 
         expect(component.container.querySelector('.active')).toBeDefined();
     });

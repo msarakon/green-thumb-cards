@@ -1,7 +1,7 @@
 import store from '../store.js';
 import { drawCards } from '../reducers/deckReducer';
 import { addCards, addItem, removeCard, removeItem } from '../reducers/playerReducer';
-import { startDrawCard, startSelectAction, playCard } from '../reducers/turnReducer';
+import { startNewAction, playCard, finishAction } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import AI from './AI';
 
@@ -12,6 +12,7 @@ class GameMaster {
         this.MAX_HAND_CARDS = 6;
         this.startGame = this.startGame.bind(this);
         this.drawCardsFor = this.drawCardsFor.bind(this);
+        this.playCard = this.playCard.bind(this);
         this.placeItem = this.placeItem.bind(this);
         this.doDisasters = this.doDisasters.bind(this);
         this.throwPlantToStreet = this.throwPlantToStreet.bind(this);
@@ -105,6 +106,20 @@ class GameMaster {
         }
     }
 
+    playCard(playerId, card) {
+        if (card.category === 'special') {
+            store.dispatch(removeCard(playerId, card.id));
+            store.dispatch(startNewAction());
+        } else {
+            console.log('play card');
+            store.dispatch(playCard(card, () => {
+                console.log('finish action');
+                store.dispatch(removeCard(playerId, card.id));
+                store.dispatch(finishAction());
+            }));
+        }
+    }
+
     placeItem(evt) {
         const containerBounds = evt.target.getBoundingClientRect();
         const x = evt.clientX - containerBounds.x - 20;
@@ -120,14 +135,16 @@ class GameMaster {
 
     steal(item, playerId) {
         const attack = store.getState().turn.card;
+        store.dispatch(removeCard('bunny1', attack.id));
         const victimName = store.getState().players[playerId].name;
         const defender = this.findDefender(playerId, attack);
         if (defender) {
             console.log(`You failed to steal "${item.title}" from ${victimName} because of "${defender.title}"`);
+            store.dispatch(finishAction());
         } else {
             console.log(`You stole "${item.title}" from ${victimName}`);
             store.dispatch(removeItem(playerId, item.id));
-            store.dispatch(playCard(item, () => store.dispatch(removeCard('bunny1', attack.id))));
+            store.dispatch(playCard(item, () => store.dispatch(finishAction())));
         }
     }
 
@@ -155,6 +172,7 @@ class GameMaster {
      * @param {Array} deck
      */
     endTurn(playerId, deck) {
+        if (store.getState().turn.actions > 0) return;
         const playerIds = Object.keys(store.getState().players);
         const playerIdx = playerIds.indexOf(playerId);
         const nextPlayerIdx = playerIdx === playerIds.length - 1 ? 0 : playerIdx + 1;
@@ -169,10 +187,7 @@ class GameMaster {
     startTurn(playerId, deck) {
         console.log(`${store.getState().players[playerId].name}'s turn starts!`);
         if (playerId === 'bunny1') {
-            if (deck.length > 0 && store.getState().players[playerId].hand.length < this.MAX_HAND_CARDS) {
-                store.dispatch(startDrawCard());
-            }
-            else store.dispatch(startSelectAction());
+            store.dispatch(startNewAction());
         } else {
             this.ai.playTurn(playerId, deck);
         }

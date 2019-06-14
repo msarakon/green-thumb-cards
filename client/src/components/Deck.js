@@ -8,7 +8,7 @@ const Deck = (props) => {
             <div
                 className='deck'
                 title={props.size + ' cards remaining'}
-                onClick={props.drawCardOn ? props.drawCard : undefined}>
+                onClick={props.canDraw ? props.drawCard : undefined}>
                 <div className='card'><div className='card-bg'></div></div>
                 <div className='card'><div className='card-bg'></div></div>
                 <div className='card'><div className='card-bg'></div></div>
@@ -21,14 +21,13 @@ const Deck = (props) => {
 
 Deck.propTypes = {
     size: PropTypes.number.isRequired,
-    drawCardOn: PropTypes.bool.isRequired,
+    canDraw: PropTypes.bool.isRequired,
     drawCard: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
-        size: state.deck.length,
-        drawCardOn: state.turn.mode === 'draw_card'
+        size: state.deck.length
     };
 };
 
