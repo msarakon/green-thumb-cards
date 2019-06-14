@@ -4,6 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 6/14   | 2.5  | Refactored turn handling. Player can now use special cards - for AI, this is still work in progress.
 | 6/13   | 1    | Defense cards are removed after use. Only some disasters affect all players. Environment items can protect plants from disasters.
 | 6/12   | 1    | Some more refactoring. Defense cards are now played automatically.
 | 6/11   | 2.5  | Did a whole lot of refactoring to get a better maintainability score. Moved game logic away from the React components.
@@ -18,4 +19,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 26.5 | | 
+| total  | 29  | | 
