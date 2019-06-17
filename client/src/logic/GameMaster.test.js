@@ -1,100 +1,111 @@
-import GameMaster from './GameMaster';
-import store from '../store';
-import { playCard, finishAction } from '../reducers/turnReducer';
-import { addItem, addCards } from '../reducers/playerReducer';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { masterMiddleware } from '../middlewares/masterMiddleware';
+import { startGame, drawCardsFor, doDisasters, playCard, placeItem, steal } from './GameMaster';
+import {
+    mockState, mockMousedown,
+    mockPlants, mockAttacks, mockDefenders, mockDisasters, mockSpecials, mockEnvironments
+} from '../test-utils';
 
 describe('GameMaster', () => {
 
-    const gm = new GameMaster();
+    const mockStore = configureMockStore([thunk, masterMiddleware]);
 
     it('should handle starting the game', () => {
-        gm.startGame();
+        const store = mockStore(() => mockState);
+        startGame(store);
     });
 
     it('should handle drawing cards for a player', () => {
-        const deck = [{ id: 1 }, { id: 2 }, { id: 3 }];
-        gm.drawCardsFor('bunny1', 2, deck, () => {});
+        const state = {
+            ...mockState,
+            deck: mockState.deck.concat(mockPlants)
+        };
+        const store = mockStore(() => state);
+        drawCardsFor(store, 'bunny1', 2);
     });
 
     it('should handle drawing cards for a player when the deck is empty', () => {
-        gm.drawCardsFor('bunny1', 2, [], () => {});
+        const state = { ...mockState, deck: [] };
+        const store = mockStore(() => state);
+        drawCardsFor(store, 'bunny1');
     });
 
     it('should handle zero disasters', () => {
-        const cards = [
-            { id: 10, category: 'plant' },
-            { id: 20, category: 'plant' },
-            { id: 30, category: 'plant' }
-        ];
-        gm.doDisasters('bunny1', cards, [], () => {});
+        const state = { ...mockState, deck: [] };
+        state.players.bunny1.hand = mockState.players.bunny1.hand.concat(mockPlants);
+        const store = mockStore(() => state);
+        doDisasters(store, 'bunny1');
     });
 
     it('should handle a disaster', () => {
-        store.dispatch(addItem('bunny1', { id: 100, category: 'plant' }));
-        store.dispatch(addItem('bunny2', { id: 200, category: 'plant' }));
-        store.dispatch(addItem('bunny3', { id: 300, category: 'plant' }));
-        store.dispatch(addItem('bunny2', { id: 400, category: 'environment', protectsFrom: 'disastah' }));
-        const cards = [{ id: 5, name: 'disastah', category: 'disaster', affectsAll: true }];
-        gm.doDisasters('bunny1', cards, [], () => {});
+        const state = { ...mockState };
+        state.players.bunny1.garden = mockState.players.bunny1.garden.concat([mockPlants[0]]);
+        state.players.bunny2.garden = mockState.players.bunny2.garden.concat([mockPlants[1]]);
+        state.players.bunny3.garden = mockState.players.bunny3.garden.concat([mockPlants[2]]);
+        state.players.bunny1.hand = mockState.players.bunny1.hand.concat([mockDisasters[0]]);
+        state.players.bunny2.hand = mockState.players.bunny2.hand.concat([mockDefenders[0]]);
+        const store = mockStore(() => state);
+        doDisasters(store, 'bunny1');
 
-        expect(store.getState().players.bunny1.garden).not.toContainEqual({ id: 100, category: 'plant' });
-        expect(store.getState().players.bunny2.garden).toContainEqual({ id: 200, category: 'plant' });
-        expect(store.getState().players.bunny3.garden).not.toContainEqual({ id: 300, category: 'plant' });
+        expect(store.getActions().filter(action => action.type == 'THROW_TO_STREET').length).toBe(2);
     });
 
-    it('should handle playing a card', () => {
-        gm.playCard('bunny1', { id: 1000, category: 'plant', title: 'Foobar' });
+    it('should handle playing a plant card', () => {
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        playCard(store, 'bunny1', mockPlants[0]);
     });
 
+    it('should handle playing an environment card', () => {
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        playCard(store, 'bunny1', mockEnvironments[0]);
+    });
+
+    it('should handle playing an attack card', () => {
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        playCard(store, 'bunny1', mockAttacks[0]);
+    });
+    
     it('should handle playing a special card', () => {
-        gm.playCard('bunny1', { id: 1001, category: 'special', title: 'Speshul' });
-        store.getState().turn.callback();
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        playCard(store, 'bunny1', mockSpecials[0]);
+    });
+
+    it('should handle playing an unknown type card', () => {
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        playCard(store, 'bunny1', { category: 'foobar' });
     });
 
     it('should handle placing an item', () => {
-        store.dispatch(playCard({ id: 1, category: 'plant' }, () => {}));
-        gm.placeItem({
-            target: {
-                getBoundingClientRect: () => {
-                    return { x: 100, y: 300, height: 400, width: 400 };
-                }
-            },
-            clientX: 550,
-            clientY: 500
-        });
+        const state = { ...mockState };
+        const store = mockStore(() => state);
+        placeItem(store, mockMousedown);
     });
 
-    it('should handle successful stealing', () => {
-        const plant = { id: 123, title: 'Foobar', category: 'plant' };
-        store.dispatch(addItem('bunny3', plant));
-        store.dispatch(playCard({ id: 666, category: 'attack', name: 'attac' }));
-
-        gm.steal({ id: 123, title: 'Foobar'}, 'bunny3');
-
-        expect(store.getState().turn.card.id === 123);
-        expect(store.getState().players.bunny3.garden).not.toContain(plant);
+    it('should handle successful stealing', async () => {
+        const state = {
+            ...mockState,
+            turn: { ...mockState.turn, card: mockAttacks[0] }
+        };
+        state.players.bunny3.garden = mockState.players.bunny3.garden.concat([mockPlants[0]]);
+        const store = mockStore(() => state);
+        steal(store, mockPlants[0], 'bunny3');
     });
 
     it('should handle failed stealing', () => {
-        const plant = { id: 124, title: 'Foobar', category: 'plant' };
-        const defender = { id: 125, title: 'Defend', category: 'defense', protectsFrom: ['attac'] };
-        store.dispatch(addItem('bunny3', plant));
-        store.dispatch(addCards('bunny3', [defender], () => {}));
-        store.dispatch(playCard({ id: 666, category: 'attack', name: 'attac' }));
-
-        gm.steal({ id: 123, title: 'Foobar'}, 'bunny3');
-
-        expect(store.getState().players.bunny3.garden).toContain(plant);
-        expect(store.getState().players.bunny2.hand).not.toContain(defender);
-    });
-
-    it('should start an AI turn', () => {
-        gm.startTurn('bunny2', []);
-    });
-
-    it('should handle ending the turn', () => {
-        store.dispatch(finishAction());
-        gm.endTurn('bunny1', []);
+        const state = {
+            ...mockState,
+            turn: { ...mockState.turn, card: mockAttacks[0] }
+        };
+        state.players.bunny3.garden = mockState.players.bunny3.garden.concat([mockPlants[0]]);
+        state.players.bunny3.hand = mockState.players.bunny3.hand.concat([mockDefenders[0]]);
+        const store = mockStore(() => state);
+        steal(store, mockPlants[0], 'bunny3');
     });
 
 });

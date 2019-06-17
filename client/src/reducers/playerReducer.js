@@ -54,19 +54,15 @@ const reducer = (state = initialState, action) => {
         return stateWithRemovedCard(state, action.data.playerId, action.data.cardId);
     case 'ADD_ITEM':
         return stateWithNewItem(state, action.data.playerId, action.data.card);
-    case 'REMOVE_ITEM':
-        return stateWithRemovedItem(state, action.data.playerId, action.data.itemId);
+    case 'REMOVE_ITEM': return stateWithRemovedItem(state, action.data.playerId, action.data.itemId);
     default: return state;
     }
 };
 
-export const addCards = (playerId, cards, callback) => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: 'ADD_CARDS',
-            data: { playerId, cards }
-        });
-        callback(getState());
+export const addCards = (playerId, cards) => {
+    return {
+        type: 'ADD_CARDS',
+        data: { playerId, cards }
     };
 };
 

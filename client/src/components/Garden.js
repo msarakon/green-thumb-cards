@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setPointer } from '../reducers/pointerReducer';
 import GardenItem from './GardenItem';
+import { steal } from '../middlewares/masterMiddleware';
 import './Garden.css';
 
 const Garden = (props) => {
     return (
-        <div className='garden'
+        <div id={ props.playerId + '-garden' }
+            className='garden'
             onMouseEnter={props.myGarden ? () => props.setPointer('insertable') : undefined}
             onMouseLeave={() => props.setPointer(null) }>
             {
@@ -15,7 +17,7 @@ const Garden = (props) => {
                     <GardenItem
                         key={item.id}
                         item={item}
-                        action={props.attackOn ? (item) => props.steal(item) : () => {}} />
+                        action={props.attackOn ? (item) => props.steal(item, props.playerId) : () => {}} />
                 )
             }
         </div>
@@ -28,7 +30,7 @@ Garden.propTypes = {
     myGarden: PropTypes.bool.isRequired,
     attackOn: PropTypes.bool.isRequired,
     setPointer: PropTypes.func.isRequired,
-    steal: PropTypes.func
+    steal: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { playerId }) => {
@@ -40,8 +42,6 @@ const mapStateToProps = (state, { playerId }) => {
     };
 };
 
-const mapDispatchToProps = {
-    setPointer
-};
+const mapDispatchToProps = { setPointer, steal };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Garden);

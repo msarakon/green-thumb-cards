@@ -3,69 +3,61 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
+import { masterMiddleware } from '../middlewares/masterMiddleware';
 import Garden from './Garden';
+import { mockState, mockPlants, mockAttacks } from '../test-utils';
 
 afterEach(cleanup);
 
 describe('Garden', () => {
 
-    const mockStore = configureMockStore([thunk]);
-
-    const baseState = {
-        deck: [],
-        players: {
-            bunny1: { name: 'Bunny 1', hand: [], garden: [] },
-            bunny2: { name: 'Bunny 2', hand: [], garden: [
-                { id: 1, name: 'foobar', title: 'Foobar' },
-                { id: 2, name: 'flower', title: 'Flower' },
-                { id: 3, name: 'fizzbuzz', title: 'Fizzbuzz' }
-            ] },
-            bunny3: { name: 'Bunny 3', hand: [], garden: [] },
-            bunny4: { name: 'Bunny 4', hand: [], garden: [] }
-        }
-    };
+    const mockStore = configureMockStore([thunk, masterMiddleware]);
 
     it('should display the items in garden', () => {
         const state = {
-            ...baseState,
-            turn: { mode: 'insert', callback: () => {} },
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'insert' },
             pointer: 'insertable'
         };
+        state.players.bunny1.garden = mockState.players.bunny1.garden.concat(mockPlants);
         const store = mockStore(() => state);
 
         render(<Provider store={store}><Garden playerId={'bunny2'} /></Provider>);
     });
 
-    it('should handle stealing of item', () => {
+    it('should handle stealing of a plant', () => {
         const state = {
-            ...baseState,
-            turn: { mode: 'attack', card: { id: 666 }, callback: () => {} },
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'attack', card: mockAttacks[0] },
             pointer: 'attackable'
         };
+        state.players.bunny2.garden = mockState.players.bunny2.garden.concat(mockPlants);
         const store = mockStore(() => state);
 
-        const mockFuncs = { steal: jest.fn() };
-        const spy = jest.spyOn(mockFuncs, 'steal');
+        const component = render(<Provider store={store}><Garden playerId={'bunny2'} /></Provider>);
+        const plant = component.container.querySelector('#bunny2-garden .garden-item');
+        fireEvent.click(plant);
 
-        const component = render(<Provider store={store}>
-            <Garden playerId={'bunny2'} steal={mockFuncs.steal} />
-        </Provider>);
-        const foobar = component.container.querySelector('.garden-item');
-        fireEvent.click(foobar);
-
-        expect(spy).toHaveBeenCalledTimes(1);
+        expect(store.getActions()[0]).toEqual({
+            type: 'REMOVE_CARD', data: { playerId: 'bunny1', cardId: mockAttacks[0].id }
+        });
     });
 
     it('should handle mouseenter and mouseleave', () => {
         const state = {
-            ...baseState,
-            turn: { mode: 'foobar '}
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'foobar' }
         };
         const store = mockStore(() => state);
         const component = render(<Provider store={store}><Garden playerId={'bunny1'} /></Provider>);
 
         fireEvent.mouseEnter(component.container.querySelector('.garden'));
         fireEvent.mouseLeave(component.container.querySelector('.garden'));
+
+        expect(store.getActions()).toEqual([
+            { type: 'SET_POINTER', data: 'insertable' },
+            { type: 'SET_POINTER', data: null }
+        ]);
     });
 
 });

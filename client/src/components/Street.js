@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { playCard } from '../reducers/turnReducer';
+import { playCard } from '../middlewares/masterMiddleware';
 import { pickFromStreet } from '../reducers/streetReducer';
 import GardenItem from './GardenItem';
 

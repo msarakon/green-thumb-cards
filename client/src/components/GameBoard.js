@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
+import { placeItem } from '../middlewares/masterMiddleware';
 import './GameBoard.css';
 
 const GameBoard = (props) => {
     const [ pointerCoords, setPointerCoords ] = useState([null, null]);
     const mouseMoveHandler = (evt) => setPointerCoords([evt.clientX - 20, evt.clientY - 20]);
 
-    if (props.turn.mode === 'start_game') props.gameMaster.startGame();
-
     return (
         <div className="gameboard"
             onMouseMove={mouseMoveHandler}
-            onMouseDown={props.canPlaceItem ? (e) => props.gameMaster.placeItem(e) : undefined}>
-            <div className="hand-container">
-                <Hand gameMaster={props.gameMaster} />
-            </div>
+            onMouseDown={props.canPlaceItem ? (e) => props.placeItem(e) : undefined}>
+            <div className="hand-container"><Hand /></div>
             <div className="neighborhood-container">
-                <Neighborhood steal={(item, playerId) => props.gameMaster.steal(item, playerId)} />
+                <Neighborhood />
             </div>
             {
                 props.insertOn &&
@@ -39,7 +35,7 @@ GameBoard.propTypes = {
     pointer: PropTypes.string,
     insertOn: PropTypes.bool.isRequired,
     canPlaceItem: PropTypes.bool.isRequired,
-    gameMaster: PropTypes.object.isRequired
+    placeItem: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -52,6 +48,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-export { GameBoard };
+const mapDispatchToProps = { placeItem };
 
-export default connect(mapStateToProps)(GameBoard);
+export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

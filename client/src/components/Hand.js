@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { playCard,  } from '../reducers/turnReducer';
 import { removeCard } from '../reducers/playerReducer';
+import { drawCards, playCard } from '../middlewares/masterMiddleware';
 import Card from './Card';
 import Deck from './Deck';
 import './Hand.css';
@@ -10,10 +10,10 @@ import './Hand.css';
 const Hand = (props) => {
     const playCard = (card) => {
         console.log(`You play "${card.title}"`);
-        props.gameMaster.playCard('bunny1', card);
+        props.playCard('bunny1', card);
     };
 
-    const drawCard = () => props.gameMaster.drawCardsFor('bunny1', 1, props.deck, () => {});
+    const drawCard = () => props.drawCards('bunny1', 1);
 
     return (
         <div className='hand'>
@@ -31,11 +31,11 @@ const Hand = (props) => {
 };
 
 Hand.propTypes = {
-    gameMaster: PropTypes.object.isRequired,
     deck: PropTypes.array.isRequired,
     turn: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
     playCard: PropTypes.func.isRequired,
+    drawCards: PropTypes.func.isRequired,
     removeCard: PropTypes.func.isRequired,
     canDraw: PropTypes.bool.isRequired
 };
@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     playCard,
     removeCard,
-    
+    drawCards
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Hand);

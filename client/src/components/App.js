@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { startGame } from '../reducers/turnReducer';
+import { startGame } from '../middlewares/masterMiddleware';
 import GameBoard from './GameBoard';
 import Footer from './Footer';
 import './App.css';
-import GameMaster from '../logic/GameMaster';
 
-const App = (props) => {
+const App = ({ startGame }) => {
     const [gameOn, setGameOn] = useState(false);
 
     const start = () => {
         setGameOn(true);
-        props.startGame();
+        startGame();
     };
 
     return (
@@ -27,7 +26,7 @@ const App = (props) => {
             {
                 gameOn &&
                 <div className="gameboard-container">
-                    <GameBoard gameMaster={new GameMaster()}/>
+                    <GameBoard />
                 </div>
             }
             <div className="footer-container">

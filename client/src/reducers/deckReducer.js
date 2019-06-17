@@ -25,13 +25,10 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export const drawCards = (data, callback) => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: 'DRAW_CARDS',
-            data
-        });
-        callback(getState());
+export const drawCards = (data) => {
+    return {
+        type: 'DRAW_CARDS',
+        data
     };
 };
 

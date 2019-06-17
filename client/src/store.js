@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import { masterMiddleware } from './middlewares/masterMiddleware';
 import deckReducer from './reducers/deckReducer';
 import playerReducer from './reducers/playerReducer';
 import turnReducer from './reducers/turnReducer';
@@ -14,6 +15,6 @@ const reducer = combineReducers({
     street: streetReducer
 });
 
-const store = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(reducer, applyMiddleware(thunk, masterMiddleware));
 
 export default store;

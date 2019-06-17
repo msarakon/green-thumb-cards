@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
-import GameMaster from '../logic/GameMaster';
 import Hand from './Hand';
+import { mockState, mockPlants } from '../test-utils';
 
 afterEach(cleanup);
 
@@ -14,20 +14,12 @@ describe('Hand', () => {
 
     it('should handle playing a card', () => {
         const state = {
-            turn: { mode: 'select_action' },
-            deck: [],
-            players: {
-                bunny1: { name: 'Bunny 1', hand: [
-                    { id: 1, name: 'foobar', title: 'Foobar', category: 'plant' },
-                    { id: 2, name: 'fizzbuzz', title: 'Fizzbuzz', category: 'plant' }
-                ], garden: [] },
-                bunny2: { name: 'Bunny 2', hand: [], garden: [] },
-                bunny3: { name: 'Bunny 3', hand: [], garden: [] },
-                bunny4: { name: 'Bunny 4', hand: [], garden: [] }
-            }
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'select_action' }
         };
+        mockState.players.bunny1.hand = mockState.players.bunny1.hand.concat(mockPlants);
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand gameMaster={new GameMaster()}/></Provider>);
+        const component = render(<Provider store={store}><Hand /></Provider>);
 
         const card = component.container.querySelector('.card');
         fireEvent.click(card);
@@ -35,39 +27,27 @@ describe('Hand', () => {
 
     it('should handle drawing a card', () => {
         const state = {
-            turn: { mode: 'draw_card' },
-            deck: [{ id: 1 }],
-            players: {
-                bunny1: { name: 'Bunny 1', hand: [], garden: [] },
-                bunny2: { name: 'Bunny 2', hand: [], garden: [] },
-                bunny3: { name: 'Bunny 3', hand: [], garden: [] },
-                bunny4: { name: 'Bunny 4', hand: [], garden: [] }
-            }
+            ...mockState,
+            turn: { mode: 'select_action' },
+            deck: mockState.deck.concat([mockPlants])
         };
         const store = mockStore(() => state);
-        const gm = { drawCardsFor: jest.fn() };
-        const spy = jest.spyOn(gm, 'drawCardsFor');
-        const component = render(<Provider store={store}><Hand gameMaster={gm}/></Provider>);
+        const component = render(<Provider store={store}><Hand /></Provider>);
 
         const deck = component.container.querySelector('.deck .card');
         fireEvent.click(deck);
-        expect(spy).toHaveBeenCalledTimes(1);
-
+        
+        expect(store.getActions()).toEqual([{ type: 'DRAW_CARDS_FOR', data: { cardCount: 1, playerId: 'bunny1' } }]);
     });
 
     it('should emphasize the active card', () => {
         const state = {
-            turn: { mode: 'insert', card: { id: 1 } },
-            deck: [],
-            players: {
-                bunny1: { name: 'Bunny 1', hand: [{ id: 1 }], garden: [] },
-                bunny2: { name: 'Bunny 2', hand: [], garden: [] },
-                bunny3: { name: 'Bunny 3', hand: [], garden: [] },
-                bunny4: { name: 'Bunny 4', hand: [], garden: [] }
-            }
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'insert', card: mockPlants[0] }
         };
+        mockState.players.bunny1.hand = mockState.players.bunny1.hand.concat(mockPlants[0]);
         const store = mockStore(() => state);
-        const component = render(<Provider store={store}><Hand gameMaster={new GameMaster()}/></Provider>);
+        const component = render(<Provider store={store}><Hand /></Provider>);
 
         expect(component.container.querySelector('.active')).toBeDefined();
     });

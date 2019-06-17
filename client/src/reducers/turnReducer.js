@@ -2,8 +2,6 @@ const initialState = { mode: null, card: null, actions: 0 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-    case 'START_GAME':
-        return { ...state, mode: 'start_game' };
     case 'START_NEW_ACTION':
         return { ...state, mode: 'select_action', actions: state.actions + 1 };
     case 'START_INSERT':
@@ -30,37 +28,12 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export const startGame = () => {
-    return { type: 'START_GAME', data: null };
-};
-
 export const startNewAction = () => {
     return { type: 'START_NEW_ACTION', data: null };
 };
 
 export const finishAction = () => {
     return { type: 'FINISH_ACTION', data: null };
-};
-
-export const playCard = (card, callback) => {
-    switch (card.category) {
-    case 'plant':
-        return {
-            type: 'START_INSERT',
-            data: { card, callback }
-        };
-    case 'attack':
-        return {
-            type: 'START_ATTACK',
-            data: { card, callback }
-        };
-    case 'environment':
-        return {
-            type: 'START_INSERT',
-            data: { card, callback }
-        };
-    default: return { type: '', data: null };
-    }
 };
 
 export default reducer;
