@@ -7,7 +7,8 @@ const mockState = {
         bunny4: { name: 'Bunny 4', hand: [], garden: [] }
     },
     street: { top: [], center: [], bottom: [] },
-    turn: { mode: 'start_game', callback: () => {} }
+    turn: { mode: 'start_game', callback: () => {} },
+    pointer: null
 };
 
 const mockMousedown = {
@@ -28,11 +29,13 @@ const mockAttacks = [
 ];
 
 const mockDefenders = [
-    { id: 100, category: 'defense', title: 'Defend', name: 'defend', protectsFrom: ['godzilla'] }
+    { id: 100, category: 'defense', title: 'Mothra', name: 'mothra', protectsFrom: ['godzilla'] },
+    { id: 101, category: 'defense', title: 'Defend', name: 'defend', protectsFrom: ['attac'] }
 ];
 
 const mockDisasters = [
-    { id: 1000, category: 'disaster', title: 'Godzilla', name: 'godzilla', affectsAll: true }
+    { id: 1000, category: 'disaster', title: 'Godzilla', name: 'godzilla', affectsAll: true },
+    { id: 1001, category: 'disaster', title: 'Stepping on Lego', name: 'stepping_on_lego' }
 ];
 
 const mockSpecials = [

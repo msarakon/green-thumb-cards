@@ -18,34 +18,61 @@ describe('GameBoard', () => {
         render(<Provider store={store} ><GameBoard /></Provider>);
     });
 
-    it('should handle drawing a plant card and placing it', async () => {
+    it('should handle selecting a plant card', () => {
         const state = {
             ...mockState,
-            turn: { ...mockState.turn, mode: 'insert', card: mockPlants[0] },
-            pointer: 'insertable'
+            players: {
+                ...mockState.players,
+                bunny1: {
+                    ...mockState.players.bunny1,
+                    hand: [mockPlants[0]]
+                }
+            }
         };
         const store = mockStore(() => state);
         const component = render(<Provider store={store} ><GameBoard /></Provider>);
 
         fireEvent.click(component.container.querySelector('.card'));
-        fireEvent.mouseMove(component.container.querySelector('.gameboard'));
-        fireEvent.mouseDown(component.container.querySelector('.garden'),  mockMousedown);
+        
+        expect(store.getActions()[0].type).toEqual('START_INSERT');
 
-        await component.container.querySelector('#bunny1-garden .garden-item');
+        // workaround for running the callback function of playCard()
+        store.getActions()[0].data.callback();
     });
 
-    it('should handle stealing a plant', async () => {
+    it('should handle placing a plant', () => {
         const state = {
             ...mockState,
-            turn: { ...mockState.turn, mode: 'attack', card: mockAttacks[0] }
+            turn: { ...mockState.turn, mode: 'insert' },
+            pointer: 'insertable'
         };
-        state.players.bunny2.garden = state.players.bunny2.garden.concat(mockPlants[0]);
         const store = mockStore(() => state);
         const component = render(<Provider store={store} ><GameBoard /></Provider>);
 
-        fireEvent.click(component.container.querySelector('.garden-item'));
-        fireEvent.mouseDown(component.container.querySelector('.garden'), mockMousedown);
+        fireEvent.mouseDown(component.container.querySelector('#bunny1-garden'), mockMousedown);
 
-        await component.container.querySelector('#bunny1-garden .garden-item');
+        expect(store.getActions()[0].type).toEqual('ADD_ITEM');
+    });
+
+    it('should handle stealing a plant', () => {
+        const state = {
+            ...mockState,
+            turn: { ...mockState.turn, mode: 'attack', card: mockAttacks[0] },
+            players: {
+                ...mockState.players,
+                bunny2: {
+                    ...mockState.players.bunny2,
+                    garden: [mockPlants[0]]
+                }
+            }
+        };
+        const store = mockStore(() => state);
+        const component = render(<Provider store={store} ><GameBoard /></Provider>);
+
+        fireEvent.click(component.container.querySelector('#bunny2-garden .garden-item'));
+
+        expect(store.getActions()[0].type).toEqual('REMOVE_CARD');
+        expect(store.getActions()[1].type).toEqual('REMOVE_ITEM');
+        expect(store.getActions()[2].type).toEqual('START_INSERT');
     });
 });

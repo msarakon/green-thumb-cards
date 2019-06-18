@@ -14,7 +14,9 @@ const GameBoard = (props) => {
         <div className="gameboard"
             onMouseMove={mouseMoveHandler}
             onMouseDown={props.canPlaceItem ? (e) => props.placeItem(e) : undefined}>
-            <div className="hand-container"><Hand /></div>
+            <div className="hand-container">
+                <Hand />
+            </div>
             <div className="neighborhood-container">
                 <Neighborhood />
             </div>

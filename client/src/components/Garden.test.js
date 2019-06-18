@@ -17,9 +17,15 @@ describe('Garden', () => {
         const state = {
             ...mockState,
             turn: { ...mockState.turn, mode: 'insert' },
-            pointer: 'insertable'
+            pointer: 'insertable',
+            players: {
+                ...mockState.players,
+                bunny1: {
+                    ...mockState.players.bunny1,
+                    garden: mockPlants
+                }
+            }
         };
-        state.players.bunny1.garden = mockState.players.bunny1.garden.concat(mockPlants);
         const store = mockStore(() => state);
 
         render(<Provider store={store}><Garden playerId={'bunny2'} /></Provider>);
@@ -29,9 +35,15 @@ describe('Garden', () => {
         const state = {
             ...mockState,
             turn: { ...mockState.turn, mode: 'attack', card: mockAttacks[0] },
-            pointer: 'attackable'
+            pointer: 'attackable',
+            players: {
+                ...mockState.players,
+                bunny2: {
+                    ...mockState.players.bunny2,
+                    garden: mockPlants
+                }
+            }
         };
-        state.players.bunny2.garden = mockState.players.bunny2.garden.concat(mockPlants);
         const store = mockStore(() => state);
 
         const component = render(<Provider store={store}><Garden playerId={'bunny2'} /></Provider>);
@@ -43,7 +55,7 @@ describe('Garden', () => {
         });
     });
 
-    it('should handle mouseenter and mouseleave', () => {
+    it('should set pointer on mouseenter and mouseleave', () => {
         const state = {
             ...mockState,
             turn: { ...mockState.turn, mode: 'foobar' }

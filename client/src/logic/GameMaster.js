@@ -246,5 +246,6 @@ export {
     playCard,
     placeItem,
     steal,
-    doDisasters
+    doDisasters,
+    playAITurn
 };

@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import Hand from './Hand';
-import { mockState, mockPlants } from '../test-utils';
+import { mockState, mockEnvironments, mockPlants, mockAttacks } from '../test-utils';
 
 afterEach(cleanup);
 
@@ -17,19 +17,23 @@ describe('Hand', () => {
             ...mockState,
             turn: { ...mockState.turn, mode: 'select_action' }
         };
-        mockState.players.bunny1.hand = mockState.players.bunny1.hand.concat(mockPlants);
+        state.players.bunny1.hand = mockEnvironments;
         const store = mockStore(() => state);
         const component = render(<Provider store={store}><Hand /></Provider>);
 
         const card = component.container.querySelector('.card');
         fireEvent.click(card);
+
+        expect(store.getActions()).toEqual([
+            { type: 'PLAY_CARD', data: { card: mockEnvironments[0], playerId: 'bunny1' } }
+        ]);
     });
 
     it('should handle drawing a card', () => {
         const state = {
             ...mockState,
             turn: { mode: 'select_action' },
-            deck: mockState.deck.concat([mockPlants])
+            deck: mockPlants
         };
         const store = mockStore(() => state);
         const component = render(<Provider store={store}><Hand /></Provider>);
@@ -43,9 +47,9 @@ describe('Hand', () => {
     it('should emphasize the active card', () => {
         const state = {
             ...mockState,
-            turn: { ...mockState.turn, mode: 'insert', card: mockPlants[0] }
+            turn: { ...mockState.turn, mode: 'insert', card: mockAttacks[0] }
         };
-        mockState.players.bunny1.hand = mockState.players.bunny1.hand.concat(mockPlants[0]);
+        state.players.bunny1.hand = state.players.bunny1.hand.concat(mockAttacks);
         const store = mockStore(() => state);
         const component = render(<Provider store={store}><Hand /></Provider>);
 
