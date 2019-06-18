@@ -135,12 +135,21 @@ const playAITurn = (store, playerId, actions) => {
 };
 
 /**
+ * Returns a list of cards that can be played.
+ * "Defense" cards cannot be played without attack.
+ * "Attack" cards can only be played if there is something to attack.
+ */
+const getPlayableCards = (players, playerId) => {
+    const playableCats = ['plant', 'environment', 'special'];
+    if (plantsInGarden(players, playerId)) playableCats.push('attack');
+    return players[playerId].hand.filter(card => playableCats.includes(card.category));
+};
+
+/**
  * Selects a random playable card for an AI player.
  */
 const getPlayableCard = (players, playerId) => {
-    const playableCats = ['plant', 'environment', 'special'];
-    if (plantsInGarden(players)) playableCats.push('attack');
-    const playableCards = players[playerId].hand.filter(card => playableCats.includes(card.category));
+    const playableCards = getPlayableCards(players, playerId);
     return playableCards[Math.floor(Math.random() * playableCards.length)];
 };
 
@@ -201,8 +210,12 @@ const getSomethingToSteal = (store, playerId, attack) => {
     }
 };
 
-const plantsInGarden = (players) => {
-    return Object.values(players).some(player => player.garden.some(item => item.category === 'plant'));
+/**
+ * Checks if there are any plants in gardens (besides in that of the given player)
+ */
+const plantsInGarden = (players, playerId) => {
+    return Object.entries(players).some(([id, player]) =>
+        id !== playerId && player.garden.some(item => item.category === 'plant'));
 };
 
 /**
@@ -215,7 +228,19 @@ const endTurn = (store, playerId) => {
     const playerIds = Object.keys(store.getState().players);
     const playerIdx = playerIds.indexOf(playerId);
     const nextPlayerIdx = playerIdx === playerIds.length - 1 ? 0 : playerIdx + 1;
-    startTurn(store, playerIds[nextPlayerIdx]);
+    if (movesLeft(store.getState().street, store.getState().players)) {
+        startTurn(store, playerIds[nextPlayerIdx]);
+    } else {
+        endGame();
+    }
+};
+
+/**
+ * Checks if there are still possible moves left for any player.
+ */
+const movesLeft = (street, players) => {
+    return Object.values(street).some(items => items.length > 0) ||
+        Object.keys(players).some(playerId => getPlayableCards(players, playerId).length > 0);
 };
 
 /**
@@ -225,6 +250,11 @@ const startTurn = (store, playerId) => {
     console.log(`${store.getState().players[playerId].name}'s turn starts!`);
     if (playerId === 'bunny1') store.dispatch(startNewAction());
     else playAITurn(store, playerId);
+};
+
+const endGame = () => {
+    console.log('Game ends!');
+    // TODO: score etc
 };
 
 const playSingleActionCard = (card, callback) => {
