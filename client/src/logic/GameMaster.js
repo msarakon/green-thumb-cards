@@ -11,6 +11,7 @@ const startGame = (store) => {
     drawCardsFor(store, 'bunny2', CARDS_AT_START);
     drawCardsFor(store, 'bunny3', CARDS_AT_START);
     drawCardsFor(store, 'bunny4', CARDS_AT_START);
+    startTurn(store, 'bunny1');
 };
 
 /**

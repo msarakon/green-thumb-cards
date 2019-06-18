@@ -143,6 +143,94 @@
       "name":"dog_buries_bone",
       "title":"Dog buries bone",
       "category":"disaster"
+    },
+    {  
+      "id":19,
+      "name":"tulip",
+      "title":"Tulip",
+      "category":"plant",
+      "count":3
+    },
+    {  
+      "id":20,
+      "name":"tulip",
+      "title":"Tulip",
+      "category":"plant",
+      "count":3
+    },
+    {  
+      "id":21,
+      "name":"chinese_lantern",
+      "title":"Chinese Lantern",
+      "category":"plant",
+      "count":3
+    },
+    {  
+      "id":22,
+      "name":"chinese_lantern",
+      "title":"Chinese Lantern",
+      "category":"plant",
+      "count":3
+    },
+    {  
+      "id":23,
+      "name":"chinese_lantern",
+      "title":"Chinese Lantern",
+      "category":"plant",
+      "count":3
+    },
+    {  
+      "id":24,
+      "name":"camellia",
+      "title":"Camellia",
+      "category":"plant",
+      "count":2
+    },
+    {  
+      "id":25,
+      "name":"camellia",
+      "title":"Camellia",
+      "category":"plant",
+      "count":2
+    },
+    {  
+      "id":26,
+      "name":"bug_eater",
+      "title":"Bug Eater",
+      "category":"plant",
+      "count":2,
+      "passivelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
+        "mealy-bug", "rootweevil", "scale", "squash_bug", "white_fly"]
+    },
+    {  
+      "id":27,
+      "name":"bug_eater",
+      "title":"Bug Eater",
+      "category":"plant",
+      "count":2,
+      "passivelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
+        "mealy-bug", "rootweevil", "scale", "squash_bug", "white_fly"]
+    },
+    {  
+      "id":28,
+      "name":"red_rose",
+      "title":"Red Rose",
+      "category":"plant",
+      "count":4
+    },
+    {  
+      "id":29,
+      "name":"red_rose",
+      "title":"Red Rose",
+      "category":"plant",
+      "count":4
+    },
+    {  
+      "id":30,
+      "name":"red_rose",
+      "title":"Red Rose",
+      "category":"plant",
+      "count":4
     }
   ]
 }
