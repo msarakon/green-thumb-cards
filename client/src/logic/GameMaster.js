@@ -68,8 +68,6 @@ const throwPlantToStreet = (store, playerId, disaster) => {
 /**
  * Returns a suitable defending card/item in player's hand/garden if such exists.
  * A hand card is removed after use.
- * @param {String} playerId 
- * @param {Object} attack 
  */
 const findDefender = (store, playerId, attack) => {
     const defender = store.getState().players[playerId].hand.find(card =>
@@ -83,6 +81,10 @@ const findDefender = (store, playerId, attack) => {
     }
 };
 
+/**
+ * Place the currently held item.
+ * Get item coordinates from the mousedown event.
+ */
 const placeItem = (store, evt) => {
     const containerBounds = evt.target.getBoundingClientRect();
     const x = evt.clientX - containerBounds.x - 20;
@@ -96,6 +98,9 @@ const placeItem = (store, evt) => {
     endTurn(store, 'bunny1');
 };
 
+/**
+ * Attempt to steal the given item from a player.
+ */
 const steal = (store, item, playerId) => {
     const attack = store.getState().turn.card;
     store.dispatch(removeCard('bunny1', attack.id));
@@ -111,6 +116,9 @@ const steal = (store, item, playerId) => {
     }
 };
 
+/**
+ * Handles an AI player turn.
+ */
 const playAITurn = (store, playerId, actions) => {
     actions = Object.is(actions, undefined) ? 0 : actions;
     const cardCount = MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
@@ -126,6 +134,9 @@ const playAITurn = (store, playerId, actions) => {
     endTurn(store, playerId);
 };
 
+/**
+ * Selects a random playable card for an AI player.
+ */
 const getPlayableCard = (players, playerId) => {
     const playableCats = ['plant', 'environment', 'special'];
     if (plantsInGarden(players)) playableCats.push('attack');
@@ -133,6 +144,9 @@ const getPlayableCard = (players, playerId) => {
     return playableCards[Math.floor(Math.random() * playableCards.length)];
 };
 
+/**
+ * Handles card action(s) for an AI player.
+ */
 const playAICard = (store, playerName, playerId, card, actions) => {
     console.log(`${playerName} plays "${card.title}"`);
     if (card.category === 'plant' || card.category === 'environment') {
@@ -153,6 +167,9 @@ const playAICard = (store, playerName, playerId, card, actions) => {
     return actions;
 };
 
+/**
+ * Places an item to a random location.
+ */
 const autoPlaceItem = (store, playerId, item) => {
     store.dispatch(addItem(playerId, {
         ...item,
@@ -161,6 +178,9 @@ const autoPlaceItem = (store, playerId, item) => {
     }));
 };
 
+/**
+ * Randomly select something for an AI player to steal.
+ */
 const getSomethingToSteal = (store, playerId, attack) => {
     const possibleVictims = Object.entries(store.getState().players).filter(([id, player]) =>
         id !== playerId && player.garden.filter(item => item.category === 'plant').length > 0
@@ -200,7 +220,6 @@ const endTurn = (store, playerId) => {
 
 /**
  * Start turn for the given player.
- * @param {String} playerId
  */
 const startTurn = (store, playerId) => {
     console.log(`${store.getState().players[playerId].name}'s turn starts!`);
