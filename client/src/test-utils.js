@@ -29,8 +29,8 @@ const mockAttacks = [
 ];
 
 const mockDefenders = [
-    { id: 100, category: 'defense', title: 'Mothra', name: 'mothra', protectsFrom: ['godzilla'] },
-    { id: 101, category: 'defense', title: 'Defend', name: 'defend', protectsFrom: ['attac'] }
+    { id: 100, category: 'defense', title: 'Mothra', name: 'mothra', activelyResists: ['godzilla'] },
+    { id: 101, category: 'defense', title: 'Defend', name: 'defend', activelyResists: ['attac'] }
 ];
 
 const mockDisasters = [
@@ -43,7 +43,8 @@ const mockSpecials = [
 ];
 
 const mockEnvironments = [
-    { id: 100000, category: 'environment', title: 'Sofa', name: 'sofa' }
+    { id: 100000, category: 'environment', title: 'Sofa', name: 'sofa' },
+    { id: 100001, category: 'environment', title: 'Table', name: 'table', passivelyResists: ['godzilla'] }
 ];
 
 export { mockState, mockMousedown, mockPlants, mockAttacks, mockDefenders, mockDisasters, mockSpecials, mockEnvironments };

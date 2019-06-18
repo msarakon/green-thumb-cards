@@ -181,7 +181,7 @@
       "title":"Bug Eater",
       "category":"plant",
       "count":2,
-      "protectsFrom": ["aphids", "beetle", "cutworm", "earwig", "locust",
+      "passivelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
         "mealy-bug", "rootweevil", "scale", "squash_bug", "white_fly"]
     },
     {  
@@ -190,7 +190,7 @@
       "title":"Bug Eater",
       "category":"plant",
       "count":2,
-      "protectsFrom": ["aphids", "beetle", "cutworm", "earwig", "locust",
+      "passivelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
         "mealy-bug", "rootweevil", "scale", "squash_bug", "white_fly"]
     },
     {  
@@ -645,7 +645,7 @@
       "name":"bug_spray",
       "title":"Bug Spray",
       "category":"defense",
-      "protectsFrom": ["aphids", "beetle", "cutworm", "earwig", "locust",
+      "activelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
         "mealy-bug", "rootweevil", "scale", "slug", "snail", "squash_bug", "white_fly"]
     },
     {  
@@ -653,7 +653,7 @@
       "name":"diazinon",
       "title":"Diazinon",
       "category":"defense",
-      "protectsFrom": ["aphids", "beetle", "cutworm", "earwig", "locust",
+      "activelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
         "mealy-bug", "rootweevil", "scale", "slug", "snail", "squash_bug", "white_fly"]
     },
     {  
@@ -661,7 +661,7 @@
       "name":"citronella",
       "title":"Citronella",
       "category":"defense",
-      "protectsFrom": ["aphids", "beetle", "cutworm", "earwig", "locust",
+      "activelyResists": ["aphids", "beetle", "cutworm", "earwig", "locust",
         "mealy-bug", "rootweevil", "scale", "squash_bug", "white_fly"]
     },
     {  
@@ -669,42 +669,42 @@
       "name":"lime_sulphur",
       "title":"Lime Sulphur",
       "category":"defense",
-      "protectsFrom": ["fungus", "leaf_rust", "mite"]
+      "activelyResists": ["fungus", "leaf_rust", "mite"]
     },
     {  
       "id":100,
       "name":"pull_weeds",
       "title":"Pull Weeds",
       "category":"defense",
-      "protectsFrom": ["crabgrass", "dandelion", "weeds"]
+      "activelyResists": ["crabgrass", "dandelion", "weeds"]
     },
     {  
       "id":101,
       "name":"rodent_bait",
       "title":"Rodent Bait",
       "category":"defense",
-      "protectsFrom": ["gopher", "mole", "squirrel"]
+      "activelyResists": ["gopher", "mole", "squirrel"]
     },
     {  
       "id":102,
       "name":"salt",
       "title":"Salt",
       "category":"defense",
-      "protectsFrom": ["slug", "snail"]
+      "activelyResists": ["slug", "snail"]
     },
     {  
       "id":103,
       "name":"slug_snail_bait",
       "title":"Slug+Snail bait",
       "category":"defense",
-      "protectsFrom": ["slug", "snail"]
+      "activelyResists": ["slug", "snail"]
     },
     {  
       "id":104,
       "name":"cat",
       "title":"Cat",
       "category":"environment",
-      "protectsFrom": ["squirrel", "mole", "gopher", "dog"]
+      "passivelyResists": ["squirrel", "mole", "gopher", "dog"]
     },
     {  
       "id":105,
@@ -717,14 +717,14 @@
       "name":"green_house",
       "title":"Green House",
       "category":"environment",
-      "protectsFrom": ["freeze", "deer", "dog", "kid"]
+      "passivelyResists": ["freeze", "deer", "dog", "kid"]
     },
     {  
       "id":107,
       "name":"sprinkler",
       "title":"Sprinkler",
       "category":"environment",
-      "protectsFrom": ["too_much_sun", "not_enough_water"]
+      "passivelyResists": ["too_much_sun", "not_enough_water"]
     },
     {  
       "id":108,

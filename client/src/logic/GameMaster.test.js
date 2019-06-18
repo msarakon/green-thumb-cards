@@ -59,7 +59,7 @@ describe('GameMaster', () => {
                 ...mockState.players,
                 bunny1: {
                     ...mockState.players.bunny1,
-                    hand: [mockDisasters[0]],
+                    hand: [mockDisasters[0], mockEnvironments[1]],
                     garden: [mockPlants[0]]
                 },
                 bunny2: {

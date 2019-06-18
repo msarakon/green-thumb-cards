@@ -72,13 +72,13 @@ const throwPlantToStreet = (store, playerId, disaster) => {
  */
 const findDefender = (store, playerId, attack) => {
     const defender = store.getState().players[playerId].hand.find(card =>
-        card.protectsFrom && card.protectsFrom.includes(attack.name));
+        card.activelyResists && card.activelyResists.includes(attack.name));
     if (defender) {
         store.dispatch(removeCard(playerId, defender.id));
         return defender;
     } else {
         return store.getState().players[playerId].garden.find(card =>
-            card.protectsFrom && card.protectsFrom.includes(attack.name));
+            card.passivelyResists && card.passivelyResists.includes(attack.name));
     }
 };
 
