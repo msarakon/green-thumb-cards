@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --mode=development --open",
     "build": "webpack --mode=production",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "prop-types": "^15.7.2",

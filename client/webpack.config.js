@@ -16,7 +16,8 @@ const config = {
         rules: [
             {
                 test: /\.js$/,
-                loader: ['babel-loader', 'eslint-loader']
+                exclude: /node_modules/,
+                use: ['babel-loader', 'eslint-loader']
             },
             {
                 test: /\.css$/,
