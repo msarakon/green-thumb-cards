@@ -6,7 +6,10 @@ import { pickFromStreet } from '../reducers/streetReducer';
 import GardenItem from './GardenItem';
 
 const Street = (props) => {
-    const pick = (item) => props.playCard(item, () => props.pickFromStreet(item.id));
+    const pick = (item) => {
+        props.playCard('bunny1', item);
+        props.pickFromStreet(item.id);
+    };
 
     return (
         <div>

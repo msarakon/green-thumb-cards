@@ -11,7 +11,7 @@ const GardenItem = ({ item, action }) => {
                 top: item.top + '%',
                 left: item.left + '%'
             }}
-            onClick={() => action(item)}>
+            onClick={action ? () => action(item) : undefined}>
             {item.id}
         </div>
     );
