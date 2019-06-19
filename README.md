@@ -1,5 +1,5 @@
-# :tulip:GreenThumbCards.js
-A JavaScript version of a 90s gardening card &amp; Windows game by Playful Minds.
+# :tulip:GreenThumbCards
+A TypeScript version of a 90s gardening card &amp; Windows game by Playful Minds.
 
 [![Build Status](https://travis-ci.org/msarakon/green-thumb-cards.svg?branch=master)](https://travis-ci.org/msarakon/green-thumb-cards) [![codecov](https://codecov.io/gh/msarakon/green-thumb-cards/branch/master/graph/badge.svg)](https://codecov.io/gh/msarakon/green-thumb-cards)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/msarakon/green-thumb-cards.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/msarakon/green-thumb-cards/alerts/)
