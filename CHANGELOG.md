@@ -4,7 +4,9 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 6/19   | 3    | Study & use TypeScript
 | 6/18   | 2.5  | Test coverage is back to 97%. Fixed a few bugs created by previous day's refactoring. Separated active (in hand) defenders from passive (in garden) defenders. Game now ends if there are no more possible moves left.
+
 | 6/17   | 2    | Moved game logic to Redux middlewares, aka. Refactoring Strikes Back
 | 6/15   | 1    | Studied Redux middlewares as a way to neatly contain the game logic
 | 6/14   | 2.5  | Refactored turn handling. Player can now use special cards - for AI, this is still work in progress.
@@ -22,4 +24,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 34.5 | | 
+| total  | 37.5 | | 
