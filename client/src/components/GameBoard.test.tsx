@@ -37,7 +37,7 @@ describe('GameBoard', () => {
         expect(store.getActions()[0].type).toEqual('START_INSERT');
 
         // workaround for running the callback function of playCard()
-        store.getActions()[0].data.callback();
+        store.getActions()[0].callback();
     });
 
     it('should handle placing a plant', () => {

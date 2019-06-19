@@ -33,7 +33,7 @@ describe('GameMaster', () => {
         const state = { ...mockState, deck: [] };
         const store = mockStore(() => state);
 
-        drawCardsFor(store, 'bunny1');
+        drawCardsFor(store, 'bunny1', 3);
     });
 
     it('should handle zero disasters', () => {
@@ -144,7 +144,7 @@ describe('GameMaster', () => {
         const state = { ...mockState };
         const store = mockStore(() => state);
 
-        playCard(store, 'bunny1', { category: 'foobar' });
+        playCard(store, 'bunny1', { id: 1, name: 'foobar', title: 'Foobar', category: 'foobar' });
 
         expect(store.getActions()).toEqual([{ data: null, type: null }]);
     });
@@ -217,7 +217,7 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2');
+        playAITurn(store, 'bunny2', 0);
 
         expect(store.getActions()[0].type).toEqual('REMOVE_ITEM');
         expect(store.getActions()[1].type).toEqual('ADD_ITEM');
@@ -242,7 +242,7 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2');
+        playAITurn(store, 'bunny2', 0);
 
         expect(store.getActions()[0].type).toEqual('REMOVE_CARD');
         expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
@@ -261,7 +261,7 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2');
+        playAITurn(store, 'bunny2', 0);
 
         expect(store.getActions()[0].type).toEqual('ADD_ITEM');
     });

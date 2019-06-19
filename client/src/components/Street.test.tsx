@@ -25,7 +25,7 @@ describe('Street', () => {
         fireEvent.click(component.container.querySelector('.garden-item'));
 
         expect(store.getActions()[0].type).toEqual('START_INSERT');
-        expect(store.getActions()[1]).toEqual( { type: 'PICK_FROM_STREET', data: mockPlants[0].id });
+        expect(store.getActions()[1]).toEqual({ type: 'PICK_FROM_STREET', itemId: mockPlants[0].id });
     });
 
 });

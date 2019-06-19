@@ -6,6 +6,10 @@ import playerReducer from './reducers/playerReducer';
 import turnReducer from './reducers/turnReducer';
 import pointerReducer from './reducers/pointerReducer';
 import streetReducer from './reducers/streetReducer';
+import { Card } from './types/card';
+import { PlayerState } from './types/player';
+import { TurnState } from './types/turn';
+import { StreetState } from './types/street';
 
 const reducer = combineReducers({
     deck: deckReducer,
@@ -17,4 +21,13 @@ const reducer = combineReducers({
 
 const store = createStore(reducer, applyMiddleware(thunk, masterMiddleware));
 
+export interface AppState {
+    deck: Card[],
+    players: PlayerState,
+    turn: TurnState,
+    street: StreetState,
+    pointer: string
+}
+
+export type Store = typeof store;
 export default store;

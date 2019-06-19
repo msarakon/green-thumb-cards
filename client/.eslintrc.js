@@ -16,8 +16,10 @@ module.exports = {
       'ecmaVersion': 2018,
       'sourceType': 'module'
   },
+  'parser': '@typescript-eslint/parser',
   'plugins': [
-      'react'
+      'react',
+      '@typescript-eslint'
   ],
   'settings': {
       'react': {
@@ -37,10 +39,8 @@ module.exports = {
           'error',
           'always'
       ],
-      'no-unused-vars': [
-        'error',
-        { 'args': 'after-used' }
-      ],
+      'no-unused-vars': ['off'],
+      'typescript/no-unused-vars': ['off'],
       'no-console': ['off']
   }
 }

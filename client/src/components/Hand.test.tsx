@@ -25,7 +25,7 @@ describe('Hand', () => {
         fireEvent.click(card);
 
         expect(store.getActions()).toEqual([
-            { type: 'PLAY_CARD', data: { card: mockEnvironments[0], playerId: 'bunny1' } }
+            { type: 'PLAY_CARD', card: mockEnvironments[0], playerId: 'bunny1' }
         ]);
     });
 
@@ -41,7 +41,7 @@ describe('Hand', () => {
         const deck = component.container.querySelector('.deck .card');
         fireEvent.click(deck);
         
-        expect(store.getActions()).toEqual([{ type: 'DRAW_CARDS_FOR', data: { cardCount: 1, playerId: 'bunny1' } }]);
+        expect(store.getActions()).toEqual([{ type: 'DRAW_CARDS_FOR', count: 1, playerId: 'bunny1' }]);
     });
 
     it('should emphasize the active card', () => {

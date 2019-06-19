@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
-import { placeItem } from '../middlewares/masterMiddleware';
 import './GameBoard.css';
 
 const GameBoard = (props) => {
@@ -11,9 +10,7 @@ const GameBoard = (props) => {
     const mouseMoveHandler = (evt) => setPointerCoords([evt.clientX - 20, evt.clientY - 20]);
 
     return (
-        <div className="gameboard"
-            onMouseMove={mouseMoveHandler}
-            onMouseDown={props.canPlaceItem ? (e) => props.placeItem(e) : undefined}>
+        <div className="gameboard" onMouseMove={mouseMoveHandler}>
             <div className="hand-container">
                 <Hand />
             </div>
@@ -35,9 +32,7 @@ GameBoard.propTypes = {
     deck: PropTypes.array.isRequired,
     turn: PropTypes.object.isRequired,
     pointer: PropTypes.string,
-    insertOn: PropTypes.bool.isRequired,
-    canPlaceItem: PropTypes.bool.isRequired,
-    placeItem: PropTypes.func.isRequired
+    insertOn: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -45,11 +40,8 @@ const mapStateToProps = (state) => {
         deck: state.deck,
         turn: state.turn,
         pointer: state.pointer,
-        insertOn: state.turn.mode === 'insert',
-        canPlaceItem: state.turn.mode === 'insert' && state.pointer === 'insertable'
+        insertOn: state.turn.mode === 'insert'
     };
 };
 
-const mapDispatchToProps = { placeItem };
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);
+export default connect(mapStateToProps)(GameBoard);

@@ -1,14 +1,12 @@
 import reducer, { throwToStreet, pickFromStreet } from './streetReducer';
+import { mockPlants } from '../test-utils';
 
 describe('streetReducer', () => {
-    it('should return the initial state', () => {
-        expect(reducer(undefined, {})).toEqual({ top: [], center: [], bottom: [] });
-    });
 
     it('should handle throwing an item to the street', () => {
-        reducer(undefined, throwToStreet({ id: 1 }));
-        reducer(undefined, throwToStreet({ id: 2 }));
-        const street = reducer(undefined, throwToStreet({ id: 3 }));
+        reducer(undefined, throwToStreet(mockPlants[0]));
+        reducer(undefined, throwToStreet(mockPlants[1]));
+        const street = reducer(undefined, throwToStreet(mockPlants[2]));
         const totalItems = Object.values(street).reduce((coll, streets) => coll.concat(streets), []);
         expect(totalItems.length).toBe(3);
     });

@@ -2,7 +2,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const config = {
-    entry: ['@babel/polyfill', './src/index.js'],
+    entry: ['@babel/polyfill', './src/index.tsx'],
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.json']
+    },
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'main.js'
@@ -15,7 +18,7 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: ['babel-loader', 'eslint-loader']
             },

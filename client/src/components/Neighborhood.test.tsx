@@ -9,7 +9,7 @@ afterEach(cleanup);
 describe('Garden', () => {
 
     it('should handle mouse enter and leave events', () => {
-        const component = render(<Provider store={store}><Neighborhood steal={() => {}} /></Provider>);
+        const component = render(<Provider store={store}><Neighborhood /></Provider>);
         fireEvent.mouseEnter(component.container.querySelector('.garden-container'));
         fireEvent.mouseLeave(component.container.querySelector('.garden-container'));
     });

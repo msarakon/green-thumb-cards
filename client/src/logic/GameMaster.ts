@@ -2,11 +2,16 @@ import { drawCards as drawCardsFromDeck } from '../reducers/deckReducer';
 import { addCards, removeCard, addItem, removeItem } from '../reducers/playerReducer';
 import { startNewAction, finishAction } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
+import { Card, GardenItem } from '../types/card';
+import { PlayerState } from '../types/player';
+import { StreetState } from '../types/street';
+import { START_INSERT, START_ATTACK } from '../types/actions';
+import { Store } from '../store';
 
 const CARDS_AT_START = 5;
 const MAX_HAND_CARDS = 6;
 
-const startGame = (store) => {
+const startGame = (store: Store) => {
     drawCardsFor(store, 'bunny1', CARDS_AT_START);
     drawCardsFor(store, 'bunny2', CARDS_AT_START);
     drawCardsFor(store, 'bunny3', CARDS_AT_START);
@@ -17,7 +22,7 @@ const startGame = (store) => {
 /**
  * Draw n cards for the given player.
  */
-const drawCardsFor = (store, playerId, proposedCount) => {
+const drawCardsFor = (store: Store, playerId: string, proposedCount: number) => {
     const count = proposedCount > store.getState().deck.length ? store.getState().deck.length : proposedCount;
     if (count > 0) {
         console.log(`${store.getState().players[playerId].name} draws ${count} card(s)`);
@@ -31,10 +36,10 @@ const drawCardsFor = (store, playerId, proposedCount) => {
 /**
  * Handle disasters if present in a player's hand.
  */
-const doDisasters = (store, playerId) => {
+const doDisasters = (store: Store, playerId: string) => {
     const disasters = store.getState().players[playerId].hand
-        .filter(card => card.category === 'disaster');
-    disasters.forEach(disaster => {
+        .filter((card: Card) => card.category === 'disaster');
+    disasters.forEach((disaster: Card) => {
         console.log(`*** Disaster event: "${disaster.title}"`);
         if (disaster.affectsAll) {
             Object.keys(store.getState().players).forEach(playerId =>
@@ -49,7 +54,7 @@ const doDisasters = (store, playerId) => {
     }
 };
 
-const throwPlantToStreet = (store, playerId, disaster) => {
+const throwPlantToStreet = (store: Store, playerId: string, disaster: Card) => {
     const player = store.getState().players[playerId];
     const defender = findDefender(store, playerId, disaster);
     if (defender) {
@@ -69,7 +74,7 @@ const throwPlantToStreet = (store, playerId, disaster) => {
  * Returns a suitable defending card/item in player's hand/garden if such exists.
  * A hand card is removed after use.
  */
-const findDefender = (store, playerId, attack) => {
+const findDefender = (store: Store, playerId: string, attack: Card) => {
     const defender = store.getState().players[playerId].hand.find(card =>
         card.activelyResists && card.activelyResists.includes(attack.name));
     if (defender) {
@@ -85,8 +90,9 @@ const findDefender = (store, playerId, attack) => {
  * Place the currently held item.
  * Get item coordinates from the mousedown event.
  */
-const placeItem = (store, evt) => {
-    const containerBounds = evt.target.getBoundingClientRect();
+const placeItem = (store: Store, evt: React.MouseEvent<HTMLElement>) => {
+    const target = evt.currentTarget as HTMLElement;
+    const containerBounds = target.getBoundingClientRect() as DOMRect;
     const x = evt.clientX - containerBounds.x - 20;
     const y = evt.clientY - containerBounds.y - 20;
     store.dispatch(addItem('bunny1', {
@@ -101,7 +107,7 @@ const placeItem = (store, evt) => {
 /**
  * Attempt to steal the given item from a player.
  */
-const steal = (store, item, playerId) => {
+const steal = (store: Store, item: GardenItem, playerId: string) => {
     const attack = store.getState().turn.card;
     store.dispatch(removeCard('bunny1', attack.id));
     const victimName = store.getState().players[playerId].name;
@@ -119,8 +125,7 @@ const steal = (store, item, playerId) => {
 /**
  * Handles an AI player turn.
  */
-const playAITurn = (store, playerId, actions) => {
-    actions = Object.is(actions, undefined) ? 0 : actions;
+const playAITurn = (store: Store, playerId: string, actions: number) => {
     const cardCount = MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
     drawCardsFor(store, playerId, cardCount);
     const playerName = store.getState().players[playerId].name;
@@ -139,7 +144,7 @@ const playAITurn = (store, playerId, actions) => {
  * "Defense" cards cannot be played without attack.
  * "Attack" cards can only be played if there is something to attack.
  */
-const getPlayableCards = (players, playerId) => {
+const getPlayableCards = (players: PlayerState, playerId: string) => {
     const playableCats = ['plant', 'environment', 'special'];
     if (plantsInGarden(players, playerId)) playableCats.push('attack');
     return players[playerId].hand.filter(card => playableCats.includes(card.category));
@@ -190,12 +195,12 @@ const autoPlaceItem = (store, playerId, item) => {
 /**
  * Randomly select something for an AI player to steal.
  */
-const getSomethingToSteal = (store, playerId, attack) => {
+const getSomethingToSteal = (store: Store, playerId: string, attack: Card) => {
     const possibleVictims = Object.entries(store.getState().players).filter(([id, player]) =>
-        id !== playerId && player.garden.filter(item => item.category === 'plant').length > 0
+        id !== playerId && player.garden.filter((item: GardenItem) => item.category === 'plant').length > 0
     );
     const [ victimId, victim ] = possibleVictims[Math.floor(Math.random() * possibleVictims.length)];
-    const possibleItems = victim.garden.filter(item => item.category === 'plant');
+    const possibleItems = victim.garden.filter((item: GardenItem) => item.category === 'plant');
     const defender = findDefender(store, victimId, attack);
     if (defender) {
         const playerName = store.getState().players[playerId].name;
@@ -213,17 +218,15 @@ const getSomethingToSteal = (store, playerId, attack) => {
 /**
  * Checks if there are any plants in gardens (besides in that of the given player)
  */
-const plantsInGarden = (players, playerId) => {
+const plantsInGarden = (players: PlayerState, playerId: string) => {
     return Object.entries(players).some(([id, player]) =>
         id !== playerId && player.garden.some(item => item.category === 'plant'));
 };
 
 /**
  * Start turn for the next player.
- * @param {Object} store
- * @param {String} playerId
  */
-const endTurn = (store, playerId) => {
+const endTurn = (store: Store, playerId: string) => {
     if (store.getState().turn.actions > 0) return;
     const playerIds = Object.keys(store.getState().players);
     const playerIdx = playerIds.indexOf(playerId);
@@ -238,7 +241,7 @@ const endTurn = (store, playerId) => {
 /**
  * Checks if there are still possible moves left for any player.
  */
-const movesLeft = (street, players) => {
+const movesLeft = (street: StreetState, players: PlayerState) => {
     return Object.values(street).some(items => items.length > 0) ||
         Object.keys(players).some(playerId => getPlayableCards(players, playerId).length > 0);
 };
@@ -246,10 +249,10 @@ const movesLeft = (street, players) => {
 /**
  * Start turn for the given player.
  */
-const startTurn = (store, playerId) => {
+const startTurn = (store: Store, playerId: string) => {
     console.log(`${store.getState().players[playerId].name}'s turn starts!`);
     if (playerId === 'bunny1') store.dispatch(startNewAction());
-    else playAITurn(store, playerId);
+    else playAITurn(store, playerId, 0);
 };
 
 const endGame = () => {
@@ -257,28 +260,31 @@ const endGame = () => {
     // TODO: score etc
 };
 
-const playSingleActionCard = (card, callback) => {
+const playSingleActionCard = (card: Card, callback: Function) => {
     switch (card.category) {
     case 'plant':
         return {
-            type: 'START_INSERT',
-            data: { card, callback }
+            type: START_INSERT,
+            card,
+            callback
         };
     case 'attack':
         return {
-            type: 'START_ATTACK',
-            data: { card, callback }
+            type: START_ATTACK,
+            card,
+            callback
         };
     case 'environment':
         return {
-            type: 'START_INSERT',
-            data: { card, callback }
+            type: START_INSERT,
+            card,
+            callback
         };
     default: return { type: null, data: null };
     }    
 };
 
-const playCard = (store, playerId, card) => {
+const playCard = (store: Store, playerId: string, card: Card) => {
     if (card.category === 'special') {
         store.dispatch(removeCard(playerId, card.id));
         store.dispatch(startNewAction());

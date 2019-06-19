@@ -51,7 +51,7 @@ describe('Garden', () => {
         fireEvent.click(plant);
 
         expect(store.getActions()[0]).toEqual({
-            type: 'REMOVE_CARD', data: { playerId: 'bunny1', cardId: mockAttacks[0].id }
+            type: 'REMOVE_CARD', playerId: 'bunny1', cardId: mockAttacks[0].id
         });
     });
 
@@ -67,8 +67,8 @@ describe('Garden', () => {
         fireEvent.mouseLeave(component.container.querySelector('.garden'));
 
         expect(store.getActions()).toEqual([
-            { type: 'SET_POINTER', data: 'insertable' },
-            { type: 'SET_POINTER', data: null }
+            { type: 'SET_POINTER', pointer: 'insertable' },
+            { type: 'SET_POINTER', pointer: null }
         ]);
     });
 
