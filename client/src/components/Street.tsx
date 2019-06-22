@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { playCard } from '../middlewares/masterMiddleware';
 import { pickFromStreet } from '../reducers/streetReducer';
 import GardenItem from './GardenItem';
+import { AppState } from '../store';
+import { GardenItem as GardenItemType } from '../types/card';
 
-const Street = (props) => {
-    const pick = (item) => {
+const Street = (props: StreetProps) => {
+    const pick = (item: GardenItemType) => {
         props.playCard('bunny1', item);
         props.pickFromStreet(item.id);
     };
@@ -14,26 +15,25 @@ const Street = (props) => {
     return (
         <div>
             {
-                props.items.map(item =>
+                props.items.map((item: GardenItemType) =>
                     <GardenItem
                         key={item.id}
                         item={item}
-                        action={props.selectOn ? (item) => pick(item) : undefined} />
+                        action={props.selectOn ? (item: GardenItemType) => pick(item) : undefined} />
                 )
             }
         </div>
     );
 };
 
-Street.propTypes = {
-    streetId: PropTypes.string.isRequired,
-    items: PropTypes.array.isRequired,
-    selectOn: PropTypes.bool.isRequired,
-    playCard: PropTypes.func.isRequired,
-    pickFromStreet: PropTypes.func.isRequired
-};
+interface StreetProps {
+    playCard: Function;
+    items: GardenItemType[];
+    pickFromStreet: Function;
+    selectOn: boolean;
+}
 
-const mapStateToProps = (state, { streetId }) => {
+const mapStateToProps = (state: AppState, { streetId }) => {
     return {
         selectOn: state.turn.mode === 'select_action',
         items: state.street[streetId]

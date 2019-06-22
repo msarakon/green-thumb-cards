@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
+import { AppState } from '../store';
 import './GameBoard.css';
 
-const GameBoard = (props) => {
+const GameBoard = (props: GameBoardProps) => {
     const [ pointerCoords, setPointerCoords ] = useState([null, null]);
-    const mouseMoveHandler = (evt) => setPointerCoords([evt.clientX - 20, evt.clientY - 20]);
+    const mouseMoveHandler = (e: React.MouseEvent<HTMLElement>) => setPointerCoords([e.clientX - 20, e.clientY - 20]);
 
     return (
-        <div className="gameboard" onMouseMove={mouseMoveHandler}>
+        <div className="gameboard" onMouseMove={(e) => mouseMoveHandler(e)}>
             <div className="hand-container">
                 <Hand />
             </div>
@@ -28,14 +28,12 @@ const GameBoard = (props) => {
     );
 };
 
-GameBoard.propTypes = {
-    deck: PropTypes.array.isRequired,
-    turn: PropTypes.object.isRequired,
-    pointer: PropTypes.string,
-    insertOn: PropTypes.bool.isRequired
-};
+interface GameBoardProps {
+    insertOn: boolean;
+    pointer: string;
+}
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
     return {
         deck: state.deck,
         turn: state.turn,

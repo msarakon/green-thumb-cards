@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { AppState } from '../store';
 
-const Deck = (props) => {
+const Deck = (props: DeckProps) => {
     if (props.size > 0) {
         return (
             <div
                 className='deck'
                 title={props.size + ' cards remaining'}
-                onClick={props.canDraw ? props.drawCard : undefined}>
+                onClick={props.canDraw ? () => props.drawCard() : undefined}>
                 <div className='card'><div className='card-bg'></div></div>
                 <div className='card'><div className='card-bg'></div></div>
                 <div className='card'><div className='card-bg'></div></div>
@@ -19,13 +19,13 @@ const Deck = (props) => {
     }
 };
 
-Deck.propTypes = {
-    size: PropTypes.number.isRequired,
-    canDraw: PropTypes.bool.isRequired,
-    drawCard: PropTypes.func.isRequired
-};
+interface DeckProps {
+    size: number;
+    canDraw: boolean;
+    drawCard: Function;
+}
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
     return {
         size: state.deck.length
     };

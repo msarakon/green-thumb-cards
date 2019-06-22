@@ -1,25 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { GardenItem as GardenItemType } from '../types/card';
 
-const GardenItem = ({ item, action }) => {
+const GardenItem = (props: GardenItemProps) => {
     return (
         <div
-            key={item.id}
+            key={props.item.id}
             className="garden-item"
             style={{
-                zIndex: item.zIndex,
-                top: item.top + '%',
-                left: item.left + '%'
+                zIndex: props.item.zIndex,
+                top: props.item.top + '%',
+                left: props.item.left + '%'
             }}
-            onClick={action ? () => action(item) : undefined}>
-            {item.id}
+            onClick={props.action ? () => props.action(props.item) : undefined}>
+            {props.item.id}
         </div>
     );
 };
 
-GardenItem.propTypes = {
-    item: PropTypes.object.isRequired,
-    action: PropTypes.func
-};
+interface GardenItemProps {
+    item: GardenItemType;
+    action: Function;
+}
 
 export default GardenItem;

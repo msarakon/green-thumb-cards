@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { removeCard } from '../reducers/playerReducer';
 import { drawCards, playCard } from '../middlewares/masterMiddleware';
 import Card from './Card';
 import Deck from './Deck';
+import { Card as CardType } from '../types/card';
+import { AppState } from '../store';
 import './Hand.css';
 
-const Hand = (props) => {
-    const playCard = (card) => {
+const Hand = (props: HandProps) => {
+    const playCard = (card: CardType) => {
         console.log(`You play "${card.title}"`);
         props.playCard('bunny1', card);
     };
@@ -30,17 +31,15 @@ const Hand = (props) => {
     );
 };
 
-Hand.propTypes = {
-    deck: PropTypes.array.isRequired,
-    turn: PropTypes.object.isRequired,
-    hand: PropTypes.array.isRequired,
-    playCard: PropTypes.func.isRequired,
-    drawCards: PropTypes.func.isRequired,
-    removeCard: PropTypes.func.isRequired,
-    canDraw: PropTypes.bool.isRequired
-};
+interface HandProps {
+    playCard: Function;
+    drawCards: Function;
+    hand: CardType[];
+    canDraw: Function;
+    deck: CardType[]
+}
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
     return {
         deck: state.deck,
         hand: state.players.bunny1.hand,

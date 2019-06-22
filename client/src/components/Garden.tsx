@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { setPointer } from '../reducers/pointerReducer';
 import GardenItem from './GardenItem';
 import { placeItem, steal } from '../middlewares/masterMiddleware';
+import { AppState } from '../store';
+import { Player } from '../types/player';
+import { GardenItem as GardenItemType } from '../types/card';
 import './Garden.css';
 
-const Garden = (props) => {
+const Garden = (props: GardenProps) => {
     return (
         <div id={ props.playerId + '-garden' }
             className='garden'
@@ -18,25 +20,25 @@ const Garden = (props) => {
                     <GardenItem
                         key={item.id}
                         item={item}
-                        action={props.attackOn ? (item) => props.steal(item, props.playerId) : () => {}} />
+                        action={props.attackOn ? (item: GardenItemType) => props.steal(item, props.playerId) : () => {}} />
                 )
             }
         </div>
     );
 };
 
-Garden.propTypes = {
-    playerId: PropTypes.string.isRequired,
-    player: PropTypes.object.isRequired,
-    myGarden: PropTypes.bool.isRequired,
-    attackOn: PropTypes.bool.isRequired,
-    setPointer: PropTypes.func.isRequired,
-    steal: PropTypes.func.isRequired,
-    canPlaceItem: PropTypes.bool.isRequired,
-    placeItem: PropTypes.func.isRequired
-};
+interface GardenProps {
+    playerId: string;
+    player: Player;
+    myGarden: boolean;
+    setPointer: Function;
+    canPlaceItem: boolean;
+    placeItem: Function;
+    attackOn: boolean;
+    steal: Function
+}
 
-const mapStateToProps = (state, { playerId }) => {
+const mapStateToProps = (state: AppState, { playerId }) => {
     return {
         player: state.players[playerId],
         myGarden: playerId === 'bunny1',

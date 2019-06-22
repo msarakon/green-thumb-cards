@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { startGame } from '../middlewares/masterMiddleware';
 import GameBoard from './GameBoard';
 import Footer from './Footer';
 import './App.css';
 
-const App = ({ startGame }) => {
+const App = (props: AppProps) => {
     const [gameOn, setGameOn] = useState(false);
 
     const start = () => {
         setGameOn(true);
-        startGame();
+        props.startGame();
     };
 
     return (
@@ -36,9 +35,9 @@ const App = ({ startGame }) => {
     );
 };
 
-App.propTypes = {
-    startGame: PropTypes.func.isRequired
-};
+interface AppProps {
+    startGame: Function;
+}
 
 const mapDispatchToProps = {
     startGame

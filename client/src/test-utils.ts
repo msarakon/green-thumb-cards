@@ -1,5 +1,3 @@
-import { SyntheticEvent } from "react";
-
 const mockState = {
     deck: [],
     players: {
@@ -17,8 +15,9 @@ const mockMousedown = {
     currentTarget: {
         getBoundingClientRect: () => {
             return {
-                left: 100, top: 300, height: 400, width: 400 };
-            }
+                left: 100, top: 300, height: 400, width: 400
+            };
+        }
     },
     clientX: 550,
     clientY: 500

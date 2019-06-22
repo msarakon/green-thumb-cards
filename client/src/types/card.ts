@@ -5,10 +5,10 @@ export interface Card {
     category: string,
     affectsAll?: boolean,
     protectsFrom?: string[]
-};
+}
 
 export interface GardenItem extends Card {
     zIndex?: number,
     top?: number,
     left?: number
-};
+}

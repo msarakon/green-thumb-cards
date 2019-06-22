@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const config = {
-    entry: ['@babel/polyfill', './src/index.tsx'],
+    entry: ['./src/index.tsx'],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json']
     },

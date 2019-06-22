@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { Card as CardType } from '../types/card';
+import { AppState } from '../store';
+import { TurnState } from '../types/turn';
 import './Card.css';
 
-const Card = (props) => {
+const Card = (props: CardProps) => {
     const selectableCategories = ['plant', 'environment', 'attack', 'special'];
     const selectable = props.canPlay && selectableCategories.includes(props.card.category);
     const active = props.turn.card && props.turn.card.id === props.card.id;
@@ -15,7 +17,7 @@ const Card = (props) => {
             (selectable ? ' selectable' : '') +
             (active ? ' active' : '')
         }
-        onClick={selectable ? props.play : undefined}
+        onClick={selectable ? () => props.play() : undefined}
         title={props.card.title}>
             <div className='card-bg'>
                 { props.card.title }
@@ -24,15 +26,14 @@ const Card = (props) => {
     );
 };
 
-Card.propTypes = {
-    card: PropTypes.object.isRequired,
-    play: PropTypes.func.isRequired,
-    turn: PropTypes.object.isRequired,
-    canPlay: PropTypes.bool.isRequired
-};
+interface CardProps {
+    card: CardType,
+    canPlay: boolean,
+    play: Function,
+    turn: TurnState
+}
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
     return {
         turn: state.turn
     };
