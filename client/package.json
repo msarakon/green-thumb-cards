@@ -70,7 +70,8 @@
       "<rootDir>/setup-tests.ts"
     ],
     "moduleNameMapper": {
-      "\\.(css)$": "<rootDir>/style-mock.ts"
+      "\\.(css)$": "<rootDir>/src/test-utils/style-mock.ts",
+      "\\.(jpg|jpeg|png|gif)$": "<rootDir>/src/test-utils/asset-transformer.ts"
     },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

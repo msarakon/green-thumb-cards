@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import Hand from './Hand';
 import Neighborhood from './Neighborhood';
 import { AppState } from '../store';
+import { TurnState } from '../types/turn';
+import { imagePath } from '../utils/index';
 import './GameBoard.css';
 
 const GameBoard = (props: GameBoardProps) => {
     const [ pointerCoords, setPointerCoords ] = useState([null, null]);
-    const mouseMoveHandler = (e: React.MouseEvent<HTMLElement>) => setPointerCoords([e.clientX - 20, e.clientY - 20]);
+    const mouseMoveHandler = (e: React.MouseEvent<HTMLElement>) =>
+        setPointerCoords([e.clientX - 20, e.clientY - 20]);
 
     return (
         <div className="gameboard" onMouseMove={(e) => mouseMoveHandler(e)}>
@@ -22,7 +25,9 @@ const GameBoard = (props: GameBoardProps) => {
                 <div className={'item-placer ' + props.pointer} style={{
                     left: pointerCoords[0],
                     top: pointerCoords[1]
-                }}></div>
+                }}>
+                    <img src={imagePath(props.turn.card.name)} />
+                </div>
             }
         </div>
     );
@@ -31,6 +36,7 @@ const GameBoard = (props: GameBoardProps) => {
 interface GameBoardProps {
     insertOn: boolean;
     pointer: string;
+    turn: TurnState;
 }
 
 const mapStateToProps = (state: AppState) => {

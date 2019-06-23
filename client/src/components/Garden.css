@@ -7,4 +7,7 @@
 
 .garden-item {
     position: absolute;
+    display: block;
+    height: 71px;
+    width: 50px;
 }

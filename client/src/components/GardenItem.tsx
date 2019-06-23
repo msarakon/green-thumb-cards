@@ -1,19 +1,20 @@
 import React from 'react';
 import { GardenItem as GardenItemType } from '../types/card';
+import { imagePath } from '../utils/index';
 
 const GardenItem = (props: GardenItemProps) => {
     return (
-        <div
+        <img
             key={props.item.id}
             className="garden-item"
+            src={imagePath(props.item.name)}
             style={{
                 zIndex: props.item.zIndex,
-                top: props.item.top + '%',
+                bottom: props.item.bottom + '%',
                 left: props.item.left + '%'
             }}
-            onClick={props.action ? () => props.action(props.item) : undefined}>
-            {props.item.id}
-        </div>
+            onClick={props.action ? () => props.action(props.item) : undefined}
+        />
     );
 };
 

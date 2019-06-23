@@ -1,5 +1,5 @@
 import reducer, { addItem, removeItem, removeCard } from './playerReducer';
-import { mockPlants } from '../test-utils';
+import { mockPlants } from '../test-utils/mock-data';
 import { ADD_CARDS } from '../types/actions'; 
 
 describe('playerReducer', () => {

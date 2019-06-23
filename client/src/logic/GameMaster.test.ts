@@ -8,7 +8,7 @@ import {
 import {
     mockState, mockMousedown,
     mockPlants, mockAttacks, mockDefenders, mockDisasters, mockSpecials, mockEnvironments
-} from '../test-utils';
+} from '../test-utils/mock-data';
 
 describe('GameMaster', () => {
 

@@ -1,5 +1,5 @@
 import reducer, { startNewAction, finishAction } from './turnReducer';
-import { mockPlants, mockAttacks } from '../test-utils';
+import { mockPlants, mockAttacks } from '../test-utils/mock-data';
 import { START_INSERT, START_ATTACK } from '../types/actions';
 
 describe('turnReducer', () => {

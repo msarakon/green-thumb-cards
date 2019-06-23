@@ -5,7 +5,7 @@ import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import { masterMiddleware } from '../middlewares/masterMiddleware';
 import Street from './Street';
-import { mockState, mockPlants } from '../test-utils';
+import { mockState, mockPlants } from '../test-utils/mock-data';
 
 afterEach(cleanup);
 

@@ -4,11 +4,12 @@ export interface Card {
     name: string,
     category: string,
     affectsAll?: boolean,
-    protectsFrom?: string[]
+    activelyResists?: string[]
+    passivelyResists?: string[]
 }
 
 export interface GardenItem extends Card {
     zIndex?: number,
-    top?: number,
+    bottom?: number,
     left?: number
 }

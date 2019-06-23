@@ -60,7 +60,7 @@ const throwPlantToStreet = (store: Store, playerId: string, disaster: Card) => {
     if (defender) {
         console.log(`${player.name} is not affected because of "${defender.title}"`);
     } else {
-        const plants = player.garden.filter(card => card.category === 'plant');
+        const plants = player.garden.filter((card: Card) => card.category === 'plant');
         const plant = plants[Math.floor(Math.random() * plants.length)];
         if (plant) {
             store.dispatch(removeItem(playerId, plant.id));
@@ -75,13 +75,13 @@ const throwPlantToStreet = (store: Store, playerId: string, disaster: Card) => {
  * A hand card is removed after use.
  */
 const findDefender = (store: Store, playerId: string, attack: Card) => {
-    const defender = store.getState().players[playerId].hand.find(card =>
+    const defender = store.getState().players[playerId].hand.find((card: Card) =>
         card.activelyResists && card.activelyResists.includes(attack.name));
     if (defender) {
         store.dispatch(removeCard(playerId, defender.id));
         return defender;
     } else {
-        return store.getState().players[playerId].garden.find(card =>
+        return store.getState().players[playerId].garden.find((card: Card) =>
             card.passivelyResists && card.passivelyResists.includes(attack.name));
     }
 };
@@ -94,11 +94,12 @@ const placeItem = (store: Store, evt: React.MouseEvent<HTMLElement>) => {
     const target = evt.currentTarget as HTMLElement;
     const containerBounds = target.getBoundingClientRect() as DOMRect;
     const x = evt.clientX - containerBounds.x - 20;
-    const y = evt.clientY - containerBounds.y - 20;
+    const y = evt.clientY - containerBounds.y;
     store.dispatch(addItem('bunny1', {
         ...store.getState().turn.card,
-        top: Math.floor(y / containerBounds.height * 100),
-        left: Math.floor(x / containerBounds.width * 100)
+        bottom: 100 - Math.floor(y / containerBounds.height * 100),
+        left: Math.floor(x / containerBounds.width * 100),
+        zIndex: 1
     }));
     store.getState().turn.callback();
     endTurn(store, 'bunny1');
@@ -147,13 +148,13 @@ const playAITurn = (store: Store, playerId: string, actions: number) => {
 const getPlayableCards = (players: PlayerState, playerId: string) => {
     const playableCats = ['plant', 'environment', 'special'];
     if (plantsInGarden(players, playerId)) playableCats.push('attack');
-    return players[playerId].hand.filter(card => playableCats.includes(card.category));
+    return players[playerId].hand.filter((card: Card) => playableCats.includes(card.category));
 };
 
 /**
  * Selects a random playable card for an AI player.
  */
-const getPlayableCard = (players, playerId) => {
+const getPlayableCard = (players: PlayerState, playerId: string) => {
     const playableCards = getPlayableCards(players, playerId);
     return playableCards[Math.floor(Math.random() * playableCards.length)];
 };
@@ -161,7 +162,7 @@ const getPlayableCard = (players, playerId) => {
 /**
  * Handles card action(s) for an AI player.
  */
-const playAICard = (store, playerName, playerId, card, actions) => {
+const playAICard = (store: Store, playerName: string, playerId: string, card: Card, actions: number) => {
     console.log(`${playerName} plays "${card.title}"`);
     if (card.category === 'plant' || card.category === 'environment') {
         autoPlaceItem(store, playerId, card);
@@ -184,10 +185,10 @@ const playAICard = (store, playerName, playerId, card, actions) => {
 /**
  * Places an item to a random location.
  */
-const autoPlaceItem = (store, playerId, item) => {
+const autoPlaceItem = (store: Store, playerId: string, item: GardenItem) => {
     store.dispatch(addItem(playerId, {
         ...item,
-        top: Math.floor(Math.random() * 90),
+        bottom: Math.floor(Math.random() * 90),
         left: Math.floor(Math.random() * 90)
     }));
 };

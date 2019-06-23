@@ -1,5 +1,5 @@
 import reducer, { throwToStreet, pickFromStreet } from './streetReducer';
-import { mockPlants } from '../test-utils';
+import { mockPlants } from '../test-utils/mock-data';
 
 describe('streetReducer', () => {
 

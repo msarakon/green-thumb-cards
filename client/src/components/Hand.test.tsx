@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import Hand from './Hand';
-import { mockState, mockEnvironments, mockPlants, mockAttacks } from '../test-utils';
+import { mockState, mockEnvironments, mockPlants, mockAttacks } from '../test-utils/mock-data';
 
 afterEach(cleanup);
 

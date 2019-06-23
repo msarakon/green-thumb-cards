@@ -23,6 +23,14 @@
     border-radius: 50%;
 }
 
+.item-placer img {
+    position: absolute;
+    height: 71px;
+    width: 50px;
+    bottom: 0;
+    left: -100%;
+}
+
 .item-placer.insertable {
     border: 2px solid lightgreen;
 }

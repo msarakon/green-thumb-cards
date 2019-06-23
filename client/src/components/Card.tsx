@@ -3,15 +3,8 @@ import { connect } from 'react-redux';
 import { Card as CardType } from '../types/card';
 import { AppState } from '../store';
 import { TurnState } from '../types/turn';
+import { imagePath } from '../utils/index';
 import './Card.css';
-
-const imagePath = (name: string) => {
-    try {
-        return require('../assets/cards/' + name + '.png');
-    } catch (ex) {
-        return require('../assets/cards/placeholder.png');
-    }
-};
 
 const Card = (props: CardProps) => {
     const selectableCategories = ['plant', 'environment', 'attack', 'special'];

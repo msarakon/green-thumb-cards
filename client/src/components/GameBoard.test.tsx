@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import { masterMiddleware } from '../middlewares/masterMiddleware';
 import GameBoard from './GameBoard';
-import { mockState, mockMousedown, mockPlants, mockAttacks } from '../test-utils';
+import { mockState, mockMousedown, mockPlants, mockAttacks } from '../test-utils/mock-data';
 
 afterEach(cleanup);
 
@@ -43,7 +43,7 @@ describe('GameBoard', () => {
     it('should handle placing a plant', () => {
         const state = {
             ...mockState,
-            turn: { ...mockState.turn, mode: 'insert' },
+            turn: { ...mockState.turn, mode: 'insert', card: mockPlants[0] },
             pointer: 'insertable'
         };
         const store = mockStore(() => state);
