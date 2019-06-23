@@ -5,6 +5,14 @@ import { AppState } from '../store';
 import { TurnState } from '../types/turn';
 import './Card.css';
 
+const imagePath = (name: string) => {
+    try {
+        return require('../assets/cards/' + name + '.png');
+    } catch (ex) {
+        return require('../assets/cards/placeholder.png');
+    }
+};
+
 const Card = (props: CardProps) => {
     const selectableCategories = ['plant', 'environment', 'attack', 'special'];
     const selectable = props.canPlay && selectableCategories.includes(props.card.category);
@@ -19,7 +27,7 @@ const Card = (props: CardProps) => {
         }
         onClick={selectable ? () => props.play() : undefined}
         title={props.card.title}>
-            <div className='card-bg'>
+            <div className='card-bg' style={{ backgroundImage: `url(${imagePath(props.card.name)})` }}>
                 { props.card.title }
             </div>
         </div>

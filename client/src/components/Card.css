@@ -37,6 +37,9 @@
     height: 100%;
     width: 100%;
     border-radius: .3em;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .plant .card-bg {

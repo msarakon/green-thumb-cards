@@ -24,7 +24,13 @@ const config = {
             },
             {
                 test: /\.css$/,
+                exclude: /node_modules/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.(jpe?g|gif|png)/,
+                exclude: /node_modules/,
+                loader: 'file-loader'
             }
         ]
     },
