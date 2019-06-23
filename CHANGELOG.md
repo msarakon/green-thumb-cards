@@ -4,6 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 6/23   | 1    | Added placeholder images for cards and garden items
 | 6/22   | 0.5  | Removed React Prop-Types since TS is enough for type checking. Updated dependencies.
 | 6/19   | 3    | Study & use TypeScript
 | 6/18   | 2.5  | Test coverage is back to 97%. Fixed a few bugs created by previous day's refactoring. Separated active (in hand) defenders from passive (in garden) defenders. Game now ends if there are no more possible moves left.
@@ -24,4 +25,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 38   | | 
+| total  | 39   | | 
