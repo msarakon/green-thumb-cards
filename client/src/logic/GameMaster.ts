@@ -3,7 +3,7 @@ import { addCards, removeCard, addItem, removeItem } from '../reducers/playerRed
 import { startNewAction, finishAction } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import { Card, GardenItem } from '../types/card';
-import { PlayerState } from '../types/player';
+import { Player, PlayerState } from '../types/player';
 import { StreetState } from '../types/street';
 import { START_INSERT, START_ATTACK } from '../types/actions';
 import { Store } from '../store';
@@ -197,10 +197,11 @@ const autoPlaceItem = (store: Store, playerId: string, item: GardenItem) => {
  * Randomly select something for an AI player to steal.
  */
 const getSomethingToSteal = (store: Store, playerId: string, attack: Card) => {
-    const possibleVictims = Object.entries(store.getState().players).filter(([id, player]) =>
-        id !== playerId && player.garden.filter((item: GardenItem) => item.category === 'plant').length > 0
-    );
-    const [ victimId, victim ] = possibleVictims[Math.floor(Math.random() * possibleVictims.length)];
+    const possibleVictims = Object.entries(store.getState().players)
+        .filter(([id, player]: [string, Player]) =>
+            id !== playerId && player.garden.filter((item: GardenItem) => item.category === 'plant').length > 0
+        );
+    const [ victimId, victim ]: [string, Player] = possibleVictims[Math.floor(Math.random() * possibleVictims.length)];
     const possibleItems = victim.garden.filter((item: GardenItem) => item.category === 'plant');
     const defender = findDefender(store, victimId, attack);
     if (defender) {
@@ -221,7 +222,7 @@ const getSomethingToSteal = (store: Store, playerId: string, attack: Card) => {
  */
 const plantsInGarden = (players: PlayerState, playerId: string) => {
     return Object.entries(players).some(([id, player]) =>
-        id !== playerId && player.garden.some(item => item.category === 'plant'));
+        id !== playerId && player.garden.some((item: GardenItem) => item.category === 'plant'));
 };
 
 /**
