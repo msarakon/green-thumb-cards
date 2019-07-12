@@ -19,13 +19,13 @@ const Neighborhood = () => {
                 <Street streetId={'center'} />
             </div>
             <div className="garden-container">
-                <Garden playerId={'bunny3'} />
+                <Garden playerId={'bunny4'} />
             </div>
             <div className="street vertical">
                 <Street streetId={'bottom'} />
             </div>
             <div className="garden-container">
-                <Garden playerId={'bunny4'} />
+                <Garden playerId={'bunny3'} />
             </div>
         </div>
     );

@@ -23,7 +23,7 @@ const Hand = (props: HandProps) => {
             )}
             {props.hand.length < 6 &&
                 <div className='card placeholder'>
-                    {props.deck.length > 0 && <div>Draw a card</div>}
+                    {props.canDraw && <div>Draw a card</div>}
                 </div>
             }
             <Deck size={props.deck.length} drawCard={drawCard} canDraw={props.canDraw} />
@@ -44,7 +44,9 @@ const mapStateToProps = (state: AppState) => {
         deck: state.deck,
         hand: state.players.bunny1.hand,
         turn: state.turn,
-        canDraw: state.players.bunny1.hand.length < 6 && state.deck.length > 0
+        canDraw: state.players.bunny1.hand.length < 6
+            && state.deck.length > 0
+            && state.turn.mode === 'select_action'
     };
 };
 

@@ -54,7 +54,7 @@ const reducer = (state = initialState, action: PlayerAction): PlayerState => {
     }
 };
 
-export const addCards = (playerId: string, cards: Card[]): PlayerAction  => {
+export const addCards = (playerId: string, cards: Card[]): PlayerAction => {
     return {
         type: ADD_CARDS,
         playerId,
@@ -62,7 +62,7 @@ export const addCards = (playerId: string, cards: Card[]): PlayerAction  => {
     };
 };
 
-export const removeCard = (playerId: string, cardId: number): PlayerAction  => {
+export const removeCard = (playerId: string, cardId: number): PlayerAction => {
     return {
         type: REMOVE_CARD,
         playerId,
@@ -78,7 +78,7 @@ export const addItem = (playerId: string, item: GardenItem): PlayerAction => {
     };
 };
 
-export const removeItem = (playerId: string, itemId: number): PlayerAction  => {
+export const removeItem = (playerId: string, itemId: number): PlayerAction => {
     return {
         type: REMOVE_ITEM,
         playerId,

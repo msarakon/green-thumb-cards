@@ -1,6 +1,6 @@
 import { drawCards as drawCardsFromDeck } from '../reducers/deckReducer';
 import { addCards, removeCard, addItem, removeItem } from '../reducers/playerReducer';
-import { startNewAction, finishAction } from '../reducers/turnReducer';
+import { startNewAction, finishAction, wait } from '../reducers/turnReducer';
 import { throwToStreet } from '../reducers/streetReducer';
 import { Card, GardenItem } from '../types/card';
 import { Player, PlayerState } from '../types/player';
@@ -126,14 +126,15 @@ const steal = (store: Store, item: GardenItem, playerId: string) => {
 /**
  * Handles an AI player turn.
  */
-const playAITurn = (store: Store, playerId: string, actions: number) => {
+const playAITurn = async (store: Store, playerId: string, actions: number) => {
+    store.dispatch(wait());
     const cardCount = MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
     drawCardsFor(store, playerId, cardCount);
     const playerName = store.getState().players[playerId].name;
     const card = getPlayableCard(store.getState().players, playerId);
     if (card) {
-        actions = playAICard(store, playerName, playerId, card, actions);
-        if (actions > 0) playAITurn(store, playerId, actions);
+        actions = await playAICard(store, playerName, playerId, card, actions);
+        if (actions > 0) await playAITurn(store, playerId, actions);
     } else {
         console.log(`${playerName} skips their turn`);
     }
@@ -162,17 +163,17 @@ const getPlayableCard = (players: PlayerState, playerId: string) => {
 /**
  * Handles card action(s) for an AI player.
  */
-const playAICard = (store: Store, playerName: string, playerId: string, card: Card, actions: number) => {
+const playAICard = async (store: Store, playerName: string, playerId: string, card: Card, actions: number) => {
     console.log(`${playerName} plays "${card.title}"`);
     if (card.category === 'plant' || card.category === 'environment') {
-        autoPlaceItem(store, playerId, card);
+        await autoPlaceItem(store, playerId, card);
         actions--;
     } else if (card.category === 'attack') {
         const haul = getSomethingToSteal(store, playerId, card);
         if (haul) {
             console.log(`${playerName} steals "${haul.item.title}" from ${haul.victimName}`);
             store.dispatch(removeItem(haul.victimId, haul.item.id));
-            autoPlaceItem(store, playerId, haul.item);
+            await autoPlaceItem(store, playerId, haul.item);
         }
         actions--;
     } else if (card.category === 'special') {
@@ -186,11 +187,16 @@ const playAICard = (store: Store, playerName: string, playerId: string, card: Ca
  * Places an item to a random location.
  */
 const autoPlaceItem = (store: Store, playerId: string, item: GardenItem) => {
-    store.dispatch(addItem(playerId, {
-        ...item,
-        bottom: Math.floor(Math.random() * 90),
-        left: Math.floor(Math.random() * 90)
-    }));
+    return new Promise(resolve => {
+        setTimeout(() => {
+            store.dispatch(addItem(playerId, {
+                ...item,
+                bottom: Math.floor(Math.random() * 90),
+                left: Math.floor(Math.random() * 90)
+            }));
+            resolve();
+        }, 500);
+    });
 };
 
 /**

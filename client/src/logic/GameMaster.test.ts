@@ -200,7 +200,7 @@ describe('GameMaster', () => {
         expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
     });
 
-    it('should handle successful AI stealing', () => {
+    it('should handle successful AI stealing', async () => {
         const state = {
             ...mockState,
             players: {
@@ -217,14 +217,15 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2', 0);
+        await playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('REMOVE_ITEM');
-        expect(store.getActions()[1].type).toEqual('ADD_ITEM');
-        expect(store.getActions()[2].type).toEqual('REMOVE_CARD');
+        expect(store.getActions()[0].type).toEqual('WAIT');
+        expect(store.getActions()[1].type).toEqual('REMOVE_ITEM');
+        expect(store.getActions()[2].type).toEqual('ADD_ITEM');
+        expect(store.getActions()[3].type).toEqual('REMOVE_CARD');
     });
 
-    it('should handle failed AI stealing', () => {
+    it('should handle failed AI stealing', async () => {
         const state = {
             ...mockState,
             players: {
@@ -242,13 +243,14 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2', 0);
+        await playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('REMOVE_CARD');
+        expect(store.getActions()[0].type).toEqual('WAIT');
         expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
+        expect(store.getActions()[2].type).toEqual('REMOVE_CARD');
     });
 
-    it('should handle playing a plant card for AI', () => {
+    it('should handle playing a plant card for AI', async () => {
         const state = {
             ...mockState,
             players: {
@@ -261,9 +263,10 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        playAITurn(store, 'bunny2', 0);
+        await playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('ADD_ITEM');
+        expect(store.getActions()[0].type).toEqual('WAIT');
+        expect(store.getActions()[1].type).toEqual('ADD_ITEM');
     });
 
 });

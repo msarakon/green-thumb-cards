@@ -17,6 +17,7 @@ export const START_NEW_ACTION = 'START_NEW_ACTION';
 export const START_INSERT = 'START_INSERT';
 export const START_ATTACK = 'START_ATTACK';
 export const FINISH_ACTION = 'FINISH_ACTION';
+export const WAIT = 'WAIT';
 
 interface StartGame {
     type: typeof START_GAME
@@ -109,10 +110,14 @@ interface FinishAction {
     type: typeof FINISH_ACTION
 }
 
+interface Wait {
+    type: typeof WAIT
+}
+
 export type MasterAction = StartGame | DrawCardsFor | PlayCard | PlaceItem | Steal;
 export type DeckAction = DrawCards;
 export type PlayerAction = AddCards | RemoveCard | AddItem | RemoveItem;
 export type PointerAction = SetPointer;
 export type StreetAction = ThrowToStreet | PickFromStreet;
-export type TurnAction = StartNewAction | StartInsert | StartAttack | FinishAction;
+export type TurnAction = StartNewAction | StartInsert | StartAttack | FinishAction | Wait;
 export type GameAction = MasterAction | DeckAction | PlayerAction | PointerAction | StreetAction | TurnAction;

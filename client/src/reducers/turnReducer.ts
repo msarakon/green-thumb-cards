@@ -1,4 +1,6 @@
-import { TurnAction, START_NEW_ACTION, START_INSERT, START_ATTACK, FINISH_ACTION } from '../types/actions';
+import {
+    TurnAction, START_NEW_ACTION, START_INSERT, START_ATTACK, FINISH_ACTION, WAIT
+} from '../types/actions';
 import { TurnState } from '../types/turn';
 
 const initialState: TurnState = new TurnState();
@@ -27,6 +29,12 @@ const reducer = (state = initialState, action: TurnAction): TurnState => {
             mode: 'select_action',
             actions: state.actions - 1
         };
+    case WAIT: {
+        return {
+            ...state,
+            mode: 'waiting'
+        };
+    }
     default: return state;
     }
 };
@@ -37,6 +45,10 @@ export const startNewAction = (): TurnAction => {
 
 export const finishAction = (): TurnAction => {
     return { type: FINISH_ACTION };
+};
+
+export const wait = (): TurnAction => {
+    return { type: WAIT };
 };
 
 export default reducer;
