@@ -4,6 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 7/11   | 1    | Some typing fixes, trying to find a good way to display AI player animations
 | 7/10   | 2.5  | Took a 2-week break from the project after spending a few hours trying to nail the art style for cards and failing. Finally decided to go with a lot simpler style and managed to draw pictures for Fuschia, Lily, Chinese Lantern, Calla and Camellia.
 | 6/23   | 1    | Added placeholder images for cards and garden items
 | 6/22   | 0.5  | Removed React Prop-Types since TS is enough for type checking. Updated dependencies.
@@ -26,4 +27,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 41.5 | | 
+| total  | 42.5 | | 
