@@ -52,7 +52,7 @@ describe('GameMaster', () => {
         doDisasters(store, 'bunny1');
     });
 
-    it('should handle a disaster that affects all', () => {
+    it('should handle a disaster that affects all', async () => {
         const state = {
             ...mockState,
             players: {
@@ -75,12 +75,12 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        doDisasters(store, 'bunny1');
+        await doDisasters(store, 'bunny1');
 
         expect(store.getActions().filter(action => action.type == 'THROW_TO_STREET').length).toBe(2);
     });
 
-    it('should handle a disaster that only affects the player', () => {
+    it('should handle a disaster that only affects the player', async () => {
         const state = {
             ...mockState,
             players: {
@@ -98,7 +98,7 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        doDisasters(store, 'bunny1');
+        await doDisasters(store, 'bunny1');
 
         expect(store.getActions().filter(action => action.type == 'THROW_TO_STREET').length).toBe(1);
     });
