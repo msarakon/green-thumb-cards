@@ -11,50 +11,62 @@ import { Store } from '../store';
 const CARDS_AT_START = 5;
 const MAX_HAND_CARDS = 6;
 
-const startGame = (store: Store) => {
-    drawCardsFor(store, 'bunny1', CARDS_AT_START);
-    drawCardsFor(store, 'bunny2', CARDS_AT_START);
-    drawCardsFor(store, 'bunny3', CARDS_AT_START);
-    drawCardsFor(store, 'bunny4', CARDS_AT_START);
+const startGame = async (store: Store) => {
+    await drawCardsFor(store, 'bunny1', CARDS_AT_START);
+    await drawCardsFor(store, 'bunny2', CARDS_AT_START);
+    await drawCardsFor(store, 'bunny3', CARDS_AT_START);
+    await drawCardsFor(store, 'bunny4', CARDS_AT_START);
     startTurn(store, 'bunny1');
 };
 
 /**
  * Draw n cards for the given player.
  */
-const drawCardsFor = (store: Store, playerId: string, proposedCount: number) => {
+const drawCardsFor = async (store: Store, playerId: string, proposedCount: number) => {
+    if (store.getState().players[playerId].hand.length >= MAX_HAND_CARDS) return;
     const count = proposedCount > store.getState().deck.length ? store.getState().deck.length : proposedCount;
     if (count > 0) {
         console.log(`${store.getState().players[playerId].name} draws ${count} card(s)`);
         const drawn = store.getState().deck.slice(0, count);
         store.dispatch(drawCardsFromDeck(count));
         store.dispatch(addCards(playerId, drawn));
-        doDisasters(store, playerId);
+        await doDisasters(store, playerId);
     }
+};
+
+const doDisaster = (store: Store, playerId: string, disaster: Card): Promise<void> => {
+    return new Promise(resolve => {
+        console.log(`${store.getState().players[playerId].name} actived the disaster "${disaster.title}"`);
+        let thrown = 0;
+        setTimeout(() => {
+            if (disaster.affectsAll) {
+                Object.keys(store.getState().players).forEach(playerId => {
+                    if (throwPlantToStreet(store, playerId, disaster)) thrown++;
+                });
+            } else {
+                if (throwPlantToStreet(store, playerId, disaster)) thrown++;
+            }
+            console.log(`${thrown} plant(s) were thrown to street by "${disaster.title}"`);
+            store.dispatch(removeCard(playerId, disaster.id));
+            resolve();
+        }, 500);
+    });
 };
 
 /**
  * Handle disasters if present in a player's hand.
  */
-const doDisasters = (store: Store, playerId: string) => {
+const doDisasters = async (store: Store, playerId: string) => {
     const disasters = store.getState().players[playerId].hand
         .filter((card: Card) => card.category === 'disaster');
-    disasters.forEach((disaster: Card) => {
-        console.log(`*** Disaster event: "${disaster.title}"`);
-        if (disaster.affectsAll) {
-            Object.keys(store.getState().players).forEach(playerId =>
-                throwPlantToStreet(store, playerId, disaster));
-        } else {
-            throwPlantToStreet(store, playerId, disaster);
-        }
-        store.dispatch(removeCard(playerId, disaster.id));
-    });
+    const disastersDone = disasters.map(async (disaster: Card) => await doDisaster(store, playerId, disaster));
+    await Promise.all(disastersDone);
     if (disasters.length > 0) {
-        drawCardsFor(store, playerId, disasters.length);
+        await drawCardsFor(store, playerId, disasters.length);
     }
 };
 
-const throwPlantToStreet = (store: Store, playerId: string, disaster: Card) => {
+const throwPlantToStreet = (store: Store, playerId: string, disaster: Card): boolean => {
     const player = store.getState().players[playerId];
     const defender = findDefender(store, playerId, disaster);
     if (defender) {
@@ -66,6 +78,7 @@ const throwPlantToStreet = (store: Store, playerId: string, disaster: Card) => {
             store.dispatch(removeItem(playerId, plant.id));
             console.log(`${player.name} lost "${plant.title}"`);
             store.dispatch(throwToStreet(plant));
+            return true;
         }
     }
 };
