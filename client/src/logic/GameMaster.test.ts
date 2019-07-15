@@ -200,7 +200,7 @@ describe('GameMaster', () => {
         expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
     });
 
-    it('should handle successful AI stealing', async () => {
+    it('should handle successful AI stealing', async (done) => {
         const state = {
             ...mockState,
             players: {
@@ -217,15 +217,18 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        await playAITurn(store, 'bunny2', 0);
+        playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('WAIT');
-        expect(store.getActions()[1].type).toEqual('REMOVE_ITEM');
-        expect(store.getActions()[2].type).toEqual('ADD_ITEM');
-        expect(store.getActions()[3].type).toEqual('REMOVE_CARD');
+        setTimeout(() => {
+            expect(store.getActions()[0].type).toEqual('WAIT');
+            expect(store.getActions()[1].type).toEqual('REMOVE_ITEM');
+            expect(store.getActions()[2].type).toEqual('ADD_ITEM');
+            expect(store.getActions()[3].type).toEqual('REMOVE_CARD');
+            done();
+        }, 1000);
     });
 
-    it('should handle failed AI stealing', async () => {
+    it('should handle failed AI stealing', async (done) => {
         const state = {
             ...mockState,
             players: {
@@ -243,14 +246,17 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        await playAITurn(store, 'bunny2', 0);
+        playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('WAIT');
-        expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
-        expect(store.getActions()[2].type).toEqual('REMOVE_CARD');
+        setTimeout(() => {
+            expect(store.getActions()[0].type).toEqual('WAIT');
+            expect(store.getActions()[1].type).toEqual('REMOVE_CARD');
+            expect(store.getActions()[2].type).toEqual('REMOVE_CARD');
+            done();
+        }, 1000);
     });
 
-    it('should handle playing a plant card for AI', async () => {
+    it('should handle playing a plant card for AI', async (done) => {
         const state = {
             ...mockState,
             players: {
@@ -263,10 +269,13 @@ describe('GameMaster', () => {
         };
         const store = mockStore(() => state);
 
-        await playAITurn(store, 'bunny2', 0);
+        playAITurn(store, 'bunny2', 0);
 
-        expect(store.getActions()[0].type).toEqual('WAIT');
-        expect(store.getActions()[1].type).toEqual('ADD_ITEM');
+        setTimeout(() => {
+            expect(store.getActions()[0].type).toEqual('WAIT');
+            expect(store.getActions()[1].type).toEqual('ADD_ITEM');
+            done();
+        }, 1000);
     });
 
 });

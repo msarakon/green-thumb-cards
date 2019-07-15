@@ -4,10 +4,3 @@
     background-color: #218C39;
     position: relative;
 }
-
-.garden-item {
-    position: absolute;
-    display: block;
-    height: 71px;
-    width: 50px;
-}

@@ -4,7 +4,6 @@ import { setPointer } from '../reducers/pointerReducer';
 import GardenItem from './GardenItem';
 import { placeItem, steal } from '../middlewares/masterMiddleware';
 import { AppState } from '../store';
-import { Player } from '../types/player';
 import { GardenItem as GardenItemType } from '../types/card';
 import './Garden.css';
 
@@ -16,7 +15,7 @@ const Garden = (props: GardenProps) => {
             onMouseLeave={() => props.setPointer(null) }
             onMouseDown={props.canPlaceItem ? (e) => props.placeItem(e) : undefined}>
             {
-                props.player.garden.map(item =>
+                props.garden.map((item: GardenItemType) =>
                     <GardenItem
                         key={item.id}
                         item={item}
@@ -29,7 +28,7 @@ const Garden = (props: GardenProps) => {
 
 interface GardenProps {
     playerId: string;
-    player: Player;
+    garden: GardenItemType[];
     myGarden: boolean;
     setPointer: Function;
     canPlaceItem: boolean;
@@ -40,7 +39,7 @@ interface GardenProps {
 
 const mapStateToProps = (state: AppState, { playerId }) => {
     return {
-        player: state.players[playerId],
+        garden: state.players[playerId].garden,
         myGarden: playerId === 'bunny1',
         attackOn: playerId !== 'bunny1' && state.turn.mode === 'attack',
         turn: state.turn,

@@ -1,9 +1,9 @@
-import { Card } from './card';
+import { Card, GardenItem } from './card';
 
 export class Player {
     name: String;
     hand: Array<Card>;
-    garden: Array<Card>;
+    garden: Array<GardenItem>;
     points: Number;
     constructor(name: String) {
         this.name = name;

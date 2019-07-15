@@ -1,0 +1,15 @@
+.garden-item {
+    position: absolute;
+    display: block;
+    height: 71px;
+    width: 50px;
+    transition: .5s all;
+}
+
+.garden-item.entering {
+    opacity: 0;
+}
+
+.garden-item.entered {
+    opacity: 1;
+}

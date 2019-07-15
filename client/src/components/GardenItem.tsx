@@ -1,6 +1,7 @@
 import React from 'react';
 import { GardenItem as GardenItemType } from '../types/card';
 import { imagePath } from '../utils/index';
+import './GardenItem.css';
 
 const GardenItem = (props: GardenItemProps) => {
     return (

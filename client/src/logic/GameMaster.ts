@@ -99,7 +99,7 @@ const placeItem = (store: Store, evt: React.MouseEvent<HTMLElement>) => {
         ...store.getState().turn.card,
         bottom: 100 - Math.floor(y / containerBounds.height * 100),
         left: Math.floor(x / containerBounds.width * 100),
-        zIndex: 1
+        zIndex: 10
     }));
     store.getState().turn.callback();
     endTurn(store, 'bunny1');
@@ -128,17 +128,19 @@ const steal = (store: Store, item: GardenItem, playerId: string) => {
  */
 const playAITurn = async (store: Store, playerId: string, actions: number) => {
     store.dispatch(wait());
-    const cardCount = MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
-    drawCardsFor(store, playerId, cardCount);
-    const playerName = store.getState().players[playerId].name;
-    const card = getPlayableCard(store.getState().players, playerId);
-    if (card) {
-        actions = await playAICard(store, playerName, playerId, card, actions);
-        if (actions > 0) await playAITurn(store, playerId, actions);
-    } else {
-        console.log(`${playerName} skips their turn`);
-    }
-    endTurn(store, playerId);
+    setTimeout(() => {
+        const cardCount = MAX_HAND_CARDS - store.getState().players[playerId].hand.length;
+        drawCardsFor(store, playerId, cardCount);
+        const playerName = store.getState().players[playerId].name;
+        const card = getPlayableCard(store.getState().players, playerId);
+        if (card) {
+            actions = playAICard(store, playerName, playerId, card, actions);
+            if (actions > 0) playAITurn(store, playerId, actions);
+        } else {
+            console.log(`${playerName} skips their turn`);
+        }
+        endTurn(store, playerId);
+    }, 1000);
 };
 
 /**
@@ -163,17 +165,17 @@ const getPlayableCard = (players: PlayerState, playerId: string) => {
 /**
  * Handles card action(s) for an AI player.
  */
-const playAICard = async (store: Store, playerName: string, playerId: string, card: Card, actions: number) => {
+const playAICard = (store: Store, playerName: string, playerId: string, card: Card, actions: number): number => {
     console.log(`${playerName} plays "${card.title}"`);
     if (card.category === 'plant' || card.category === 'environment') {
-        await autoPlaceItem(store, playerId, card);
+        autoPlaceItem(store, playerId, card);
         actions--;
     } else if (card.category === 'attack') {
         const haul = getSomethingToSteal(store, playerId, card);
         if (haul) {
             console.log(`${playerName} steals "${haul.item.title}" from ${haul.victimName}`);
             store.dispatch(removeItem(haul.victimId, haul.item.id));
-            await autoPlaceItem(store, playerId, haul.item);
+            autoPlaceItem(store, playerId, haul.item);
         }
         actions--;
     } else if (card.category === 'special') {
@@ -187,16 +189,11 @@ const playAICard = async (store: Store, playerName: string, playerId: string, ca
  * Places an item to a random location.
  */
 const autoPlaceItem = (store: Store, playerId: string, item: GardenItem) => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            store.dispatch(addItem(playerId, {
-                ...item,
-                bottom: Math.floor(Math.random() * 90),
-                left: Math.floor(Math.random() * 90)
-            }));
-            resolve();
-        }, 500);
-    });
+    store.dispatch(addItem(playerId, {
+        ...item,
+        bottom: Math.floor(Math.random() * 90),
+        left: Math.floor(Math.random() * 90)
+    }));
 };
 
 /**
