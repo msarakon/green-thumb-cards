@@ -4,6 +4,8 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 7/14   | 1.5  | Couldn't get animations working for players 3 & 4, will try to use transitions next
+| 7/13   | 1    | Trying to create animations for AI player actions
 | 7/12   | 1    | Added timeout for when an AI player places a garden item (for future animations), updated dependencies
 | 7/11   | 1    | Some typing fixes, trying to find a good way to display AI player animations
 | 7/10   | 2.5  | Took a 2-week break from the project after spending a few hours trying to nail the art style for cards and failing. Finally decided to go with a lot simpler style and managed to draw pictures for Fuschia, Lily, Chinese Lantern, Calla and Camellia.
@@ -28,4 +30,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 43.5 | | 
+| total  | 46   | | 
