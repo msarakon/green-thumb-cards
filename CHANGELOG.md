@@ -4,6 +4,7 @@ Below is a table for keeping track of time spent on the initial development phas
 
 | date   | hrs  | what was done |
 | :-----:|:-----| :------|
+| 8/13   | 1.5  | Added card images for Freesia, Narcissus and Pea. AI player should attack if someone's garden has a plant that they want (= "desirable item").
 | 8/8    | 1.5  | Added card images for Bug Eater, Cactus, Chinese Bell Flower, Hire a Gardener, Pansie, Red Rose and Tulip
 | 7/15   | 1    | Gave up with animations and transitions for now, added timeouts for AI player actions and disasters
 | 7/14   | 1.5  | Couldn't get animations working for players 3 & 4, will try to use transitions next
@@ -32,4 +33,4 @@ Below is a table for keeping track of time spent on the initial development phas
 | 5/31   | 2    | Added primitive functionality for adding a new plant to garden. Frustration over mousemove events.
 | 5/30   | 5    | Selected the tools (React, Webpack, Jest, etc.) and built a barebones version of the UI with some primitive state management. Card JSON now contains real data. |
 | 5/29   | 0.5  | Created the repository and generated the placeholder card JSON. |
-| total  | 48.5 | | 
+| total  | 50   | | 
