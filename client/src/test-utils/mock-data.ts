@@ -1,10 +1,10 @@
 const mockState = {
     deck: [],
     players: {
-        bunny1: { name: 'Bunny 1', hand: [], garden: [] },
-        bunny2: { name: 'Bunny 2', hand: [], garden: [] },
-        bunny3: { name: 'Bunny 3', hand: [], garden: [] },
-        bunny4: { name: 'Bunny 4', hand: [], garden: [] }
+        bunny1: { name: 'Bunny 1', hand: [], garden: [], points: 0 },
+        bunny2: { name: 'Bunny 2', hand: [], garden: [], points: 0 },
+        bunny3: { name: 'Bunny 3', hand: [], garden: [], points: 0 },
+        bunny4: { name: 'Bunny 4', hand: [], garden: [], points: 0 }
     },
     street: { top: [], center: [], bottom: [] },
     turn: { mode: 'start_game', callback: () => {} },

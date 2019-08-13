@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { masterMiddleware } from '../middlewares/masterMiddleware';
 import {
     startGame, drawCardsFor, doDisasters, playCard, placeItem, steal,
-    playAITurn
+    playAITurn, hasSomethingDesirable
 } from './GameMaster';
 import {
     mockState, mockMousedown,
@@ -276,6 +276,30 @@ describe('GameMaster', () => {
             expect(store.getActions()[1].type).toEqual('ADD_ITEM');
             done();
         }, 1000);
+    });
+
+    it('should check players gardens for desirable items', () => {
+        const players = {
+            bunny1: {
+                ...mockState.players.bunny1,
+                garden: [mockPlants[1]]
+            },
+            bunny2: {
+                ...mockState.players.bunny2,
+                garden: [mockPlants[0]]
+            },
+            bunny3: {
+                ...mockState.players.bunny3,
+                garden: [mockPlants[2]]
+            },
+            bunny4: {
+                ...mockState.players.bunny4,
+                garden: [mockPlants[0]]
+            }
+        };
+
+        expect(hasSomethingDesirable(players, 'bunny1')).toBeFalsy();
+        expect(hasSomethingDesirable(players, 'bunny2')).toBeTruthy();
     });
 
 });

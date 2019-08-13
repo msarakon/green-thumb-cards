@@ -172,6 +172,10 @@ const getPlayableCards = (players: PlayerState, playerId: string) => {
  */
 const getPlayableCard = (players: PlayerState, playerId: string) => {
     const playableCards = getPlayableCards(players, playerId);
+    if (playableCards.some((card: Card) => card.category === 'attack')
+        && hasSomethingDesirable(players, playerId)) {
+        return playableCards.find((card: Card) => card.category === 'attack');
+    }
     return playableCards[Math.floor(Math.random() * playableCards.length)];
 };
 
@@ -207,6 +211,18 @@ const autoPlaceItem = (store: Store, playerId: string, item: GardenItem) => {
         bottom: Math.floor(Math.random() * 90),
         left: Math.floor(Math.random() * 90)
     }));
+};
+
+const hasSomethingDesirable = (players: PlayerState, playerId: string): boolean => {
+    const playerPlants: string[] = [
+        ...players[playerId].hand.map((plant: GardenItem) => plant.name),
+        ...players[playerId].garden.map((plant: GardenItem) => plant.name)
+    ];
+    return Object.keys(players).some((pId: string) =>
+        pId !== playerId && players[pId].garden.some((plant: GardenItem) =>
+            playerPlants.includes(plant.name)
+        )
+    );
 };
 
 /**
@@ -321,5 +337,6 @@ export {
     placeItem,
     steal,
     doDisasters,
-    playAITurn
+    playAITurn,
+    hasSomethingDesirable
 };

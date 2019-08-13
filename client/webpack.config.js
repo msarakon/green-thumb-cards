@@ -37,7 +37,7 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            title: 'GreenThumbCards.js'
+            title: 'Green Thumb Cards'
         })
     ]
 };
